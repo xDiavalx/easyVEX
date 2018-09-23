@@ -25,4 +25,9 @@ When you write VEX code and want to use easyVex functions type:
 #include "easyVex.h"
 Then you can just use stuff defined in the easyVex.h file.
 
+Note: If your filepath is soemthing like: 
+C:\Users\[USER]\Documents\houdini[VERSION]\vex\include\easyVex\easyVex.h
+You will need to use
+#include "easyVex/easyVex.h"
+
 Enjoy! XD
