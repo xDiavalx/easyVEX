@@ -12,4 +12,17 @@ Tell me how I can improve performance.
 Add and suggest new functions. 
 I want to learn from you!
 
+How to use:
+Include files go into 
+$HFS/houdini/vex/include/ 
+path, or into something like 
+C:\Users\[USER]\Documents\houdini[VERSION]\vex\include (for Windows).
+
+So under Windows best put the easyVex.h file into
+C:\Users\[USER]\Documents\houdini[VERSION]\vex\include 
+
+When you write VEX code and want to use easyVex functions type: 
+#include "easyVex.h"
+Then you can just use stuff defined in the easyVex.h file.
+
 Enjoy! XD
