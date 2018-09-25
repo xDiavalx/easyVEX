@@ -82,6 +82,39 @@ function int[] appendunique(int numbers[]; const int num) {
 	return numbers;
 }
 
-//test
+//removes all instances of value from array
+function void removevalues(int numbers[]; const int remove) {
+	while (1) {
+		int temp;
+		temp = removevalue(numbers, i);
+		if (temp == 0) {
+			break;
+		}
+	}
+}
+
+//removes all instances of all values in seccond array from first array
+function void removevalues(int numbers[]; const int remove[]) {
+	foreach(int i; remove){
+		while(1) {
+			int temp;
+			temp = removevalue(numbers, i);
+			if (temp == 0) {
+				break;
+			}
+		}
+	}
+}
+
+//returns int array of unique values of an arbitrary attribute
+function int[] uniquevals(string componentType; string attribName){	
+	int clean[] = {};
+	int count = nuniqueval(0, componentType, attribName);
+	for (int i = 0; i < count; i++) {
+		int val = uniqueval(0, componentType, attribName, i);
+		append(clean,val);
+	}
+	return clean;
+}
 
 #endif
