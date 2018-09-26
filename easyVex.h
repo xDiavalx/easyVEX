@@ -117,4 +117,50 @@ function int[] uniquevals(string componentType; string attribName){
 	return clean;
 }
 
+//edges 
+struct edgeStruct{
+	int a,b;
+
+	//print verbose edge description to log 
+	void printfVerbose(){
+		printf("edge between points %i and %i \n", a,b);
+	}
+
+	//returns a string in standard Houdini edge format 
+	string getFullName(){
+		return sprintf("p%i_%i", this.a, this.b);
+	}
+
+	//swaps a and b - reverseing the direction
+	void swap(){
+	//this method fails for large numbers
+		this.a = this.a + this.b;
+		this.b = this.a - this.b;
+		this.a = this.a - this.b;
+
+	/*  
+	//My guess is for most cases the above method is sufficient
+	//but a stable (and less efficient) alterantive is the following code.
+	//completelye replace the code above with this. 
+		int c;
+		c = this.a;
+		this.a = this.b;
+		this.b = c;
+	*/
+	}
+
+	//returns 0 if a>b and 1 if b>a
+	int compare(){
+		return this.a>this.b;
+	}
+
+	//sorts a and be in increasing order
+	void sort(){
+		if(compare(this)){
+			swap(this);
+		}
+}
+
+}
+
 #endif
