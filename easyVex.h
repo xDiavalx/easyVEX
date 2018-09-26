@@ -121,6 +121,33 @@ function int[] uniquevals(string componentType; string attribName){
 struct edgeStruct{
 	int a,b;
 
+	/*General info: 
+	//To create a variable of type custom struct:
+	edgeStruct A = edgeStruct(1,2); 
+	
+	//To use an internal variable of the struct:
+	printf("%i\n",A.a);
+	A.a = 6;
+
+	//To use a function defined in a custom struct:
+	printfVerbose(A);
+	
+	//To make an array of custom struct:
+	edgeStruct B = edgeStruct(3,2);
+	edgeStruct C = edgeStruct(4,5);
+	edgeStruct edges[];
+	push(edges,A);
+	push(edges,B);
+	push(edges,C);
+
+	//To loop over a custom struct:
+	foreach(edgeStruct test; edges){
+	printfVerbose(test);
+	printf("a is %i \n",test.a);
+	}
+	*/
+
+
 	//print verbose edge description to log 
 	void printfVerbose(){
 		printf("edge between points %i and %i \n", a,b);
