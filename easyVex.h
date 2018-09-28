@@ -117,28 +117,48 @@ function int[] uniquevals(string componentType; string attribName){
 	return clean;
 }
 
+//returns point position at input
+function vector pointp(const int input; const int point){
+	return point(input,"P",point);
+}
+//returns point position at input 0
+function vector pointp(const int point){
+	return point(0,"P",point);
+}
+
+//returns the angle between two vectors in degrees
+//example: f@angle = angle({0,1,0},{1,0,0});
+function float angle(const vector u,v){
+	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
+}
+//returns the angle between two 2d vectors in degrees
+//example: f@angle = angle({0,1},{1,0});
+function float angle(const vector2 u,v){
+	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
+}
+
 //edges 
 struct edgeStruct{
 	int a,b;
 
 	/*General info: 
 	//To create a variable of type custom struct:
-	edgeStruct A = edgeStruct(1,2); 
+	edgeStruct ed1 = edgeStruct(1,2); 
 	
 	//To use an internal variable of the struct:
-	printf("%i\n",A.a);
-	A.a = 6;
+	printf("%i\n",ed1.a);
+	ed1.a = 6;
 
 	//To use a function defined in a custom struct:
-	printfVerbose(A);
+	printfVerbose(ed1);
 	
 	//To make an array of custom struct:
-	edgeStruct B = edgeStruct(3,2);
-	edgeStruct C = edgeStruct(4,5);
+	edgeStruct ed2 = edgeStruct(3,2);
+	edgeStruct ed3 = edgeStruct(4,5);
 	edgeStruct edges[];
-	push(edges,A);
-	push(edges,B);
-	push(edges,C);
+	push(edges,ed1);
+	push(edges,ed2);
+	push(edges,ed3);
 
 	//To loop over a custom struct:
 	foreach(edgeStruct test; edges){
@@ -148,45 +168,131 @@ struct edgeStruct{
 	*/
 
 
-	//print verbose edge description to log 
+	//print verbose edge description to log
+	//example: printf(ed1); 
 	void printfVerbose(){
 		printf("edge between points %i and %i \n", a,b);
 	}
 
-	//returns a string in standard Houdini edge format 
+	//returns a string in standard Houdini edge format
+	//example: getFullName(ed1); 
 	string getFullName(){
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
 	//swaps a and b - reverseing the direction
+	//example: swap(ed1);
 	void swap(){
+	/*
 	//this method fails for large numbers
 		this.a = this.a + this.b;
 		this.b = this.a - this.b;
 		this.a = this.a - this.b;
 
-	/*  
+	*/  
 	//My guess is for most cases the above method is sufficient
 	//but a stable (and less efficient) alterantive is the following code.
-	//completelye replace the code above with this. 
 		int c;
 		c = this.a;
 		this.a = this.b;
 		this.b = c;
-	*/
 	}
 
 	//returns 0 if a>b and 1 if b>a
+	//example: compare(ed1);
 	int compare(){
 		return this.a>this.b;
 	}
 
-	//sorts a and be in increasing order
+	//sorts a and b in increasing order
+	//example: sort(ed1);
 	void sort(){
-		if(compare(this)){
+		if( compare(this) ){
 			swap(this);
 		}
-}
+	}
+
+	//returns the position of the edgepoint a at input
+	//example: v@pos = posA(ed1,2);
+	vector posA(const int input){
+		return pointp(input,this.a);
+	}
+
+	//returns the position of the edgepoint a at input 0
+	//example: v@pos = posA(ed1);
+	vector posA(){
+		return pointp(0,this.a);
+	}
+
+	//returns the position of the edgepoint b at input
+	//example: v@pos = posB(ed1,2);
+	vector posB(const int input){
+		return pointp(input,this.b);
+	}
+	//returns the position of the edgepoint b at input 0
+	//example: v@pos = posB(ed1);
+	vector posB(){
+		return pointp(0,this.b);
+	}
+
+	//returns the length of the edge at input
+	//example: f@len = length(ed1,2);
+	float length(const int input){
+		return distance(pointp(input,this.a),pointp(input,this.b));
+	}
+	//returns the length of the edge at input 0
+	//example: f@len = length(ed1);
+	float length(){
+		return distance(pointp(0,this.a),pointp(0,this.b));
+	}
+
+	/*
+	Following are functions for interpreting the edge as a vector
+	*/
+
+	//returns the non-normalized vector AB == posB - posA at input
+	//example: v@vectorAB = vectorAB(ed1,2);
+	vector vectorAB(const int input){
+		return pointp(input,this.b) - pointp(input,this.a);
+	}
+	//returns the non-normalized vector AB == posB - posA at input 0
+	//example: v@vectorAB = vectorAB(ed1);
+	vector vectorAB(){
+		return pointp(0,this.b) - pointp(0,this.a);
+	}
+	//returns the non-normalized vector BA == posA - posB at input
+	//example: v@vectorBA = vectorBA(ed1);
+	vector vectorBA(const int input){
+		return pointp(input,this.a) - pointp(input,this.b);
+	}
+	//returns the non-normalized vector BA == posA - posB at input 0
+	//example: v@vectorBA = vectorBA(ed1);
+	vector vectorBA(){
+		return pointp(0,this.a) - pointp(0,this.b);
+	}
+
+	//returns the normalized vector AB == posB - posA at input
+	//example: v@vectorAB = nvectorAB(ed1,2);
+	vector nvectorAB(const int input){
+		return normalize( pointp(input,this.b) - pointp(input,this.a) );
+	}
+	//returns the normalized vector AB == posB - posA at input 0
+	//example: v@vectorAB = nvectorAB(ed1);
+	vector nvectorAB(){
+		return normalize( pointp(0,this.b) - pointp(0,this.a) );
+	}
+	//returns the normalized vector BA == posA - posB at input
+	//example: v@vectorBA = nvectorBA(ed1);
+	vector nvectorBA(const int input){
+		return normalize( pointp(input,this.a) - pointp(input,this.b) );
+	}
+	//returns the normalized vector BA == posA - posB at input 0
+	//example: v@vectorBA = nvectorBA(ed1);
+	vector nvectorBA(){
+		return normalize( pointp(0,this.a) - pointp(0,this.b) );
+	}
+
+
 
 }
 
