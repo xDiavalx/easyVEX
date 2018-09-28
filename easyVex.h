@@ -136,6 +136,26 @@ function float angle(const vector u,v){
 function float angle(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
+//returns the angle between two edges in degrees at input 0
+//example: f@angle = angle({0,1},{1,0});
+function float angle(const edgeStruct u,v){
+	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
+}
+//returns the angle between two edges in degrees at inputs
+//example: f@angle = angle(ed1,0,ed2,1);
+function float angle(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return degrees( acos( dot(u,inputU,v,inputV)/( length(v,inputV)*length(u,inputU) )  ) );
+}
+
+//dot product of two edges at input 0
+function float dot(const edgeStruct u,v){
+	return posA(u)*posA(v) + posB(u)*posA(v);
+}
+//dot product of two edges at inputs
+function float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return posA(u,inputU)*posA(v,inputV) + posB(u,inputU)*posA(v,inputV);
+}
+
 
 //edges 
 struct edgeStruct{
