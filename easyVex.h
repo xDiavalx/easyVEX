@@ -136,25 +136,6 @@ function float angle(const vector u,v){
 function float angle(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
-//returns the angle between two edges in degrees at input 0
-//example: f@angle = angle({0,1},{1,0});
-function float angle(const edgeStruct u,v){
-	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
-}
-//returns the angle between two edges in degrees at inputs
-//example: f@angle = angle(ed1,0,ed2,1);
-function float angle(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return degrees( acos( dot(u,inputU,v,inputV)/( length(v,inputV)*length(u,inputU) )  ) );
-}
-
-//dot product of two edges at input 0
-function float dot(const edgeStruct u,v){
-	return posA(u)*posA(v) + posB(u)*posA(v);
-}
-//dot product of two edges at inputs
-function float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return posA(u,inputU)*posA(v,inputV) + posB(u,inputU)*posA(v,inputV);
-}
 
 
 //edges 
@@ -312,8 +293,41 @@ struct edgeStruct{
 		return normalize( pointp(0,this.a) - pointp(0,this.b) );
 	}
 
-
-
 }
+
+//dot product of two edges at input 0
+float dot(const edgeStruct u,v){
+	return dot(vectorAB(u),vectorAB(v));
+}
+
+//dot product of two edges at inputs
+float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return dot(vectorAB(u,inputU),vectorAB(v,inputV));
+}
+
+//dot product of two normalized edges at input 0
+float ndot(const edgeStruct u,v){
+	return dot(nvectorAB(u),nvectorAB(v));
+}
+
+//dot product of two normalized edges at inputs
+float ndot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return dot(nvectorAB(u,inputU),nvectorAB(v,inputV));
+}
+
+/*
+
+
+	//returns the angle between two edges in degrees at input 0
+	//example: f@angle = angle({0,1},{1,0});
+	float angle(const edgeStruct u,v){
+		return degrees( acos( dot((edgeStruct) u,v)/( length((edgeStruct) v)*length((edgeStruct) u) )  ) );
+	}
+	//returns the angle between two edges in degrees at inputs
+	//example: f@angle = angle(ed1,0,ed2,1);
+	float angle(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+		return degrees( acos( dot(u,inputU,v,inputV)/( length(v,inputV)*length(u,inputU) )  ) );
+	}
+*/
 
 #endif
