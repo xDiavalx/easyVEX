@@ -128,15 +128,23 @@ function vector pointp(const int point){
 
 //returns the angle between two vectors in degrees
 //example: f@angle = angle({0,1,0},{1,0,0});
-function float angle(const vector u,v){
+function float angled(const vector u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 //returns the angle between two 2d vectors in degrees
 //example: f@angle = angle({0,1},{1,0});
-function float angle(const vector2 u,v){
+function float angled(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 
+//returns dot product of two vectors, but normalizes the vectors beforehand
+float dotn(const vector u,v ){
+	return dot(normalize(u),normalize(v));
+}
+//returns dot product of two vector2s, but normalizes the vectors beforehand
+float dotn(const vector2 u,v ){
+	return dot(normalize(u),normalize(v));
+}
 
 //edges 
 struct edgeStruct{
@@ -222,7 +230,7 @@ struct edgeStruct{
 	//returns the position of the edgepoint a at input 0
 	//example: v@pos = posA(ed1);
 	vector posA(){
-		return pointp(0,this.a);
+		return pointp(this.a);
 	}
 
 	//returns the position of the edgepoint b at input
@@ -233,7 +241,7 @@ struct edgeStruct{
 	//returns the position of the edgepoint b at input 0
 	//example: v@pos = posB(ed1);
 	vector posB(){
-		return pointp(0,this.b);
+		return pointp(this.b);
 	}
 
 	//returns the length of the edge at input
@@ -252,82 +260,88 @@ struct edgeStruct{
 	*/
 
 	//returns the non-normalized vector AB == posB - posA at input
-	//example: v@vectorAB = vectorAB(ed1,2);
-	vector vectorAB(const int input){
+	//example: v@vectorAB = vectorab(ed1,2);
+	vector vectorab(const int input){
 		return pointp(input,this.b) - pointp(input,this.a);
 	}
 	//returns the non-normalized vector AB == posB - posA at input 0
-	//example: v@vectorAB = vectorAB(ed1);
-	vector vectorAB(){
+	//example: v@vectorAB = vectorab(ed1);
+	vector vectorab(){
 		return pointp(0,this.b) - pointp(0,this.a);
 	}
 	//returns the non-normalized vector BA == posA - posB at input
-	//example: v@vectorBA = vectorBA(ed1);
-	vector vectorBA(const int input){
+	//example: v@vectorBA = vectorba(ed1);
+	vector vectorba(const int input){
 		return pointp(input,this.a) - pointp(input,this.b);
 	}
 	//returns the non-normalized vector BA == posA - posB at input 0
-	//example: v@vectorBA = vectorBA(ed1);
-	vector vectorBA(){
+	//example: v@vectorBA = vectorba(ed1);
+	vector vectorba(){
 		return pointp(0,this.a) - pointp(0,this.b);
 	}
 
 	//returns the normalized vector AB == posB - posA at input
-	//example: v@vectorAB = nvectorAB(ed1,2);
-	vector nvectorAB(const int input){
+	//example: v@vectorAB = vectorab_n(ed1,2);
+	vector vectorab_n(const int input){
 		return normalize( pointp(input,this.b) - pointp(input,this.a) );
 	}
 	//returns the normalized vector AB == posB - posA at input 0
-	//example: v@vectorAB = nvectorAB(ed1);
-	vector nvectorAB(){
+	//example: v@vectorAB = vectorab_n(ed1);
+	vector vectorab_n(){
 		return normalize( pointp(0,this.b) - pointp(0,this.a) );
 	}
 	//returns the normalized vector BA == posA - posB at input
-	//example: v@vectorBA = nvectorBA(ed1);
-	vector nvectorBA(const int input){
+	//example: v@vectorBA = vectorba_n(ed1);
+	vector vectorba_n(const int input){
 		return normalize( pointp(input,this.a) - pointp(input,this.b) );
 	}
 	//returns the normalized vector BA == posA - posB at input 0
-	//example: v@vectorBA = nvectorBA(ed1);
-	vector nvectorBA(){
+	//example: v@vectorBA = vectorba_n(ed1);
+	vector vectorba_n(){
 		return normalize( pointp(0,this.a) - pointp(0,this.b) );
 	}
 
 }
 
-//dot product of two edges at input 0
+//dot product of two edges (as vectors) at input 0
+//example: f@dot = dot(ed1,ed2);
 float dot(const edgeStruct u,v){
-	return dot(vectorAB(u),vectorAB(v));
+	return dot(vectorab(u),vectorab(v));
 }
-
-//dot product of two edges at inputs
+//dot product of two edges (as vectors) at inputs
+//example: f@dot = dot(ed1,0,ed2,1);
 float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return dot(vectorAB(u,inputU),vectorAB(v,inputV));
+	return dot(vectorab(u,inputU),vectorab(v,inputV));
 }
 
 //dot product of two normalized edges at input 0
-float ndot(const edgeStruct u,v){
-	return dot(nvectorAB(u),nvectorAB(v));
+//example: f@dot = dot_n(ed1,ed2);
+float dot_n(const edgeStruct u,v){
+	return dot(vectorab_n(u),vectorab_n(v));
 }
-
 //dot product of two normalized edges at inputs
-float ndot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return dot(nvectorAB(u,inputU),nvectorAB(v,inputV));
+//example: f@dot = dot_n(ed1,0,ed2,1);
+float dot_n(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return dot(vectorab_n(u,inputU),vectorab_n(v,inputV));
 }
 
-/*
 
+//returns the angle between two edges in degrees at input 0
+//example: f@angle = angle_d({0,1},{1,0});
+float angle_d(const edgeStruct u,v){
+	return degrees( acos( dot_n( u,v)  ) );
+}
+//returns the angle between two edges in degrees at input 0
+//example: f@angle = angle({0,1},{1,0});
+float angle(const edgeStruct u,v){
+	return acos( dot_n( u,v)  );
+}
+	
+//returns the angle between two edges in degrees at inputs
+//example: f@angle = angle_d(ed1,0,ed2,1);
+float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
+	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
+}
 
-	//returns the angle between two edges in degrees at input 0
-	//example: f@angle = angle({0,1},{1,0});
-	float angle(const edgeStruct u,v){
-		return degrees( acos( dot((edgeStruct) u,v)/( length((edgeStruct) v)*length((edgeStruct) u) )  ) );
-	}
-	//returns the angle between two edges in degrees at inputs
-	//example: f@angle = angle(ed1,0,ed2,1);
-	float angle(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-		return degrees( acos( dot(u,inputU,v,inputV)/( length(v,inputV)*length(u,inputU) )  ) );
-	}
-*/
 
 #endif
