@@ -86,7 +86,7 @@ function int[] appendunique(int numbers[]; const int num) {
 function void removevalues(int numbers[]; const int remove) {
 	while (1) {
 		int temp;
-		temp = removevalue(numbers, i);
+		temp = removevalue(numbers, remove);
 		if (temp == 0) {
 			break;
 		}
@@ -106,7 +106,7 @@ function void removevalues(int numbers[]; const int remove[]) {
 	}
 }
 
-//returns int array of unique values of an arbitrary attribute
+//returns int array of unique values of an arbitrary attribute at input 0
 function int[] uniquevals(string componentType; string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(0, componentType, attribName);
@@ -115,6 +115,16 @@ function int[] uniquevals(string componentType; string attribName){
 		append(clean,val);
 	}
 	return clean;
+}
+//returns int array of unique values of an arbitrary attribute at input
+function int[] uniquevals(int input; string componentType; string attribName){	
+	int clean[] = {};
+	int count = nuniqueval(input, componentType, attribName);
+	for (int i = 0; i < count; i++) {
+		int val = uniqueval(input, componentType, attribName, i);
+		append(clean,val);
+	}
+ 	return clean;
 }
 
 //returns point position at input
@@ -128,23 +138,25 @@ function vector pointp(const int point){
 
 //returns the angle between two vectors in degrees
 //example: f@angle = angle({0,1,0},{1,0,0});
-function float angled(const vector u,v){
+function float angle_d(const vector u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 //returns the angle between two 2d vectors in degrees
 //example: f@angle = angle({0,1},{1,0});
-function float angled(const vector2 u,v){
+function float angle_d(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 
 //returns dot product of two vectors, but normalizes the vectors beforehand
-float dotn(const vector u,v ){
+float dot_n(const vector u,v ){
 	return dot(normalize(u),normalize(v));
 }
 //returns dot product of two vector2s, but normalizes the vectors beforehand
-float dotn(const vector2 u,v ){
+float dot_n(const vector2 u,v ){
 	return dot(normalize(u),normalize(v));
 }
+
+
 
 //edges 
 struct edgeStruct{
@@ -184,8 +196,8 @@ struct edgeStruct{
 	}
 
 	//returns a string in standard Houdini edge format
-	//example: getFullName(ed1); 
-	string getFullName(){
+	//example: getfullname(ed1); 
+	string getfullname(){
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
@@ -300,8 +312,91 @@ struct edgeStruct{
 	vector vectorba_n(){
 		return normalize( pointp(0,this.a) - pointp(0,this.b) );
 	}
+	//returns the center position of the edge at input 0
+	//example: v@halfpos = halfpoint(ed1);
+	vector halfpoint(){
+		return ( pointp(0,this.a) + pointp(0,this.b) )*.5;
+	}
+	//returns the center position of the edge at input
+	//example: v@halfpos = halfpoint(ed1);
+	vector halfpoint(const int input){
+		return ( pointp(input,this.a) + pointp(input,this.b) )*.5;
+	}
 
+	//returns the edges connected to point A at input 0
+	//example: edgeStruct[]
+	edgeStruct[] neighboursedges(){
+		edgeStruct result[];
+		int points[];
+		points = neighbours(0,this.a);
+		removevalues(points,this.b);
+		
+		foreach(int i ; points){
+			edgeStruct ed;
+			ed = edgeStruct(i,this.a);
+			push(result,ed);
+		}
+		
+		return result;
+	}
+
+	
 }
+
+/*
+//returns the edges connected to point A at input 0
+//example: edgeStruct[]
+int[] neighboursA(const edgeStruct u){
+	//edgeStruct[] result;
+	int points[];
+	points = neighbours(0,u.a);
+	/*
+	removevalues(points,u.b);
+	foreach(int i ; points){
+		edgeStruct ed = edgeStruct(i,u.a);
+		push(result,ed);
+	}
+	return result;
+	/
+	return points[];
+}
+*/
+
+//Tools to handle edge array data:
+
+//returns an edgeStruct array given a Houdini edge group by input and name 
+//example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+edgeStruct[] edgestruct_fromgroup(const int input; const string name){
+	int numbers[] = expandedgegroup(input, name); 
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+}
+//returns a string in standard Houdini edge format
+//example: getfullname(edges); 
+edgeStruct[] edgestruct_fromarray(const int numbers[]){
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+}
+
+//returns a string in standard Houdini edge format
+//example: getfullname(edges); 
+string getfullname(const edgeStruct edges[]){
+	string result;
+	foreach(edgeStruct ed; edges){
+		append( result, sprintf("p%i_%i ", ed.a, ed.b) );
+	}
+	return result;
+}
+
+
+//Math operations on edgeStructs:
+
 
 //dot product of two edges (as vectors) at input 0
 //example: f@dot = dot(ed1,ed2);
@@ -342,6 +437,8 @@ float angle(const edgeStruct u,v){
 float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
 	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
 }
+
+
 
 
 #endif
