@@ -1,5 +1,7 @@
 ReadMe
 
+WARNING: This is still early days. There might be several major changes. Like major naming-convention-changes.
+
 Author: Dimitri Shimanovskiy
 
 The License allows you to do pretty much anything you want with this code (http://unlicense.org/). 
