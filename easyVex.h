@@ -4,7 +4,10 @@
 /*
 * This Software was originally developed by Dimtiri Shimanovskiy.
 * Feel free to use as you wish (http://unlicense.org/). Feedback is appreciated
-* Credit and dontations are appreciated. If you credit me in a project, send me a message to dimitri.shima.dev@gmail.com, so I can find out about it.
+* Credit and dontations are appreciated. If you credit me in a project, 
+* send me a message to dimitri.shima.dev@gmail.com, so I can find out about it.
+* Contributers:
+* Matthew Hendershot
 *
 * License:
 * This is free and unencumbered software released into the public domain.
@@ -38,18 +41,27 @@
 *
 * COMMENTS:	This include file contains functions to improve quality of life and geometry editing.
 *
-* Instrcutions: Include files go into $HFS/houdini/vex/include/ path
-* 1. Include files go into
-* $HFS/houdini/vex/include/
-* file path.
+* Instrcutions:
+* 1. Put the easyVex.h file into 
+* $HOUDINI_USER_PREF_DIR/vex/include/
+* Just create the folders, if they don't exist already.
 * 2. Type
 * #include "easyVex.h"
 * in the wrangle to be able to use the functions.
+* If the file is in a subfolder it will be something like:
+* #include "subfolder/easyVex.h"
 */
 
 //General utility functions
 
-//This function takes an array of integers and reduces a version that is sorted in ascending order and has no duplicate values. 
+//Returns position of the point closest to given position
+//Contributed by Matthew Hendershot
+function vector nearptpos( const int input; const vector pos)
+{
+return vector(point(input, “P”, int(nearpoint(input, pos))));
+} 
+
+//Returns int array of unique values (no duplicates) sorted in ascending order. 
 function int[] uniquearray(const int numbers[]) {
 	int localNumbers[] = {};
 	int clean[] = {};
@@ -74,7 +86,7 @@ function int[] uniquearray(const int numbers[]) {
 	return clean;
 }
 
-//This function should only add new unique values to an array
+//Adds only new int values (no duplicates) to an int array and returns the modified array.
 function int[] appendunique(int numbers[]; const int num) {
 	if (find(numbers, num)<0) {
 		append(numbers, num);
@@ -82,7 +94,7 @@ function int[] appendunique(int numbers[]; const int num) {
 	return numbers;
 }
 
-//removes all instances of value from array
+//Removes all instances of int value from int array
 function void removevalues(int numbers[]; const int remove) {
 	while (1) {
 		int temp;
@@ -93,7 +105,7 @@ function void removevalues(int numbers[]; const int remove) {
 	}
 }
 
-//removes all instances of all values in seccond array from first array
+//Removes all instances of all int values in seccond array from first int array
 function void removevalues(int numbers[]; const int remove[]) {
 	foreach(int i; remove){
 		while(1) {
@@ -106,7 +118,7 @@ function void removevalues(int numbers[]; const int remove[]) {
 	}
 }
 
-//returns int array of unique values of an arbitrary attribute at input 0
+//Returns int array of unique values of an arbitrary attribute at input 0
 function int[] uniquevals(string componentType; string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(0, componentType, attribName);
@@ -116,7 +128,7 @@ function int[] uniquevals(string componentType; string attribName){
 	}
 	return clean;
 }
-//returns int array of unique values of an arbitrary attribute at input
+//Returns int array of unique values of an arbitrary attribute at input
 function int[] uniquevals(int input; string componentType; string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(input, componentType, attribName);
@@ -127,44 +139,44 @@ function int[] uniquevals(int input; string componentType; string attribName){
  	return clean;
 }
 
-//returns point position at input
+//Returns point position at input
 function vector pointp(const int input; const int point){
 	return point(input,"P",point);
 }
-//returns point position at input 0
+//Returns point position at input 0
 function vector pointp(const int point){
 	return point(0,"P",point);
 }
 
-//returns the angle between two vectors in degrees
-//example: f@angle = angle({0,1,0},{1,0,0});
+//Returns the angle between two vectors in degrees
+//Example: f@angle = angle({0,1,0},{1,0,0});
 function float angle_d(const vector u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
-//returns the angle between two 2d vectors in degrees
-//example: f@angle = angle({0,1},{1,0});
+//Returns the angle between two 2d vectors in degrees
+//Example: f@angle = angle({0,1},{1,0});
 function float angle_d(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 
-//returns dot product of two vectors, but normalizes the vectors beforehand
+//Returns dot product of two vectors, but normalizes the vectors beforehand
 float dot_n(const vector u,v ){
 	return dot(normalize(u),normalize(v));
 }
-//returns dot product of two vector2s, but normalizes the vectors beforehand
+//Returns dot product of two vector2s, but normalizes the vectors beforehand
 float dot_n(const vector2 u,v ){
 	return dot(normalize(u),normalize(v));
 }
 
 
 
-//edges 
+//Edges 
 struct edgeStruct{
 	int a,b;
 
 	/*General info: 
 	//To create a variable of type custom struct:
-	edgeStruct ed1 = edgeStruct(1,2); 
+	edgeStruct ed1 = edgeStruct(1,2);
 	
 	//To use an internal variable of the struct:
 	printf("%i\n",ed1.a);
@@ -201,22 +213,13 @@ struct edgeStruct{
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
-	//swaps a and b - reverseing the direction
+	//Returns a reversed version of the edge (a will b, and b will be a)
 	//example: swap(ed1);
 	void swap(){
-	/*
-	//this method fails for large numbers
-		this.a = this.a + this.b;
-		this.b = this.a - this.b;
-		this.a = this.a - this.b;
-
-	*/  
-	//My guess is for most cases the above method is sufficient
-	//but a stable (and less efficient) alterantive is the following code.
 		int c;
 		c = this.a;
-		this.a = this.b;
-		this.b = c;
+		this.a=this.b;
+		this.b=c;
 	}
 
 	//returns 0 if a>b and 1 if b>a
@@ -267,9 +270,11 @@ struct edgeStruct{
 		return distance(pointp(0,this.a),pointp(0,this.b));
 	}
 
-	/*
-	Following are functions for interpreting the edge as a vector
-	*/
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	//Following are functions for interpreting the edge as a vector//
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
 
 	//returns the non-normalized vector AB == posB - posA at input
 	//example: v@vectorAB = vectorab(ed1,2);
@@ -322,9 +327,58 @@ struct edgeStruct{
 	vector halfpoint(const int input){
 		return ( pointp(input,this.a) + pointp(input,this.b) )*.5;
 	}
+	
+}
 
-	//returns the edges connected to point A at input 0
-	//example: edgeStruct[]
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//Following are functions to handle edge array data://
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+//Returns a string in standard Houdini edge format
+//Example: printf(getfullname(edges)); 
+string getfullname(const edgeStruct edges[]){
+	string result;
+	foreach(edgeStruct ed; edges){
+		append( result, sprintf("p%i_%i ", ed.a, ed.b) );
+	}
+	return result;
+}
+//Returns edges as an int array of point indexes
+//Example: i[]@display1=getint(edges); 
+int[] getint(const edgeStruct edges[]){
+	int result[];
+	foreach(edgeStruct ed; edges){
+		append( result, ed.a );
+		append( result, ed.b );
+	}
+	return result;
+}
+
+/* - probably broken
+//Returns an array of int that represents edges, without a given edge
+//Example:
+//i[]@display1=getint(edges); 
+//i[]@display2=removeedge(@display1, ed1);
+int[] removeedge(const int edges[]; const edgeStruct ed){
+	int result[];
+	for(int i=0; i<len(edges); i = i+2) {
+		if(!( (edges[i]==ed.a && edges[i+1]==ed.b) || (edges[i]==ed.b && edges[i+1]==ed.a) )  ){
+			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
+			append(result,edges[i]);
+			append(result,edges[i+1]);
+		}
+	}
+	return result;
+}
+*/
+
+/* - 
+	//This is probably broken
+
+	//Returns the edges connected to point A at input 0
+	//Example: edgeStruct[]
 	edgeStruct[] neighboursedges(){
 		edgeStruct result[];
 		int points[];
@@ -339,13 +393,93 @@ struct edgeStruct{
 		
 		return result;
 	}
+	*/
 
-	
+/* - probably does not work
+//Returns new array that does not contain given edge or its reverse
+//Example: printf(getfullname( removevalues(edges, ed1) ));
+function int[] removevalues(const edgeStruct edges[]; const edgeStruct ed) {
+	//edgeStruct result[]; 
+	int result[];
+	int numbers[] = getint(edges[]);
+	for(int i ; i<len(numbers)*.5; i = i+2) {
+		if(!( (numbers[i]==ed.a && numbers[i+1]==ed.b) || (numbers[i]==ed.b && numbers[i+1]==ed.a) )  ){
+			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
+			append(result,numbers[i]);
+			append(result,numbers[i+1]);
+		}
+	}
+	return result;
 }
+*/
 
 /*
-//returns the edges connected to point A at input 0
-//example: edgeStruct[]
+//Returns all edges connected to a point at input
+//Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
+edgeStruct[] edgestruct_frompoint(const int input; const int point){
+	int numbers[] = neighbours(input, point); 
+	edgeStruct result[];
+	foreach(int i; numbers ){
+		push( result, edgeStruct(point,i) );
+	}
+	return result;
+}
+*/
+
+/* broken
+//Returns all edges connected to both points of an edge
+//Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
+function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct ed){
+	edgeStruct result[];
+	getint(edgestruct_frompoint(input,ed.a) );
+
+	//push(result, edgestruct_frompoint(input,ed.a) );
+	//push(result, edgestruct_frompoint(input,ed.b) );
+
+	return result;
+}
+*/
+
+
+//Returns an edgeStruct array given a Houdini edge group by input and name 
+//Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+edgeStruct[] edgestruct_fromgroup(const int input; const string name){
+	int numbers[] = expandedgegroup(input, name); 
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+}
+
+//returns a string in standard Houdini edge format
+//example: getfullname(edges); 
+edgeStruct[] edgestruct_fromarray(const int numbers[]){
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+}
+
+
+
+//to do: sorts edgeStruct array by first element in increasing order
+/*
+//returns an array of edgeStructs, sorted in increasing values
+//example: 
+edgeStruct[] sort(const edgeStruct numbers[]){
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+}
+*/
+
+/*
+//Returns the edges connected to point A at input 0
+//Example: edgeStruct[]
 int[] neighboursA(const edgeStruct u){
 	//edgeStruct[] result;
 	int points[];
@@ -362,40 +496,12 @@ int[] neighboursA(const edgeStruct u){
 }
 */
 
-//Tools to handle edge array data:
-
-//returns an edgeStruct array given a Houdini edge group by input and name 
-//example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
-edgeStruct[] edgestruct_fromgroup(const int input; const string name){
-	int numbers[] = expandedgegroup(input, name); 
-	edgeStruct result[];
-	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(numbers[i],numbers[i+1]) );
-	}
-	return result;
-}
-//returns a string in standard Houdini edge format
-//example: getfullname(edges); 
-edgeStruct[] edgestruct_fromarray(const int numbers[]){
-	edgeStruct result[];
-	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(numbers[i],numbers[i+1]) );
-	}
-	return result;
-}
-
-//returns a string in standard Houdini edge format
-//example: getfullname(edges); 
-string getfullname(const edgeStruct edges[]){
-	string result;
-	foreach(edgeStruct ed; edges){
-		append( result, sprintf("p%i_%i ", ed.a, ed.b) );
-	}
-	return result;
-}
-
-
 //Math operations on edgeStructs:
+
+//Check if two given edges are identical. Returns 1 if same and 0 if not.
+int isequal(const edgeStruct u,v){
+	return (u.a==v.a && u.b==v.b) || (u.a==v.b && u.b==v.a);
+}
 
 
 //dot product of two edges (as vectors) at input 0
@@ -439,6 +545,12 @@ float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const
 }
 
 
+//to do: define line struct 
+//to do: define line struct from edgeStruct
+//to do: line to point distance
 
+//to do: plane struct
+//to do: is line on plane?
+//to do: line - to plane intersection point (if line on plane return plane reference point)
 
 #endif
