@@ -213,7 +213,7 @@ struct edgeStruct{
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
-	//Returns a reversed version of the edge (a will b, and b will be a)
+	//Swaps edge direction (a will b, and b will be a)
 	//example: swap(ed1);
 	void swap(){
 		int c;
@@ -222,108 +222,106 @@ struct edgeStruct{
 		this.b=c;
 	}
 
-	//returns 0 if a>b and 1 if b>a
-	//example: compare(ed1);
+	//Returns 0 if a>b and 1 if b>a
+	//Example: compare(ed1);
 	int compare(){
 		return this.a>this.b;
 	}
 
-	//sorts a and b in increasing order
-	//example: sort(ed1);
+	//Sorts a and b in increasing order
+	//Example: sort(ed1);
 	void sort(){
 		if( compare(this) ){
 			swap(this);
 		}
 	}
 
-	//returns the position of the edgepoint a at input
-	//example: v@pos = posA(ed1,2);
+	//Returns the position of the edgepoint a at input
+	//Example: v@pos = posA(ed1,2);
 	vector posA(const int input){
 		return pointp(input,this.a);
 	}
 
-	//returns the position of the edgepoint a at input 0
-	//example: v@pos = posA(ed1);
+	//Returns the position of the edgepoint a at input 0
+	//Example: v@pos = posA(ed1);
 	vector posA(){
 		return pointp(this.a);
 	}
 
-	//returns the position of the edgepoint b at input
-	//example: v@pos = posB(ed1,2);
+	//Returns the position of the edgepoint b at input
+	//Example: v@pos = posB(ed1,2);
 	vector posB(const int input){
 		return pointp(input,this.b);
 	}
-	//returns the position of the edgepoint b at input 0
-	//example: v@pos = posB(ed1);
+	//Returns the position of the edgepoint b at input 0
+	//Example: v@pos = posB(ed1);
 	vector posB(){
 		return pointp(this.b);
 	}
 
-	//returns the length of the edge at input
-	//example: f@len = length(ed1,2);
+	//Returns the length of the edge at input
+	//Example: f@len = length(ed1,2);
 	float length(const int input){
 		return distance(pointp(input,this.a),pointp(input,this.b));
 	}
-	//returns the length of the edge at input 0
-	//example: f@len = length(ed1);
+	//Returns the length of the edge at input 0
+	//Example: f@len = length(ed1);
 	float length(){
 		return distance(pointp(0,this.a),pointp(0,this.b));
 	}
 
 	/////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////
 	//Following are functions for interpreting the edge as a vector//
 	/////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////
 
-	//returns the non-normalized vector AB == posB - posA at input
-	//example: v@vectorAB = vectorab(ed1,2);
+	//Returns the non-normalized vector AB == posB - posA at input
+	//Example: v@vectorAB = vectorab(ed1,2);
 	vector vectorab(const int input){
 		return pointp(input,this.b) - pointp(input,this.a);
 	}
-	//returns the non-normalized vector AB == posB - posA at input 0
-	//example: v@vectorAB = vectorab(ed1);
+	//Returns the non-normalized vector AB == posB - posA at input 0
+	//Example: v@vectorAB = vectorab(ed1);
 	vector vectorab(){
 		return pointp(0,this.b) - pointp(0,this.a);
 	}
-	//returns the non-normalized vector BA == posA - posB at input
-	//example: v@vectorBA = vectorba(ed1);
+	//Returns the non-normalized vector BA == posA - posB at input
+	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(const int input){
 		return pointp(input,this.a) - pointp(input,this.b);
 	}
-	//returns the non-normalized vector BA == posA - posB at input 0
-	//example: v@vectorBA = vectorba(ed1);
+	//Returns the non-normalized vector BA == posA - posB at input 0
+	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(){
 		return pointp(0,this.a) - pointp(0,this.b);
 	}
 
-	//returns the normalized vector AB == posB - posA at input
-	//example: v@vectorAB = vectorab_n(ed1,2);
+	//Returns the normalized vector AB == posB - posA at input
+	//Example: v@vectorAB = vectorab_n(ed1,2);
 	vector vectorab_n(const int input){
 		return normalize( pointp(input,this.b) - pointp(input,this.a) );
 	}
-	//returns the normalized vector AB == posB - posA at input 0
-	//example: v@vectorAB = vectorab_n(ed1);
+	//Returns the normalized vector AB == posB - posA at input 0
+	//Example: v@vectorAB = vectorab_n(ed1);
 	vector vectorab_n(){
 		return normalize( pointp(0,this.b) - pointp(0,this.a) );
 	}
-	//returns the normalized vector BA == posA - posB at input
-	//example: v@vectorBA = vectorba_n(ed1);
+	//Returns the normalized vector BA == posA - posB at input
+	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(const int input){
 		return normalize( pointp(input,this.a) - pointp(input,this.b) );
 	}
-	//returns the normalized vector BA == posA - posB at input 0
-	//example: v@vectorBA = vectorba_n(ed1);
+	//Returns the normalized vector BA == posA - posB at input 0
+	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(){
 		return normalize( pointp(0,this.a) - pointp(0,this.b) );
 	}
-	//returns the center position of the edge at input 0
-	//example: v@halfpos = halfpoint(ed1);
+	//Returns the center position of the edge at input 0
+	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(){
 		return ( pointp(0,this.a) + pointp(0,this.b) )*.5;
 	}
-	//returns the center position of the edge at input
-	//example: v@halfpos = halfpoint(ed1);
+	//Returns the center position of the edge at input
+	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(const int input){
 		return ( pointp(input,this.a) + pointp(input,this.b) )*.5;
 	}
