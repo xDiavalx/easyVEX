@@ -354,8 +354,8 @@ int[] getint(const edgeStruct edges[]){
 	return result;
 }
 
-/* - probably broken
-//Returns an array of int that represents edges, without a given edge
+//Returns an array of int that represents edges, without a given edge 
+//and without a swapped version of that edge. 
 //Example:
 //i[]@display1=getint(edges); 
 //i[]@display2=removeedge(@display1, ed1);
@@ -370,48 +370,25 @@ int[] removeedge(const int edges[]; const edgeStruct ed){
 	}
 	return result;
 }
-*/
-
-/* - 
-	//This is probably broken
-
-	//Returns the edges connected to point A at input 0
-	//Example: edgeStruct[]
-	edgeStruct[] neighboursedges(){
-		edgeStruct result[];
-		int points[];
-		points = neighbours(0,this.a);
-		removevalues(points,this.b);
-		
-		foreach(int i ; points){
-			edgeStruct ed;
-			ed = edgeStruct(i,this.a);
-			push(result,ed);
-		}
-		
-		return result;
-	}
-	*/
-
-/* - probably does not work
-//Returns new array that does not contain given edge or its reverse
-//Example: printf(getfullname( removevalues(edges, ed1) ));
-function int[] removevalues(const edgeStruct edges[]; const edgeStruct ed) {
-	//edgeStruct result[]; 
+//Returns new array that does not contain given edge or the swapped version of that edge
+//Example:
+//i[]@display1=getint(edges); 
+//i[]@display2=removeedge(@display1, ed1);
+int[] removeedge(const edgeStruct edges[]; const edgeStruct ed){
+	/*int nums[] = getint(edges);
 	int result[];
-	int numbers[] = getint(edges[]);
-	for(int i ; i<len(numbers)*.5; i = i+2) {
-		if(!( (numbers[i]==ed.a && numbers[i+1]==ed.b) || (numbers[i]==ed.b && numbers[i+1]==ed.a) )  ){
+	for(int i=0; i<len(nums); i = i+2) {
+		if(!( (nums[i]==ed.a && nums[i+1]==ed.b) || (nums[i]==ed.b && nums[i+1]==ed.a) )  ){
 			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
-			append(result,numbers[i]);
-			append(result,numbers[i+1]);
+			append(result,nums[i]);
+			append(result,nums[i+1]);
 		}
 	}
-	return result;
+	return result;*/
+	return removeedge(getint(edges),ed);
 }
-*/
 
-/*
+
 //Returns all edges connected to a point at input
 //Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
 edgeStruct[] edgestruct_frompoint(const int input; const int point){
@@ -422,33 +399,7 @@ edgeStruct[] edgestruct_frompoint(const int input; const int point){
 	}
 	return result;
 }
-*/
 
-/* broken
-//Returns all edges connected to both points of an edge
-//Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
-function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct ed){
-	edgeStruct result[];
-	getint(edgestruct_frompoint(input,ed.a) );
-
-	//push(result, edgestruct_frompoint(input,ed.a) );
-	//push(result, edgestruct_frompoint(input,ed.b) );
-
-	return result;
-}
-*/
-
-
-//Returns an edgeStruct array given a Houdini edge group by input and name 
-//Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
-edgeStruct[] edgestruct_fromgroup(const int input; const string name){
-	int numbers[] = expandedgegroup(input, name); 
-	edgeStruct result[];
-	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(numbers[i],numbers[i+1]) );
-	}
-	return result;
-}
 
 //returns a string in standard Houdini edge format
 //example: getfullname(edges); 
@@ -460,6 +411,31 @@ edgeStruct[] edgestruct_fromarray(const int numbers[]){
 	return result;
 }
 
+//Returns all edges connected to both points of an edge - without the source edge
+//Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
+function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct ed){
+	//int numbers[];
+	edgeStruct result[];
+	//numbers = getint(edgestruct_frompoint(input,ed.a) ) ;
+	//append(numbers, getint(edgestruct_frompoint(input,ed.b) ) );
+	push(result, edgestruct_frompoint(input,ed.a) );
+	push(result, edgestruct_frompoint(input,ed.b) );
+	return edgestruct_fromarray(removeedge(result,ed) );
+}
+
+//Returns an edgeStruct array given a Houdini edge group by input and name 
+//Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+edgeStruct[] edgestruct_fromgroup(const int input; const string name){
+	/*
+	int numbers[] = expandedgegroup(input, name); 
+	edgeStruct result[];
+	for(int i = 0; i<len(numbers); i=i+2 ){
+		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	}
+	return result;
+	*/
+	return edgestruct_fromarray(expandedgegroup(input, name));
+}
 
 
 //to do: sorts edgeStruct array by first element in increasing order
@@ -494,7 +470,9 @@ int[] neighboursA(const edgeStruct u){
 }
 */
 
-//Math operations on edgeStructs:
+///////////////////////////////////
+//Math operations on edgeStructs://
+///////////////////////////////////
 
 //Check if two given edges are identical. Returns 1 if same and 0 if not.
 int isequal(const edgeStruct u,v){
