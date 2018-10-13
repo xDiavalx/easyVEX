@@ -484,8 +484,14 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	int alla[], allb[], ordera[], orderb[];
 	//split the edges into front points and rear points
 	foreach(edgeStruct ed; edges){
-		append( alla, ed.a );
-		append( allb, ed.b );
+		if(ed.a<ed.b){
+			append( alla, ed.a );
+			append( allb, ed.b );
+		}
+		else{
+			append( alla, ed.b );
+			append( allb, ed.a );
+		}
 	}
 	amount = len(alla);
 
@@ -497,6 +503,10 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	for(int i=0; i<amount ; i++ ){
 		ordera[i] = (ordera[i]+2)*(amount+2)+orderb[i];
 	}
+
+	//fix the large numbers to range
+	ordera = argsort(alla);
+
 	alla = reorder(alla, ordera);
 	allb = reorder(allb, ordera);
 
