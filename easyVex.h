@@ -475,9 +475,8 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 }
 
 
-//to do: sorts edgeStruct array by first element in increasing order
-//returns an array of edgeStructs, sorted in increasing values
-//example: 
+//Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
+//example: printf(getfullname( sort(edges) ));
 edgeStruct[] sort(const edgeStruct edges[]){
 	int amount;
 	edgeStruct result[];
