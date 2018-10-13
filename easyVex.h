@@ -54,6 +54,13 @@
 
 //General utility functions
 
+// Function mappings
+
+//#define pointp(inp,pn) point(inp,"P",pn)
+
+
+
+
 //Returns position of the point closest to given position
 //Contributed by Matthew Hendershot
 function vector nearptpos( const int input; const vector pos)
@@ -139,6 +146,7 @@ function int[] uniquevals(int input; string componentType; string attribName){
  	return clean;
 }
 
+
 //Returns point position at input
 function vector pointp(const int input; const int point){
 	return point(input,"P",point);
@@ -147,6 +155,7 @@ function vector pointp(const int input; const int point){
 function vector pointp(const int point){
 	return point(0,"P",point);
 }
+
 
 //Returns the angle between two vectors in degrees
 //Example: f@angle = angle({0,1,0},{1,0,0});
@@ -222,52 +231,53 @@ struct edgeStruct{
 		this.b=c;
 	}
 
-	//Returns 0 if a>b and 1 if b>a
+	//Returns 1 if a>b and 0 if b>a
 	//Example: compare(ed1);
 	int compare(){
 		return this.a>this.b;
 	}
 
+	/*
 	//Sorts a and b in increasing order
 	//Example: sort(ed1);
 	void sort(){
 		if( compare(this) ){
 			swap(this);
 		}
-	}
+	}*/
 
 	//Returns the position of the edgepoint a at input
 	//Example: v@pos = posA(ed1,2);
 	vector posA(const int input){
-		return pointp(input,this.a);
+		return point(input,"P",this.a);
 	}
 
 	//Returns the position of the edgepoint a at input 0
 	//Example: v@pos = posA(ed1);
 	vector posA(){
-		return pointp(this.a);
+		return point(0,"P",this.a);
 	}
 
 	//Returns the position of the edgepoint b at input
 	//Example: v@pos = posB(ed1,2);
 	vector posB(const int input){
-		return pointp(input,this.b);
+		return point(input,"P",this.b);
 	}
 	//Returns the position of the edgepoint b at input 0
 	//Example: v@pos = posB(ed1);
 	vector posB(){
-		return pointp(this.b);
+		return point(0,"P",this.b);
 	}
 
 	//Returns the length of the edge at input
 	//Example: f@len = length(ed1,2);
 	float length(const int input){
-		return distance(pointp(input,this.a),pointp(input,this.b));
+		return distance(point(input,"P",this.a),point(input,"P",this.b));
 	}
 	//Returns the length of the edge at input 0
 	//Example: f@len = length(ed1);
 	float length(){
-		return distance(pointp(0,this.a),pointp(0,this.b));
+		return distance(point(0,"P",this.a),point(0,"P",this.b));
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -277,55 +287,62 @@ struct edgeStruct{
 	//Returns the non-normalized vector AB == posB - posA at input
 	//Example: v@vectorAB = vectorab(ed1,2);
 	vector vectorab(const int input){
-		return pointp(input,this.b) - pointp(input,this.a);
+		return point(input,"P",this.b) - point(input,"P",this.a);
 	}
 	//Returns the non-normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab(ed1);
 	vector vectorab(){
-		return pointp(0,this.b) - pointp(0,this.a);
+		return point(0,"P",this.b) - point(0,"P",this.a);
 	}
 	//Returns the non-normalized vector BA == posA - posB at input
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(const int input){
-		return pointp(input,this.a) - pointp(input,this.b);
+		return point(input,"P",this.a) - point(input,"P",this.b);
 	}
 	//Returns the non-normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(){
-		return pointp(0,this.a) - pointp(0,this.b);
+		return point(0,"P",this.a) - point(0,"P",this.b);
 	}
 
 	//Returns the normalized vector AB == posB - posA at input
 	//Example: v@vectorAB = vectorab_n(ed1,2);
 	vector vectorab_n(const int input){
-		return normalize( pointp(input,this.b) - pointp(input,this.a) );
+		return normalize( point(input,"P",this.b) - point(input,"P",this.a) );
 	}
 	//Returns the normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab_n(ed1);
 	vector vectorab_n(){
-		return normalize( pointp(0,this.b) - pointp(0,this.a) );
+		return normalize( point(0,"P",this.b) - point(0,"P",this.a) );
 	}
 	//Returns the normalized vector BA == posA - posB at input
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(const int input){
-		return normalize( pointp(input,this.a) - pointp(input,this.b) );
+		return normalize( point(input,"P",this.a) - point(input,"P",this.b) );
 	}
 	//Returns the normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(){
-		return normalize( pointp(0,this.a) - pointp(0,this.b) );
+		return normalize( point(0,"P",this.a) - point(0,"P",this.b) );
 	}
 	//Returns the center position of the edge at input 0
 	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(){
-		return ( pointp(0,this.a) + pointp(0,this.b) )*.5;
+		return ( point(0,"P",this.a) + point(0,"P",this.b) )*.5;
 	}
 	//Returns the center position of the edge at input
 	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(const int input){
-		return ( pointp(input,this.a) + pointp(input,this.b) )*.5;
+		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
 	}
 	
+}
+
+edgeStruct sort(const edgeStruct ed){
+	if( compare(ed) ){
+		return edgeStruct(ed.b,ed.a);
+		}
+	return ed;
 }
 
 //////////////////////////////////////////////////////
@@ -349,6 +366,26 @@ int[] getint(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
 		append( result, ed.a );
+		append( result, ed.b );
+	}
+	return result;
+}
+
+//Returns point indexes of first points of an array of edges
+//Example: i[]@display1=getinta(edges); 
+int[] getinta(const edgeStruct edges[]){
+	int result[];
+	foreach(edgeStruct ed; edges){
+		append( result, ed.a );
+	}
+	return result;
+}
+
+//Returns point indexes of seccond points of an array of edges
+//Example: i[]@display1=getintb(edges); 
+int[] getintb(const edgeStruct edges[]){
+	int result[];
+	foreach(edgeStruct ed; edges){
 		append( result, ed.b );
 	}
 	return result;
@@ -439,17 +476,38 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 
 
 //to do: sorts edgeStruct array by first element in increasing order
-/*
 //returns an array of edgeStructs, sorted in increasing values
 //example: 
-edgeStruct[] sort(const edgeStruct numbers[]){
+edgeStruct[] sort(const edgeStruct edges[]){
+	int amount;
 	edgeStruct result[];
-	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+	int alla[], allb[], ordera[], orderb[];
+	//split the edges into front points and rear points
+	foreach(edgeStruct ed; edges){
+		append( alla, ed.a );
+		append( allb, ed.b );
+	}
+	amount = len(alla);
+
+	//determine order
+	ordera = argsort(alla);
+	orderb = argsort(allb);
+
+	//combine sorting orders and give greater weight to a 
+	for(int i=0; i<amount ; i++ ){
+		ordera[i] = (ordera[i]+2)*(amount+2)+orderb[i];
+	}
+	alla = reorder(alla, ordera);
+	allb = reorder(allb, ordera);
+
+	edgeStruct temp;
+	for(int i=0; i<amount; i++){
+		temp = edgeStruct(alla[i],allb[i]);
+		push(result, temp);
 	}
 	return result;
 }
-*/
+
 
 /*
 //Returns the edges connected to point A at input 0
