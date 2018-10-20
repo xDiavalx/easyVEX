@@ -360,6 +360,7 @@ string getfullname(const edgeStruct edges[]){
 	}
 	return result;
 }
+
 //Returns edges as an int array of point indexes
 //Example: i[]@display1=getint(edges); 
 int[] getint(const edgeStruct edges[]){
@@ -518,24 +519,22 @@ edgeStruct[] sort(const edgeStruct edges[]){
 }
 
 
-/*
 //Returns the edges connected to point A at input 0
 //Example: edgeStruct[]
-int[] neighboursA(const edgeStruct u){
-	//edgeStruct[] result;
+edgeStruct[] neighbours_a(const edgeStruct u){
+	edgeStruct result[];
 	int points[];
-	points = neighbours(0,u.a);
-	/*
-	removevalues(points,u.b);
+	int a = u.a;
+	int b = u.b;
+	points = neighbours(0,a);
+	removevalue(points,b);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(i,u.a);
+		edgeStruct ed = edgeStruct(i,a);
 		push(result,ed);
 	}
 	return result;
-	/
-	return points[];
 }
-*/
+
 
 ///////////////////////////////////
 //Math operations on edgeStructs://
