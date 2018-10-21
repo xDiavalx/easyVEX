@@ -135,6 +135,7 @@ function int[] uniquevals(string componentType; string attribName){
 	}
 	return clean;
 }
+
 //Returns int array of unique values of an arbitrary attribute at input
 function int[] uniquevals(int input; string componentType; string attribName){	
 	int clean[] = {};
@@ -146,22 +147,22 @@ function int[] uniquevals(int input; string componentType; string attribName){
  	return clean;
 }
 
-
 //Returns point position at input
 function vector pointp(const int input; const int point){
 	return point(input,"P",point);
 }
+
 //Returns point position at input 0
 function vector pointp(const int point){
 	return point(0,"P",point);
 }
-
 
 //Returns the angle between two vectors in degrees
 //Example: f@angle = angle({0,1,0},{1,0,0});
 function float angle_d(const vector u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
+
 //Returns the angle between two 2d vectors in degrees
 //Example: f@angle = angle({0,1},{1,0});
 function float angle_d(const vector2 u,v){
@@ -172,14 +173,17 @@ function float angle_d(const vector2 u,v){
 float dot_n(const vector u,v ){
 	return dot(normalize(u),normalize(v));
 }
+
 //Returns dot product of two vector2s, but normalizes the vectors beforehand
 float dot_n(const vector2 u,v ){
 	return dot(normalize(u),normalize(v));
 }
 
-
-
-//Edges 
+////////////////////////////////////
+////////////////////////////////////
+//Edge struct and helper functions//
+////////////////////////////////////
+////////////////////////////////////
 struct edgeStruct{
 	int a,b;
 
@@ -190,9 +194,10 @@ struct edgeStruct{
 	//To use an internal variable of the struct:
 	printf("%i\n",ed1.a);
 	ed1.a = 6;
+	int a = ed1.a //if you need to use the component in functions
 
 	//To use a function defined in a custom struct:
-	printfVerbose(ed1);
+	printfverbose(ed1);
 	
 	//To make an array of custom struct:
 	edgeStruct ed2 = edgeStruct(3,2);
@@ -204,26 +209,26 @@ struct edgeStruct{
 
 	//To loop over a custom struct:
 	foreach(edgeStruct test; edges){
-	printfVerbose(test);
+	printfverbose(test);
 	printf("a is %i \n",test.a);
 	}
 	*/
 
 
-	//print verbose edge description to log
-	//example: printf(ed1); 
-	void printfVerbose(){
+	//Print verbose edge description to log
+	//Example: printfverbose(ed1); 
+	void printfverbose(){
 		printf("edge between points %i and %i \n", a,b);
 	}
 
-	//returns a string in standard Houdini edge format
-	//example: getfullname(ed1); 
+	//Returns a string in standard Houdini edge format
+	//Example: printf(getfullname(ed1)); 
 	string getfullname(){
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
 	//Swaps edge direction (a will b, and b will be a)
-	//example: swap(ed1);
+	//Example: swap(ed1);
 	void swap(){
 		int c;
 		c = this.a;
@@ -244,28 +249,30 @@ struct edgeStruct{
 		if( compare(this) ){
 			swap(this);
 		}
-	}*/
+	}
+	*/
 
 	//Returns the position of the edgepoint a at input
-	//Example: v@pos = posA(ed1,2);
-	vector posA(const int input){
+	//Example: v@pos = posa(ed1,2);
+	vector posa(const int input){
 		return point(input,"P",this.a);
 	}
 
 	//Returns the position of the edgepoint a at input 0
-	//Example: v@pos = posA(ed1);
-	vector posA(){
+	//Example: v@pos = posa(ed1);
+	vector posa(){
 		return point(0,"P",this.a);
 	}
 
 	//Returns the position of the edgepoint b at input
-	//Example: v@pos = posB(ed1,2);
-	vector posB(const int input){
+	//Example: v@pos = posb(ed1,2);
+	vector posb(const int input){
 		return point(input,"P",this.b);
 	}
+
 	//Returns the position of the edgepoint b at input 0
-	//Example: v@pos = posB(ed1);
-	vector posB(){
+	//Example: v@pos = posb(ed1);
+	vector posb(){
 		return point(0,"P",this.b);
 	}
 
@@ -274,6 +281,7 @@ struct edgeStruct{
 	float length(const int input){
 		return distance(point(input,"P",this.a),point(input,"P",this.b));
 	}
+
 	//Returns the length of the edge at input 0
 	//Example: f@len = length(ed1);
 	float length(){
@@ -281,7 +289,9 @@ struct edgeStruct{
 	}
 
 	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
 	//Following are functions for interpreting the edge as a vector//
+	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
 
 	//Returns the non-normalized vector AB == posB - posA at input
@@ -289,16 +299,19 @@ struct edgeStruct{
 	vector vectorab(const int input){
 		return point(input,"P",this.b) - point(input,"P",this.a);
 	}
+
 	//Returns the non-normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab(ed1);
 	vector vectorab(){
 		return point(0,"P",this.b) - point(0,"P",this.a);
 	}
+
 	//Returns the non-normalized vector BA == posA - posB at input
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(const int input){
 		return point(input,"P",this.a) - point(input,"P",this.b);
 	}
+
 	//Returns the non-normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(){
@@ -310,26 +323,31 @@ struct edgeStruct{
 	vector vectorab_n(const int input){
 		return normalize( point(input,"P",this.b) - point(input,"P",this.a) );
 	}
+
 	//Returns the normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab_n(ed1);
 	vector vectorab_n(){
 		return normalize( point(0,"P",this.b) - point(0,"P",this.a) );
 	}
+
 	//Returns the normalized vector BA == posA - posB at input
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(const int input){
 		return normalize( point(input,"P",this.a) - point(input,"P",this.b) );
 	}
+
 	//Returns the normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(){
 		return normalize( point(0,"P",this.a) - point(0,"P",this.b) );
 	}
+
 	//Returns the center position of the edge at input 0
 	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(){
 		return ( point(0,"P",this.a) + point(0,"P",this.b) )*.5;
 	}
+
 	//Returns the center position of the edge at input
 	//Example: v@halfpos = halfpoint(ed1);
 	vector halfpoint(const int input){
@@ -408,6 +426,7 @@ int[] removeedge(const int edges[]; const edgeStruct ed){
 	}
 	return result;
 }
+
 //Returns new array that does not contain given edge or the swapped version of that edge
 //Example:
 //i[]@display1=getint(edges); 
@@ -426,7 +445,6 @@ int[] removeedge(const edgeStruct edges[]; const edgeStruct ed){
 	return removeedge(getint(edges),ed);
 }
 
-
 //Returns all edges connected to a point at input
 //Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
 edgeStruct[] edgestruct_frompoint(const int input; const int point){
@@ -437,7 +455,6 @@ edgeStruct[] edgestruct_frompoint(const int input; const int point){
 	}
 	return result;
 }
-
 
 //returns a string in standard Houdini edge format
 //example: getfullname(edges); 
@@ -475,7 +492,6 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	return edgestruct_fromarray(expandedgegroup(input, name));
 }
 
-
 //Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
 //example: printf(getfullname( sort(edges) ));
 edgeStruct[] sort(const edgeStruct edges[]){
@@ -494,22 +510,19 @@ edgeStruct[] sort(const edgeStruct edges[]){
 		}
 	}
 	amount = len(alla);
-
 	//determine order
 	ordera = argsort(alla);
 	orderb = argsort(allb);
-
-	//combine sorting orders and give greater weight to a 
+	//combine sorting orders and give greater weight to "a" 
 	for(int i=0; i<amount ; i++ ){
 		ordera[i] = (ordera[i]+2)*(amount+2)+orderb[i];
 	}
-
 	//fix the large numbers to range
 	ordera = argsort(alla);
 
 	alla = reorder(alla, ordera);
 	allb = reorder(allb, ordera);
-
+	//make edgeStruct array
 	edgeStruct temp;
 	for(int i=0; i<amount; i++){
 		temp = edgeStruct(alla[i],allb[i]);
@@ -518,9 +531,8 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	return result;
 }
 
-
 //Returns the edges connected to point A at input 0
-//Example: edgeStruct[]
+//Example: printf(getfullname( neighbours_a(ed1) ));
 edgeStruct[] neighbours_a(const edgeStruct u){
 	edgeStruct result[];
 	int points[];
@@ -529,7 +541,55 @@ edgeStruct[] neighbours_a(const edgeStruct u){
 	points = neighbours(0,a);
 	removevalue(points,b);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(i,a);
+		edgeStruct ed = edgeStruct(a,i);
+		push(result,ed);
+	}
+	return result;
+}
+
+//Returns the edges connected to point A at input
+//Example: printf(getfullname( neighbours_a(0,ed1) ));
+edgeStruct[] neighbours_a(const int input; const edgeStruct u){
+	edgeStruct result[];
+	int points[];
+	int a = u.a;
+	int b = u.b;
+	points = neighbours(input,a);
+	removevalue(points,b);
+	foreach(int i ; points){
+		edgeStruct ed = edgeStruct(a,i);
+		push(result,ed);
+	}
+	return result;
+}
+
+//Returns the edges connected to point B at input 0
+//Example: printf(getfullname( neighbours_b(ed1) ));
+edgeStruct[] neighbours_b(const edgeStruct u){
+	edgeStruct result[];
+	int points[];
+	int a = u.a;
+	int b = u.b;
+	points = neighbours(0,b);
+	removevalue(points,a);
+	foreach(int i ; points){
+		edgeStruct ed = edgeStruct(b,i);
+		push(result,ed);
+	}
+	return result;
+}
+
+//Returns the edges connected to point B at input
+//Example: printf(getfullname( neighbours_b(0,ed1) ));
+edgeStruct[] neighbours_b(const int input; const edgeStruct u){
+	edgeStruct result[];
+	int points[];
+	int a = u.a;
+	int b = u.b;
+	points = neighbours(input,b);
+	removevalue(points,a);
+	foreach(int i ; points){
+		edgeStruct ed = edgeStruct(b,i);
 		push(result,ed);
 	}
 	return result;
@@ -545,47 +605,47 @@ int isequal(const edgeStruct u,v){
 	return (u.a==v.a && u.b==v.b) || (u.a==v.b && u.b==v.a);
 }
 
-
-//dot product of two edges (as vectors) at input 0
-//example: f@dot = dot(ed1,ed2);
+//Dot product of two edges (as vectors) at input 0
+//Example: f@dot = dot(ed1,ed2);
 float dot(const edgeStruct u,v){
 	return dot(vectorab(u),vectorab(v));
 }
-//dot product of two edges (as vectors) at inputs
-//example: f@dot = dot(ed1,0,ed2,1);
+
+//Dot product of two edges (as vectors) at inputs
+//Example: f@dot = dot(ed1,0,ed2,1);
 float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
 	return dot(vectorab(u,inputU),vectorab(v,inputV));
 }
 
-//dot product of two normalized edges at input 0
-//example: f@dot = dot_n(ed1,ed2);
+//Dot product of two normalized edges at input 0
+//Example: f@dot = dot_n(ed1,ed2);
 float dot_n(const edgeStruct u,v){
 	return dot(vectorab_n(u),vectorab_n(v));
 }
-//dot product of two normalized edges at inputs
-//example: f@dot = dot_n(ed1,0,ed2,1);
+
+//Dot product of two normalized edges at inputs
+//Example: f@dot = dot_n(ed1,0,ed2,1);
 float dot_n(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
 	return dot(vectorab_n(u,inputU),vectorab_n(v,inputV));
 }
 
-
-//returns the angle between two edges in degrees at input 0
-//example: f@angle = angle_d({0,1},{1,0});
+//Returns the angle between two edges in degrees at input 0
+//Example: f@angle = angle_d({0,1},{1,0});
 float angle_d(const edgeStruct u,v){
 	return degrees( acos( dot_n( u,v)  ) );
 }
-//returns the angle between two edges in degrees at input 0
-//example: f@angle = angle({0,1},{1,0});
+
+//Returns the angle between two edges in degrees at input 0
+//Example: f@angle = angle({0,1},{1,0});
 float angle(const edgeStruct u,v){
 	return acos( dot_n( u,v)  );
 }
 	
-//returns the angle between two edges in degrees at inputs
-//example: f@angle = angle_d(ed1,0,ed2,1);
+//Returns the angle between two edges in degrees at inputs
+//Example: f@angle = angle_d(ed1,0,ed2,1);
 float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
 	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
 }
-
 
 //to do: define line struct 
 //to do: define line struct from edgeStruct
