@@ -181,7 +181,9 @@ float dot_n(const vector2 u,v ){
 
 ////////////////////////////////////
 ////////////////////////////////////
+////////////////////////////////////
 //Edge struct and helper functions//
+////////////////////////////////////
 ////////////////////////////////////
 ////////////////////////////////////
 struct edgeStruct{
@@ -493,7 +495,7 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 }
 
 //Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
-//example: printf(getfullname( sort(edges) ));
+//Example: printf(getfullname( sort(edges) ));
 edgeStruct[] sort(const edgeStruct edges[]){
 	int amount;
 	edgeStruct result[];
@@ -648,6 +650,9 @@ float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const
 }
 
 //to do: define line struct 
+/*
+struct lineStruct
+*/
 //to do: define line struct from edgeStruct
 //to do: line to point distance
 
