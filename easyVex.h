@@ -179,6 +179,15 @@ float dot_n(const vector2 u,v ){
 	return dot(normalize(u),normalize(v));
 }
 
+//Return the area of a triangle given by points A B C
+float trianglearea(const vector A,B,C){
+	float a = distance2(A,B); //squared distance A to B
+	float b = distance2(B,C); //squared distance B to C
+	float c = distance2(C,A); //squared distance C to A
+	return .25*sqrt( 2*b*c+ 2*c*a+ 2*a*b+ - a*a - b*b - c*c ); //http://mathworld.wolfram.com/TriangleArea.html
+}
+
+
 ////////////////////////////////////
 ////////////////////////////////////
 ////////////////////////////////////
@@ -214,6 +223,19 @@ struct edgeStruct{
 	printfverbose(test);
 	printf("a is %i \n",test.a);
 	}
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	/////////REFACTOR INCOMMING!!!!!!!!!!!!!!
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	//THE PROBLEM: Defining functins in here defies convention
+	//Usually input parameter is the first input. 
+	//This convention needs to be maintained! 
+	//Since we cannot maintain it if we use the definitions in the struct, we need to put those function variations outside.
 	*/
 
 
@@ -363,6 +385,18 @@ edgeStruct sort(const edgeStruct ed){
 		return edgeStruct(ed.b,ed.a);
 		}
 	return ed;
+}
+
+//Returns the position of the edgepoint a at input
+//Example: v@pos = posa(2,ed1);
+vector posa(const int input; const edgeStruct edge){
+	return point(input,"P",edge.a);
+}
+
+//Returns the position of the edgepoint b at input
+//Example: v@pos = posb(2,ed1);
+vector posb(const int input; const edgeStruct edge){
+	return point(input,"P",edge.b);
 }
 
 //////////////////////////////////////////////////////
@@ -649,14 +683,73 @@ float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const
 	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
 }
 
-//to do: define line struct 
+///////////////////////
+//Define lineStruct://
+///////////////////////
 /*
-struct lineStruct
+//pseudo enum. This works, but is dangerous,
+//since it might conflict with other code
+#define lineType int
+#define closed 0
+#define open 1
+#define openA 2
+#define openB 3
 */
-//to do: define line struct from edgeStruct
-//to do: line to point distance
+
+struct lineStruct{
+	vector A,B; //point A and B on a line 
+
+	/*The type determines whether it is
+	(0) a line-segment, 
+	(1) an infinite line, 
+	(2) a line starting at B and extending (infinitely) in direction A or
+	(3) a line starting at A and extending (infinitely) in direction B.
+	*/
+	int type; //closed==0, open==1, openA==2, openB==3; See comment above 
+
+	//Returns 1 if A and B are NOT the same and 0 otherwise. 
+	//If A and B were equal (return 0) the struct would be invalid.
+	int isok(){
+		return this.A==this.B ? 0 : 1; 
+	}
+}
+
+
+//Returns a line struct from an edgeStruct at input 0, of type 0 (closed)
+lineStruct linefromedge(const edgeStruct edge){
+	lineStruct line = lineStruct(posa(edge),posb(edge),0);
+	return line;
+}
+//Returns a line struct from an edgeStruct at input 0, of type
+lineStruct linefromedge(const edgeStruct edge; const int type){
+	lineStruct line = lineStruct(posa(edge),posb(edge),type);
+	return line;
+}
+//Returns a line struct from an edgeStruct at input, of type 0 (closed)
+lineStruct linefromedge(const int input; const edgeStruct edge){
+	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),0);
+	return line;
+}
+//Returns a line struct from an edgeStruct at input, of type
+lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
+	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),type);
+	return line;
+}
+
+//returns minimum distance between a lineStruct and pos X 
+//http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+float linetoposdist(const lineStruct line; const vector X){
+	vector A = line.A;
+	vector B = line.B;
+	float dist;
+	dist = abs( cross(X-A,X-B) )/abs(B-A);
+	//to do: Fix it for different line types!!!
+	return dist;   
+}
+
 
 //to do: plane struct
+//to do: line from plane to plane intersection
 //to do: is line on plane?
 //to do: line - to plane intersection point (if line on plane return plane reference point)
 
