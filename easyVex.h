@@ -303,13 +303,17 @@ struct edgeStruct{
 	//Returns the length of the edge at input 0
 	//Example: f@len = length(ed1);
 	float length(){
-		return distance(point(0,"P",this.a),point(0,"P",this.b));
+		vector A = point(0,"P",this.a);
+		vector B = point(0,"P",this.b);
+		return distance(A,B);
 	}
 
 	//Returns the length of the edge at input
 	//Example: f@len = length(ed1,2);
 	float length(const int input){
-		return distance(point(input,"P",this.a),point(input,"P",this.b));
+		vector A = point(input,"P",this.a);
+		vector B = point(input,"P",this.b);
+		return distance(A,B);
 	}
 
 
@@ -402,8 +406,10 @@ vector posb(const int input; const edgeStruct edge){
 
 //Returns the length of the edge at input
 //Example: f@len = length(2,ed1);
-float length(const int input, const edgeStruct edge){
-	return distance(point(input,"P",edge.a),point(input,"P",edge.b));
+float length(const int input; const edgeStruct edge){
+	vector A = point(input,"P",edge.a);
+	vector B = point(input,"P",edge.b);
+	return distance(A,B);
 }
 
 
@@ -749,8 +755,7 @@ lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
 float linetoposdist(const lineStruct line; const vector X){
 	vector A = line.A;
 	vector B = line.B;
-	float dist;
-	dist = abs( cross(X-A,X-B) )/abs(B-A);
+	float dist = length( cross(X-A,X-B) )/length(B-A);
 	//to do: Fix it for different line types!!!
 	return dist;   
 }
