@@ -126,7 +126,7 @@ function void removevalues(int numbers[]; const int remove[]) {
 }
 
 //Returns int array of unique values of an arbitrary attribute at input 0
-function int[] uniquevals(string componentType; string attribName){	
+function int[] uniquevals(const string componentType; const string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(0, componentType, attribName);
 	for (int i = 0; i < count; i++) {
@@ -137,7 +137,7 @@ function int[] uniquevals(string componentType; string attribName){
 }
 
 //Returns int array of unique values of an arbitrary attribute at input
-function int[] uniquevals(int input; string componentType; string attribName){	
+function int[] uniquevals(const int input; const string componentType; const string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(input, componentType, attribName);
 	for (int i = 0; i < count; i++) {
@@ -300,17 +300,18 @@ struct edgeStruct{
 		return point(0,"P",this.b);
 	}
 
+	//Returns the length of the edge at input 0
+	//Example: f@len = length(ed1);
+	float length(){
+		return distance(point(0,"P",this.a),point(0,"P",this.b));
+	}
+
 	//Returns the length of the edge at input
 	//Example: f@len = length(ed1,2);
 	float length(const int input){
 		return distance(point(input,"P",this.a),point(input,"P",this.b));
 	}
 
-	//Returns the length of the edge at input 0
-	//Example: f@len = length(ed1);
-	float length(){
-		return distance(point(0,"P",this.a),point(0,"P",this.b));
-	}
 
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
@@ -368,13 +369,13 @@ struct edgeStruct{
 
 	//Returns the center position of the edge at input 0
 	//Example: v@halfpos = halfpoint(ed1);
-	vector halfpoint(){
+	vector midpoint(){
 		return ( point(0,"P",this.a) + point(0,"P",this.b) )*.5;
 	}
 
 	//Returns the center position of the edge at input
 	//Example: v@halfpos = halfpoint(ed1);
-	vector halfpoint(const int input){
+	vector midpoint(const int input){
 		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
 	}
 	
@@ -398,6 +399,13 @@ vector posa(const int input; const edgeStruct edge){
 vector posb(const int input; const edgeStruct edge){
 	return point(input,"P",edge.b);
 }
+
+//Returns the length of the edge at input
+//Example: f@len = length(2,ed1);
+float length(const int input, const edgeStruct edge){
+	return distance(point(input,"P",edge.a),point(input,"P",edge.b));
+}
+
 
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
