@@ -755,9 +755,40 @@ lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
 float linetoposdist(const lineStruct line; const vector X){
 	vector A = line.A;
 	vector B = line.B;
+	int type = line.type;
 	float dist = length( cross(X-A,X-B) )/length(B-A);
-	//to do: Fix it for different line types!!!
-	return dist;   
+
+	if(type==1){ //infinite line
+		return dist;
+	}
+	float dista = distance(A,X);
+	float distb = distance(B,X);
+
+	float dirAX = dot((X-A),(B-A));
+	if(type==3){ //closed at A
+		if(dirAX<0){ //if X further from B than A
+			return length((X-A));
+		}
+		return dist;
+	}
+	float dirBX = dot((X-B),(A-B));
+	if(type==2){ //closed at B
+		if(dirBX<0){
+			return length((X-B));
+		}
+		return dist;
+	}
+	if(type==0){ //closed line segment
+		if(dirAX<0){
+			return dista;
+		}
+		if(dirBX<0){
+			return distb;
+		}
+		return dist;
+	}
+	//fallback:
+	return dist;
 }
 
 
