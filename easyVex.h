@@ -197,7 +197,7 @@ float trianglearea(const vector A,B,C){
 ////////////////////////////////////
 struct edgeStruct{
 	int a,b;
-
+  //Bjorns note, the struct should keep what input it's using, defaulting to 0
 	/*General info: 
 	//To create a variable of type custom struct:
 	edgeStruct ed1 = edgeStruct(1,2);
@@ -275,7 +275,16 @@ struct edgeStruct{
 		}
 	}
 	*/
-
+  //Returns the int for pt a
+	//Example: pt_a = pta(ed1);
+  int pta(){
+    return this.a;
+  }
+  //Returns the int for pt b
+	//Example: pt_a = pta(ed1);
+  int ptb(){
+    return this.b;
+  }
 	//Returns the position of the edgepoint a at input
 	//Example: v@pos = posa(ed1,2);
 	vector posa(const int input){
@@ -382,7 +391,9 @@ struct edgeStruct{
 	vector midpoint(const int input){
 		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
 	}
+ 
 	
+  
 }
 
 edgeStruct sort(const edgeStruct ed){
@@ -424,7 +435,7 @@ float length(const int input; const edgeStruct edge){
 string getfullname(const edgeStruct edges[]){
 	string result;
 	foreach(edgeStruct ed; edges){
-		append( result, sprintf("p%i_%i ", ed.a, ed.b) );
+		append( result, sprintf("a%i_b%i ", ed.a, ed.b) );
 	}
 	return result;
 }
@@ -541,6 +552,20 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	*/
 	return edgestruct_fromarray(expandedgegroup(input, name));
 }
+
+//returns a string in standard Houdini edge format
+//example: getfullname(edges); 
+edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
+    
+    int skip_last = primintrinsic(input, "closed", primnum)==0 ?1 :0; //if open, don't create an edge between the end points
+
+    edgeStruct result[];
+    for(int i = 0; i<primvertexcount(input, primnum)-skip_last; i++){
+            push( result, edgeStruct(vertexpoint(input, primvertex(input, primnum,i) ),vertexpoint(input, primvertex(input, primnum,(i+1)%primvertexcount(input, primnum) ) ) ) );
+    }
+    return result;
+}
+
 
 //Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
 //Example: printf(getfullname( sort(edges) ));
@@ -690,12 +715,36 @@ float angle_d(const edgeStruct u,v){
 float angle(const edgeStruct u,v){
 	return acos( dot_n( u,v)  );
 }
-	
+
+
+
 //Returns the angle between two edges in degrees at inputs
 //Example: f@angle = angle_d(ed1,0,ed2,1);
 float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
 	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
 }
+
+
+float angle_around(const edgeStruct u,v; vector axis){
+    vector a = vectorab_n(u); 
+    vector b = vectorab_n(v); 
+    vector world_up = set(0,1,0);
+    if(axis!= world_up ){ //rotate to align up axis to y
+        //in a more generic context the following might be useful as it's own function, it's a common operation.
+        vector4 q_align = dihedral(world_up, axis);
+        vector at = vectorab_n(u);
+        a = qrotate(q_align, a); 
+        b = qrotate(q_align, b); 
+    }
+    vector4 q_align = dihedral(a, set(0,0,-1) ); //this rotates the vectors to align against the z axis, the atan2 function is zero for this
+    b = qrotate(q_align, b); 
+    return atan2( b.x, b.z);
+}
+//maybe this needs to be a copy of the above to avoid copying of 
+float angle_around_d(const edgeStruct u,v; vector axis){
+    return degrees(angle_around( u, v, axis));
+}
+
 
 ///////////////////////
 //Define lineStruct://
