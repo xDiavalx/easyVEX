@@ -8,6 +8,7 @@
 * send me a message to dimitri.shima.dev@gmail.com, so I can find out about it.
 * Contributers:
 * Matthew Hendershot
+* bhenriksson (https://github.com/bhenriksson031/easyVEX_beh)
 *
 * License:
 * This is free and unencumbered software released into the public domain.
@@ -196,23 +197,23 @@ float trianglearea(const vector A,B,C){
 ////////////////////////////////////
 ////////////////////////////////////
 struct edgeStruct{
-	int a,b;
+	int input,a,b;
   //Bjorns note, the struct should keep what input it's using, defaulting to 0
 	/*General info: 
 	//To create a variable of type custom struct:
-	edgeStruct ed1 = edgeStruct(1,2);
+	edgeStruct ed1 = edgeStruct(0,1,2);
 	
 	//To use an internal variable of the struct:
 	printf("%i\n",ed1.a);
 	ed1.a = 6;
-	int a = ed1.a //if you need to use the component in functions
+	int a = geta(ed1) //if you need to use the component in functions
 
 	//To use a function defined in a custom struct:
 	printfverbose(ed1);
 	
 	//To make an array of custom struct:
-	edgeStruct ed2 = edgeStruct(3,2);
-	edgeStruct ed3 = edgeStruct(4,5);
+	edgeStruct ed2 = edgeStruct(0,3,2);
+	edgeStruct ed3 = edgeStruct(0,4,5);
 	edgeStruct edges[];
 	push(edges,ed1);
 	push(edges,ed2);
@@ -238,11 +239,26 @@ struct edgeStruct{
 	//Since we cannot maintain it if we use the definitions in the struct, we need to put those function variations outside.
 	*/
 
+	//Returns the int for the input
+	//Example: int input = getinput(ed1);
+	int getinput(){
+		return this.input;
+	}
+	//Returns the int for pt a
+	//Example: int pt_a = geta(ed1);
+	int geta(){
+		return this.a;
+	}
+	//Returns the int for pt b
+	//Example: int pt_b = getb(ed1);
+	int getb(){
+		return this.b;
+	}
 
 	//Print verbose edge description to log
 	//Example: printfverbose(ed1); 
 	void printfverbose(){
-		printf("edge between points %i and %i \n", a,b);
+		printf("edge between points %i and %i, at input %i\n", a,b,input);
 	}
 
 	//Returns a string in standard Houdini edge format
@@ -275,16 +291,6 @@ struct edgeStruct{
 		}
 	}
 	*/
-  //Returns the int for pt a
-	//Example: pt_a = pta(ed1);
-  int pta(){
-    return this.a;
-  }
-  //Returns the int for pt b
-	//Example: pt_a = pta(ed1);
-  int ptb(){
-    return this.b;
-  }
 	//Returns the position of the edgepoint a at input
 	//Example: v@pos = posa(ed1,2);
 	vector posa(const int input){
@@ -294,7 +300,7 @@ struct edgeStruct{
 	//Returns the position of the edgepoint a at input 0
 	//Example: v@pos = posa(ed1);
 	vector posa(){
-		return point(0,"P",this.a);
+		return point(this.input,"P",this.a);
 	}
 
 	//Returns the position of the edgepoint b at input
@@ -306,14 +312,14 @@ struct edgeStruct{
 	//Returns the position of the edgepoint b at input 0
 	//Example: v@pos = posb(ed1);
 	vector posb(){
-		return point(0,"P",this.b);
+		return point(this.input,"P",this.b);
 	}
 
 	//Returns the length of the edge at input 0
 	//Example: f@len = length(ed1);
 	float length(){
-		vector A = point(0,"P",this.a);
-		vector B = point(0,"P",this.b);
+		vector A = point(this.input,"P",this.a);
+		vector B = point(this.input,"P",this.b);
 		return distance(A,B);
 	}
 
@@ -341,7 +347,7 @@ struct edgeStruct{
 	//Returns the non-normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab(ed1);
 	vector vectorab(){
-		return point(0,"P",this.b) - point(0,"P",this.a);
+		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
 	}
 
 	//Returns the non-normalized vector BA == posA - posB at input
@@ -353,7 +359,7 @@ struct edgeStruct{
 	//Returns the non-normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(){
-		return point(0,"P",this.a) - point(0,"P",this.b);
+		return point(this.input,"P",this.a) - point(this.input,"P",this.b);
 	}
 
 	//Returns the normalized vector AB == posB - posA at input
@@ -365,7 +371,7 @@ struct edgeStruct{
 	//Returns the normalized vector AB == posB - posA at input 0
 	//Example: v@vectorAB = vectorab_n(ed1);
 	vector vectorab_n(){
-		return normalize( point(0,"P",this.b) - point(0,"P",this.a) );
+		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
 	}
 
 	//Returns the normalized vector BA == posA - posB at input
@@ -377,13 +383,13 @@ struct edgeStruct{
 	//Returns the normalized vector BA == posA - posB at input 0
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(){
-		return normalize( point(0,"P",this.a) - point(0,"P",this.b) );
+		return normalize( point(this.input,"P",this.a) - point(this.input,"P",this.b) );
 	}
 
 	//Returns the center position of the edge at input 0
 	//Example: v@halfpos = halfpoint(ed1);
 	vector midpoint(){
-		return ( point(0,"P",this.a) + point(0,"P",this.b) )*.5;
+		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
 	}
 
 	//Returns the center position of the edge at input
@@ -391,14 +397,12 @@ struct edgeStruct{
 	vector midpoint(const int input){
 		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
 	}
- 
-	
-  
+
 }
 
 edgeStruct sort(const edgeStruct ed){
 	if( compare(ed) ){
-		return edgeStruct(ed.b,ed.a);
+		return edgeStruct(getinput(ed), getb(ed),geta(ed));
 		}
 	return ed;
 }
@@ -423,6 +427,31 @@ float length(const int input; const edgeStruct edge){
 	return distance(A,B);
 }
 
+//Returns the non-normalized vector AB == posB - posA at input
+//Example: v@vectorAB = vectorab(ed1,2);
+vector vectorab(const int input; const edgeStruct edge){
+	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
+}
+//Returns the non-normalized vector BA == posA - posB at input
+//Example: v@vectorBA = vectorba(ed1);
+vector vectorba(const int input; const edgeStruct edge; const edgeStruct edge){
+		return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
+}
+//Returns the normalized vector AB == posB - posA at input
+//Example: v@vectorAB = vectorab_n(ed1,2);
+vector vectorab_n(const int input; const edgeStruct edge){
+	return normalize( point(input,"P",getb(edge)) - point(input,"P",geta(edge)) );
+}
+//Returns the normalized vector BA == posA - posB at input
+//Example: v@vectorBA = vectorba_n(ed1);
+vector vectorba_n(const int input; const edgeStruct edge){
+	return normalize( point(input,"P",geta(edge)) - point(input,"P",getb(edge)) );
+}
+//Returns the center position of the edge at input
+//Example: v@halfpos = halfpoint(ed1);
+vector midpoint(const int input; const edgeStruct edge){
+	return ( point(input,"P",geta(edge)) + point(input,"P",getb(edge)) )*.5;
+}
 
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
@@ -575,13 +604,13 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	int alla[], allb[], ordera[], orderb[];
 	//split the edges into front points and rear points
 	foreach(edgeStruct ed; edges){
-		if(ed.a<ed.b){
-			append( alla, ed.a );
-			append( allb, ed.b );
+		if(geta(ed)<getb(ed)){
+			append( alla, geta(ed) );
+			append( allb, getb(ed) );
 		}
 		else{
-			append( alla, ed.b );
-			append( allb, ed.a );
+			append( alla, getb(ed) );
+			append( allb, geta(ed) );
 		}
 	}
 	amount = len(alla);
@@ -600,7 +629,7 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	//make edgeStruct array
 	edgeStruct temp;
 	for(int i=0; i<amount; i++){
-		temp = edgeStruct(alla[i],allb[i]);
+		temp = edgeStruct(0,alla[i],allb[i]); //!!!!INPUT NEEDS TO BE FIXED
 		push(result, temp);
 	}
 	return result;
