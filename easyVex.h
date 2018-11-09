@@ -870,7 +870,38 @@ float linetoposdist(const lineStruct line; const vector X){
 }
 
 
-//to do: plane struct
+//planeStruct represents an infinite plane in 3D space. It has a normal direction
+struct planeStruct{
+	vector normal, pos; //normal = direction and normal of the plane. pos = a point on the plane
+
+	vector getnormal(){
+		return this.normal;
+	}
+	vector getpos(){
+		return this.pos;
+	} 
+}
+
+planeStruct planestruct_fromprim(int input; int prim){
+	int pts[] = primpoints(input, prim);
+	vector pos = pointp(input,pts[0]);
+	vector normal;
+	int hasnormal = hasprimattrib(input,"N");
+	if(hasnormal){
+		normal = normalize( prim(input, "N", prim) );
+	}
+	if(!hasnormal){
+		//normal = primintrinsic(input, "N", prim);
+		normal = normalize ( cross(pointp(input,pts[1])-pointp(input,pts[0]),pointp(input,pts[0])-pointp(input,pts[2]) ) );
+	}
+	return planeStruct(normal, pos);
+}
+
+float dist(int input; int point; planeStruct plane){
+	float dist = dot(pointp(input,point)-getpos(plane),normalize(getnormal(plane)));
+	return dist;
+}
+
 //to do: line from plane to plane intersection
 //to do: is line on plane?
 //to do: line - to plane intersection point (if line on plane return plane reference point)
