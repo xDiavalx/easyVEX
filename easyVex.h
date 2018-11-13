@@ -799,6 +799,29 @@ struct lineStruct{
 	*/
 	int type; //closed==0, open==1, openA==2, openB==3; See comment above 
 
+	//Returns point A on line
+	vector geta(){
+		return this.A;
+	}
+	//Returns point B on line
+	vector getb(){
+		return this.B;
+	}
+	//Returns type of line
+	/*The type determines whether it is
+	(0) a line-segment, 
+	(1) an infinite line, 
+	(2) a line starting at B and extending (infinitely) in direction A or
+	(3) a line starting at A and extending (infinitely) in direction B.
+	*/
+	int gettype(){
+		return this.type;
+	}
+	//Returns vector AB normalized
+	vector getnormal(){
+		return normalize(this.B-this.A);
+	}
+
 	//Returns 1 if A and B are NOT the same and 0 otherwise. 
 	//If A and B were equal (return 0) the struct would be invalid.
 	int isok(){
@@ -828,12 +851,12 @@ lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
 	return line;
 }
 
-//returns minimum distance between a lineStruct and pos X 
+//Returns minimum distance between a lineStruct and pos X 
 //http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 float linetoposdist(const lineStruct line; const vector X){
-	vector A = line.A;
-	vector B = line.B;
-	int type = line.type;
+	vector A = geta(line);
+	vector B = getb(line);
+	int type = gettype(line);
 	float dist = length( cross(X-A,X-B) )/length(B-A);
 
 	if(type==1){ //infinite line
@@ -869,41 +892,148 @@ float linetoposdist(const lineStruct line; const vector X){
 	return dist;
 }
 
+//Returns whether two lines are similar encoded as a result vector
+//result.x == 1 -> all points of both lines lie on the same infinite line
+//result.x == 0 -> both lines lie on the same infinite line
+//result.y == 1 -> points on both lines are the same (ignoring point order)
+//result.y == 0 -> points on both lines are not the same (ignoring point order)
+//result.z == 1 -> types are the same
+//result.z == 0 -> types are different
+vector isequal(const lineStruct l1,l2){
+	vector result; 
+	vector p1 = getnormal(l1);
+	vector p2 = getnormal(l2);
+	result.x = normal1==normal2||normal1==-normal2 ? 1 : 0;//if normals match, then 1
+	result.y = (geta(l1)==geta(l2)&&getb(l1)==getb(l2))||(geta(l1)==getb(l2)&&getb(l1)==geta(l2)) ? 1 : 0;//if points match, then 1
+	result.z = gettype(l1)==gettype(l2);
+	return result;
+}
 
-//planeStruct represents an infinite plane in 3D space. It has a normal direction
+//to do: line to line has intersection point?
+//to do: line to line intersection point or closest point (with success parameter)
+//to do: line to line angle (angle between two lines)
+//to do: angle around and angle around_d for lines
+
+//The planeStruct represents an infinite plane in 3D space. It has a normal direction.
 struct planeStruct{
 	vector normal, pos; //normal = direction and normal of the plane. pos = a point on the plane
 
 	vector getnormal(){
-		return this.normal;
+		return normalize(this.normal);//this normalization should be moved to a constructor
 	}
 	vector getpos(){
 		return this.pos;
 	} 
 }
 
-planeStruct planestruct_fromprim(int input; int prim){
+
+//Returns a planeStruct given a primitive number and the input
+planeStruct planestruct_fromprim(const int input; const int prim){
 	int pts[] = primpoints(input, prim);
 	vector pos = pointp(input,pts[0]);
-	vector normal;
-	int hasnormal = hasprimattrib(input,"N");
-	if(hasnormal){
+	vector normal = {0,1,0}; //Definition for fallback
+	if(hasprimattrib(input,"N")){ //Try to find primitive normal
 		normal = normalize( prim(input, "N", prim) );
+		return planeStruct(normal, pos);
 	}
-	if(!hasnormal){
-		//normal = primintrinsic(input, "N", prim);
+	if(haspointattrib(input,"N")){ //Try to find point normal
+		normal = normalize( point(input, "N", pts[0]) );
+		return planeStruct(normal, pos);
+	}
+	if(hasvertexattrib(input,"N")){ //Try to find vertex normal
+		normal = normalize( vertex(input, "N", prim, 0) );
+		return planeStruct(normal, pos);
+	}
+	if(len(pts)>2){ //Generate normal from point positions
+		warning("planestruct_fromprim: Had to generate normal attribute from point positions.");
 		normal = normalize ( cross(pointp(input,pts[1])-pointp(input,pts[0]),pointp(input,pts[0])-pointp(input,pts[2]) ) );
+		return planeStruct(normal, pos);
 	}
-	return planeStruct(normal, pos);
+	warning("planestruct_fromprim: Could not find or generate normal. Using fallback {0,1,0}.");
+	return planeStruct(normal, pos); // Backup
+}
+//Returns a planeStruct given a primitive number and the input
+planeStruct planestruct_fromprim(const int prim){
+	int input = 0;
+	int pts[] = primpoints(input, prim);
+	vector pos = pointp(input,pts[0]);
+	vector normal = {0,1,0}; //Definition for fallback
+	if(hasprimattrib(input,"N")){ //Try to find primitive normal
+		normal = normalize( prim(input, "N", prim) );
+		return planeStruct(normal, pos);
+	}
+	if(haspointattrib(input,"N")){ //Try to find point normal
+		normal = normalize( point(input, "N", pts[0]) );
+		return planeStruct(normal, pos);
+	}
+	if(hasvertexattrib(input,"N")){ //Try to find vertex normal
+		normal = normalize( vertex(input, "N", prim, 0) );
+		return planeStruct(normal, pos);
+	}
+	if(len(pts)>2){ //Generate normal from point positions
+		warning("planestruct_fromprim: Had to generate normal attribute from point positions.");
+		normal = normalize ( cross(pointp(input,pts[1])-pointp(input,pts[0]),pointp(input,pts[0])-pointp(input,pts[2]) ) );
+		return planeStruct(normal, pos);
+	}
+	warning("planestruct_fromprim: Could not find or generate normal. Using fallback {0,1,0}.");
+	return planeStruct(normal, pos); // Backup
 }
 
-float dist(int input; int point; planeStruct plane){
-	float dist = dot(pointp(input,point)-getpos(plane),normalize(getnormal(plane)));
+//Returns the closest distance between a point and an (infinite) plane defined by a planeStruct.
+//If the point is under the plane (based on plane's normal) the value is negative.
+float dist(const int input; const  int point; const planeStruct plane){
+	float dist = dot(pointp(input,point)-getpos(plane),getnormal(plane));
 	return dist;
 }
 
-//to do: line from plane to plane intersection
-//to do: is line on plane?
-//to do: line - to plane intersection point (if line on plane return plane reference point)
+//Returns intersection point between line and plane
+//success
+//0 => disjoint (no intersection)
+//1 => the plane intersects the line in the returned point
+//2 => the segment lies in the plane
+//3 => the intersection lies outside the segment
+//From: https://de.mathworks.com/matlabcentral/fileexchange/17751-straight-line-and-plane-intersection
+vector intersection(const planeStruct plane; const lineStruct line; int success){
+	vector result = {0,0,0};
+	vector linedir = getb(line) - geta(line);
+	vector toline = geta(line) - getpos(plane);
+	float D = dot(getnormal(plane) - linedir);
+	float N = - dot(getnormal(plane) , toline);
+	success = 0;
+	if(abs(D) < 0.0000001 ){ //The segment is parallel to plane  //10^-7
+		if(N == 0){
+			success = 2; //the segment lies on the plane
+			return result;
+		}
+		else{
+			success = 0; //no intersection
+			return result;
+		}
+	}
+	//compute the intersection parameter
+	float sI = N / D;
+	result = geta(line) + sI * linedir;
+
+	success = sI<0||sI>1 ? 3:1; //If true, the intersection point lies outside the segment, so there is no intersection
+
+	return result; 
+	////////////////////////Fix this to account for different line types!!!!
+}
+
+lineStruct linestruct_fromplanes(const planeStruct p1,p2){
+	vector dir = cross(getnormal(p1),getnormal(p2));
+	vector pos = 0; //////////////////////////////////////////////////////////////////FIX THIS
+	if(dir==0){
+		warning("linestruct_fromplanes(%e,%e): planes are identical, therefore no line makes sense",p1, p2);
+		return lineStruct({0,0,0},{0,1,0},1);
+	}
+	return lineStruct(pos,dir+pos,1); 
+}
+
+//to do: angle between line and plane https://www.vitutor.com/geometry/distance/line_plane.html
+//to do: is line on plane? (both points have dist 0 to plane)
+//to do: line - plane intersection point (if line on plane return plane reference point, will require success parameter)
+//to do: intersection of 3 planes http://geomalgorithms.com/a05-_intersect-1.html ?maybe
+//to do: point closest to 3 planes ?maybe
 
 #endif
