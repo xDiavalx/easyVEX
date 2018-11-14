@@ -1020,13 +1020,23 @@ vector intersection(const planeStruct plane; const lineStruct line; int success)
 	////////////////////////Fix this to account for different line types!!!!
 }
 
+
+//Returns line at the intersection of two planes
+//Solution based on https://forum.unity.com/threads/how-to-find-line-of-intersecting-planes.109458/
 lineStruct linestruct_fromplanes(const planeStruct p1,p2){
-	vector dir = cross(getnormal(p1),getnormal(p2));
-	vector pos = 0; //////////////////////////////////////////////////////////////////FIX THIS
-	if(dir==0){
-		warning("linestruct_fromplanes(%e,%e): planes are identical, therefore no line makes sense",p1, p2);
+	vector dir = cross(getnormal(p1),getnormal(p2)); //direction of line
+
+    vector orthogonalp1 = cross(getnormal(p2), dir); //similar to p1 but orthogonal to p2    
+    float numerator = dot(getnormal(p1), orthogonalp1); //length of p1 on orthogonalp1
+
+    if(abs(numerator) <0.000001){ //bail if the planes are essentially the same
+		warning("linestruct_fromplanes(%e,%e): planes are parallel, therefore no line makes sense",p1, p2);
 		return lineStruct({0,0,0},{0,1,0},1);
 	}
+    vector p2p1 = getpos(p1) - getpos(p2); //vector p2 to p1
+	float t = dot(getnormal(p1), p2p1) / numerator; //p2p1 projected onto p1 normalized for orthogonalp1
+	vector pos = getpos(p2) + t * orthogonalp1; //go from p2 via orthogonalp1 to p1
+
 	return lineStruct(pos,dir+pos,1); 
 }
 
