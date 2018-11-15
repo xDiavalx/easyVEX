@@ -204,7 +204,7 @@ struct edgeStruct{
 	edgeStruct ed1 = edgeStruct(0,1,2);
 	
 	//To use an internal variable of the struct:
-	printf("%i\n",ed1.a);
+	printf("%i\n",ed1.a );
 	ed1.a = 6;
 	int a = geta(ed1) //if you need to use the component in functions
 
@@ -222,7 +222,7 @@ struct edgeStruct{
 	//To loop over a custom struct:
 	foreach(edgeStruct test; edges){
 	printfverbose(test);
-	printf("a is %i \n",test.a);
+	printf("a is %i \n",geta(test));
 	}
 	/////////////////////////////////////////
 	/////////////////////////////////////////
@@ -258,7 +258,7 @@ struct edgeStruct{
 	//Print verbose edge description to log
 	//Example: printfverbose(ed1); 
 	void printfverbose(){
-		printf("edge between points %i and %i, at input %i\n", a,b,input);
+		printf("edge between points %i and %i, at input %i\n", this.a,this.b,this.input);
 	}
 
 	//Returns a string in standard Houdini edge format
@@ -282,22 +282,13 @@ struct edgeStruct{
 		return this.a>this.b;
 	}
 
-	/*
-	//Sorts a and b in increasing order
-	//Example: sort(ed1);
-	void sort(){
-		if( compare(this) ){
-			swap(this);
-		}
-	}
-	*/
 	//Returns the position of the edgepoint a at input
 	//Example: v@pos = posa(ed1,2);
 	vector posa(const int input){
 		return point(input,"P",this.a);
 	}
 
-	//Returns the position of the edgepoint a at input 0
+	//Returns the position of the edgepoint a
 	//Example: v@pos = posa(ed1);
 	vector posa(){
 		return point(this.input,"P",this.a);
@@ -309,13 +300,13 @@ struct edgeStruct{
 		return point(input,"P",this.b);
 	}
 
-	//Returns the position of the edgepoint b at input 0
+	//Returns the position of the edgepoint b
 	//Example: v@pos = posb(ed1);
 	vector posb(){
 		return point(this.input,"P",this.b);
 	}
 
-	//Returns the length of the edge at input 0
+	//Returns the length of the edge
 	//Example: f@len = length(ed1);
 	float length(){
 		vector A = point(this.input,"P",this.a);
@@ -344,7 +335,7 @@ struct edgeStruct{
 		return point(input,"P",this.b) - point(input,"P",this.a);
 	}
 
-	//Returns the non-normalized vector AB == posB - posA at input 0
+	//Returns the non-normalized vector AB == posB - posA
 	//Example: v@vectorAB = vectorab(ed1);
 	vector vectorab(){
 		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
@@ -356,7 +347,7 @@ struct edgeStruct{
 		return point(input,"P",this.a) - point(input,"P",this.b);
 	}
 
-	//Returns the non-normalized vector BA == posA - posB at input 0
+	//Returns the non-normalized vector BA == posA - posB
 	//Example: v@vectorBA = vectorba(ed1);
 	vector vectorba(){
 		return point(this.input,"P",this.a) - point(this.input,"P",this.b);
@@ -368,7 +359,7 @@ struct edgeStruct{
 		return normalize( point(input,"P",this.b) - point(input,"P",this.a) );
 	}
 
-	//Returns the normalized vector AB == posB - posA at input 0
+	//Returns the normalized vector AB == posB - posA
 	//Example: v@vectorAB = vectorab_n(ed1);
 	vector vectorab_n(){
 		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
@@ -380,13 +371,13 @@ struct edgeStruct{
 		return normalize( point(input,"P",this.a) - point(input,"P",this.b) );
 	}
 
-	//Returns the normalized vector BA == posA - posB at input 0
+	//Returns the normalized vector BA == posA - posB
 	//Example: v@vectorBA = vectorba_n(ed1);
 	vector vectorba_n(){
 		return normalize( point(this.input,"P",this.a) - point(this.input,"P",this.b) );
 	}
 
-	//Returns the center position of the edge at input 0
+	//Returns the center position of the edge
 	//Example: v@halfpos = halfpoint(ed1);
 	vector midpoint(){
 		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
@@ -400,6 +391,7 @@ struct edgeStruct{
 
 }
 
+//Returns a version of the edgeStruct where a<b
 edgeStruct sort(const edgeStruct ed){
 	if( compare(ed) ){
 		return edgeStruct(getinput(ed), getb(ed),geta(ed));
@@ -464,7 +456,7 @@ vector midpoint(const int input; const edgeStruct edge){
 string getfullname(const edgeStruct edges[]){
 	string result;
 	foreach(edgeStruct ed; edges){
-		append( result, sprintf("a%i_b%i ", ed.a, ed.b) );
+		append( result, sprintf("a%i_b%i ", geta(ed), getb(ed) ) );
 	}
 	return result;
 }
@@ -474,8 +466,8 @@ string getfullname(const edgeStruct edges[]){
 int[] getint(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, ed.a );
-		append( result, ed.b );
+		append( result, geta(ed) );
+		append( result, getb(ed) );
 	}
 	return result;
 }
@@ -485,7 +477,7 @@ int[] getint(const edgeStruct edges[]){
 int[] getinta(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, ed.a );
+		append( result, geta(ed) );
 	}
 	return result;
 }
@@ -495,7 +487,7 @@ int[] getinta(const edgeStruct edges[]){
 int[] getintb(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, ed.b );
+		append( result, getb(ed) );
 	}
 	return result;
 }
@@ -508,7 +500,7 @@ int[] getintb(const edgeStruct edges[]){
 int[] removeedge(const int edges[]; const edgeStruct ed){
 	int result[];
 	for(int i=0; i<len(edges); i = i+2) {
-		if(!( (edges[i]==ed.a && edges[i+1]==ed.b) || (edges[i]==ed.b && edges[i+1]==ed.a) )  ){
+		if(!( (edges[i]==geta(ed) && edges[i+1]==getb(ed) ) || (edges[i]==getb(ed) && edges[i+1]==geta(ed) ) )  ){
 			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
 			append(result,edges[i]);
 			append(result,edges[i+1]);
@@ -541,17 +533,16 @@ edgeStruct[] edgestruct_frompoint(const int input; const int point){
 	int numbers[] = neighbours(input, point); 
 	edgeStruct result[];
 	foreach(int i; numbers ){
-		push( result, edgeStruct(point,i) );
+		push( result, edgeStruct(input,point,i) );
 	}
 	return result;
 }
 
-//returns a string in standard Houdini edge format
-//example: getfullname(edges); 
-edgeStruct[] edgestruct_fromarray(const int numbers[]){
+//Returns a edgeStruct array given an input and an array of point id pairs.
+edgeStruct[] edgestruct_fromarray(const int input; const int numbers[]){
 	edgeStruct result[];
 	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(numbers[i],numbers[i+1]) );
+		push( result, edgeStruct(input, numbers[i],numbers[i+1]) );
 	}
 	return result;
 }
@@ -563,9 +554,9 @@ function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct ed){
 	edgeStruct result[];
 	//numbers = getint(edgestruct_frompoint(input,ed.a) ) ;
 	//append(numbers, getint(edgestruct_frompoint(input,ed.b) ) );
-	push(result, edgestruct_frompoint(input,ed.a) );
-	push(result, edgestruct_frompoint(input,ed.b) );
-	return edgestruct_fromarray(removeedge(result,ed) );
+	push(result, edgestruct_frompoint(input,geta(ed)) );
+	push(result, edgestruct_frompoint(input,getb(ed)) );
+	return edgestruct_fromarray(input,removeedge(result,ed) );
 }
 
 //Returns an edgeStruct array given a Houdini edge group by input and name 
@@ -579,18 +570,19 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	}
 	return result;
 	*/
-	return edgestruct_fromarray(expandedgegroup(input, name));
+	return edgestruct_fromarray(input,expandedgegroup(input, name));
 }
 
-//returns a string in standard Houdini edge format
-//example: getfullname(edges); 
+//Returns an edgeStruct array given an input and a primitive.
+//In other words, turns all edges of a polygon into edgeStructs.
 edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
     
     int skip_last = primintrinsic(input, "closed", primnum)==0 ?1 :0; //if open, don't create an edge between the end points
 
     edgeStruct result[];
-    for(int i = 0; i<primvertexcount(input, primnum)-skip_last; i++){
-            push( result, edgeStruct(vertexpoint(input, primvertex(input, primnum,i) ),vertexpoint(input, primvertex(input, primnum,(i+1)%primvertexcount(input, primnum) ) ) ) );
+    int vtxcount = primvertexcount(input, primnum);
+    for(int i = 0; i<vtxcount-skip_last; i++){
+            push( result, edgeStruct(input,vertexpoint(input, primvertex(input, primnum,i) ),vertexpoint(input, primvertex(input, primnum,(i+1)%vtxcount ) ) ) );
     }
     return result;
 }
@@ -629,72 +621,70 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	//make edgeStruct array
 	edgeStruct temp;
 	for(int i=0; i<amount; i++){
-		temp = edgeStruct(0,alla[i],allb[i]); //!!!!INPUT NEEDS TO BE FIXED
+		temp = edgeStruct(getinput(edges[0]),alla[i],allb[i]); //!!!!INPUT NEEDS TO BE FIXED
 		push(result, temp);
 	}
 	return result;
 }
 
-//Returns the edges connected to point A at input 0
+//Returns the edges connected to point A
 //Example: printf(getfullname( neighbours_a(ed1) ));
-edgeStruct[] neighbours_a(const edgeStruct u){
+edgeStruct[] neighbours_a(const edgeStruct ed){
 	edgeStruct result[];
 	int points[];
-	int a = u.a;
-	int b = u.b;
-	points = neighbours(0,a);
+	int input = getinput(ed);
+	int a = geta(ed);
+	int b = getb(ed);
+	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(a,i);
-		push(result,ed);
+		push(result,edgeStruct(input,a,i));
 	}
 	return result;
 }
 
 //Returns the edges connected to point A at input
 //Example: printf(getfullname( neighbours_a(0,ed1) ));
-edgeStruct[] neighbours_a(const int input; const edgeStruct u){
+edgeStruct[] neighbours_a(const int input; const edgeStruct ed){
 	edgeStruct result[];
 	int points[];
-	int a = u.a;
-	int b = u.b;
+	int a = geta(ed);
+	int b = getb(ed);
 	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(a,i);
-		push(result,ed);
+		push(result,edgeStruct(input,a,i));
 	}
 	return result;
 }
 
-//Returns the edges connected to point B at input 0
+//Returns the edges connected to point B
 //Example: printf(getfullname( neighbours_b(ed1) ));
-edgeStruct[] neighbours_b(const edgeStruct u){
+edgeStruct[] neighbours_b(const edgeStruct ed){
 	edgeStruct result[];
 	int points[];
-	int a = u.a;
-	int b = u.b;
-	points = neighbours(0,b);
+	int input = getinput(ed);
+	int a = geta(ed);
+	int b = getb(ed);
+	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(b,i);
-		push(result,ed);
+		push(result,edgeStruct(input,b,i));
 	}
 	return result;
 }
 
 //Returns the edges connected to point B at input
 //Example: printf(getfullname( neighbours_b(0,ed1) ));
-edgeStruct[] neighbours_b(const int input; const edgeStruct u){
+edgeStruct[] neighbours_b(const int input; const edgeStruct ed){
 	edgeStruct result[];
 	int points[];
-	int a = u.a;
-	int b = u.b;
+	int a = geta(ed);
+	int b = getb(ed);
 	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
-		edgeStruct ed = edgeStruct(b,i);
-		push(result,ed);
+		push(result,edgeStruct(input,b,i));
 	}
 	return result;
 }
@@ -704,64 +694,64 @@ edgeStruct[] neighbours_b(const int input; const edgeStruct u){
 //Math operations on edgeStructs://
 ///////////////////////////////////
 
-//Check if two given edges are identical. Returns 1 if same and 0 if not.
-int isequal(const edgeStruct u,v){
-	return (u.a==v.a && u.b==v.b) || (u.a==v.b && u.b==v.a);
+//Check if two given edges have the same points. Returns 1 if same and 0 if not.
+int isequal(const edgeStruct ed1,ed2){
+	return (geta(ed1)==geta(ed2) && getb(ed1)==getb(ed2) ) || (geta(ed1)==getb(ed2) && getb(ed1)==geta(ed2) );
 }
 
-//Dot product of two edges (as vectors) at input 0
+//Dot product of two edges (as vectors). 
 //Example: f@dot = dot(ed1,ed2);
-float dot(const edgeStruct u,v){
-	return dot(vectorab(u),vectorab(v));
+float dot(const edgeStruct ed1,ed2){
+	return dot(vectorab(ed1),vectorab(ed2));
 }
 
 //Dot product of two edges (as vectors) at inputs
-//Example: f@dot = dot(ed1,0,ed2,1);
-float dot(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return dot(vectorab(u,inputU),vectorab(v,inputV));
+//Example: f@dot = dot(0,ed1,1,ed2);
+float dot(const int input1 ; const edgeStruct ed1 ; const int input2 ; const edgeStruct ed2){
+	return dot(vectorab(input1,ed1),vectorab(input2,ed2));
 }
 
-//Dot product of two normalized edges at input 0
+//Dot product of two normalized edges. Both edges are normalized before the dot product, not after.
 //Example: f@dot = dot_n(ed1,ed2);
-float dot_n(const edgeStruct u,v){
-	return dot(vectorab_n(u),vectorab_n(v));
+float dot_n(const edgeStruct ed1,ed2){
+	return dot(vectorab_n(ed1),vectorab_n(ed2));
 }
 
 //Dot product of two normalized edges at inputs
-//Example: f@dot = dot_n(ed1,0,ed2,1);
-float dot_n(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return dot(vectorab_n(u,inputU),vectorab_n(v,inputV));
+//Example: f@dot = dot_n(0,ed1,0,ed2);
+float dot_n(const int input1 ; const edgeStruct ed1 ;const int input2;  const edgeStruct ed2){
+	return dot(vectorab_n(input1,ed1),vectorab_n(input2,ed2));
 }
 
-//Returns the angle between two edges in degrees at input 0
-//Example: f@angle = angle_d({0,1},{1,0});
-float angle_d(const edgeStruct u,v){
-	return degrees( acos( dot_n( u,v)  ) );
+//Returns the angle between two edges in degrees
+//Example: f@angle = angle_d(ed1,ed2);
+float angle_d(const edgeStruct ed1,ed2){
+	return degrees( acos( dot_n( ed1,ed2)  ) );
 }
 
-//Returns the angle between two edges in degrees at input 0
-//Example: f@angle = angle({0,1},{1,0});
-float angle(const edgeStruct u,v){
-	return acos( dot_n( u,v)  );
+//Returns the angle between two edges in radians
+//Example: f@angle = angle(ed1,ed2);
+float angle(const edgeStruct ed1,ed2){
+	return acos( dot_n( ed1,ed2)  );
 }
 
 
 
 //Returns the angle between two edges in degrees at inputs
 //Example: f@angle = angle_d(ed1,0,ed2,1);
-float angle_d(const edgeStruct u ; const int inputU ; const edgeStruct v ; const int inputV){
-	return degrees( acos( dot_n(u,inputU,v,inputV) )  );
+float angle_d(const int input1 ; const edgeStruct ed1 ;const int input2;  const edgeStruct ed22){
+	return degrees( acos( dot_n(input1,ed1,input2,ed2) )  );
 }
 
-
-float angle_around(const edgeStruct u,v; vector axis){
-    vector a = vectorab_n(u); 
-    vector b = vectorab_n(v); 
+//Returns angle between two edges in radians around a rotation axis 
+float angle_around(const edgeStruct ed1,ed2; vector axis){
+    vector a = vectorab_n(ed1); 
+    vector b = vectorab_n(ed2); 
     vector world_up = set(0,1,0);
     if(axis!= world_up ){ //rotate to align up axis to y
         //in a more generic context the following might be useful as it's own function, it's a common operation.
         vector4 q_align = dihedral(world_up, axis);
-        vector at = vectorab_n(u);
+        vector at = vectorab_n(ed1);
         a = qrotate(q_align, a); 
         b = qrotate(q_align, b); 
     }
@@ -769,9 +759,9 @@ float angle_around(const edgeStruct u,v; vector axis){
     b = qrotate(q_align, b); 
     return atan2( b.x, b.z);
 }
-//maybe this needs to be a copy of the above to avoid copying of 
-float angle_around_d(const edgeStruct u,v; vector axis){
-    return degrees(angle_around( u, v, axis));
+//Returns angle between two edges in degrees around a rotation axis
+float angle_around_d(const edgeStruct ed1,ed2; vector axis){
+    return degrees(angle_around( ed1,ed2, axis));
 }
 
 
@@ -952,7 +942,7 @@ planeStruct planestruct_fromprim(const int input; const int prim){
 	warning("planestruct_fromprim: Could not find or generate normal. Using fallback {0,1,0}.");
 	return planeStruct(normal, pos); // Backup
 }
-//Returns a planeStruct given a primitive number and the input
+//Returns a planeStruct given a primitive number at input 0
 planeStruct planestruct_fromprim(const int prim){
 	int input = 0;
 	int pts[] = primpoints(input, prim);
@@ -985,6 +975,7 @@ float dist(const int input; const  int point; const planeStruct plane){
 	float dist = dot(pointp(input,point)-getpos(plane),getnormal(plane));
 	return dist;
 }
+
 
 //Returns intersection point between line and plane
 //success
