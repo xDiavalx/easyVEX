@@ -61,15 +61,31 @@
 
 
 
+/**
+ * Returns position of the point closest to given position at input 0
+ * @param	{vector}	{pos}	position that we examine 
+ */
+function vector nearptpos( const vector pos)
+{
+	return vector(point(0, “P”, int(nearpoint(0, pos))));
+}
 
-//Returns position of the point closest to given position
-//Contributed by Matthew Hendershot
+/**
+ * Returns position of the point closest to given position at input
+ * @param {int}	{input}   number of the input that we look at to find the geometry   
+ * @param {vector}	{pos}	position that we examine 
+ * 
+ * Contributed by Matthew Hendershot
+ */
 function vector nearptpos( const int input; const vector pos)
 {
-return vector(point(input, “P”, int(nearpoint(input, pos))));
-} 
+	return vector(point(input, “P”, int(nearpoint(input, pos))));
+}
 
-//Returns int array of unique values (no duplicates) sorted in ascending order. 
+/**
+ * Returns int array of unique values (no duplicates) sorted in ascending order.
+ * @param {int array}	{numbers}   arbitrary integer array
+ */
 function int[] uniquearray(const int numbers[]) {
 	int localNumbers[] = {};
 	int clean[] = {};
@@ -94,7 +110,10 @@ function int[] uniquearray(const int numbers[]) {
 	return clean;
 }
 
-//Adds only new int values (no duplicates) to an int array and returns the modified array.
+/**
+ * Adds only new int values (no duplicates) to an int array and returns the modified array.
+ * @param {int array}	{numbers}   arbitrary integer array
+ */
 function int[] appendunique(int numbers[]; const int num) {
 	if (find(numbers, num)<0) {
 		append(numbers, num);
@@ -102,7 +121,11 @@ function int[] appendunique(int numbers[]; const int num) {
 	return numbers;
 }
 
-//Removes all instances of int value from int array
+/**
+ * Removes all instances of int value from int array
+ * @param {int array}	{numbers}   arbitrary integer array
+ * @param {int}	{remove}   integer value to be removed from the array
+ */
 function void removevalues(int numbers[]; const int remove) {
 	while (1) {
 		int temp;
@@ -113,7 +136,11 @@ function void removevalues(int numbers[]; const int remove) {
 	}
 }
 
-//Removes all instances of all int values in seccond array from first int array
+/**
+ * Removes all instances of all int values in seccond array from first int array
+ * @param {int array}	{numbers}   arbitrary integer array
+ * @param {int array}	{remove}   arbitrary integer array to be removed from the numbers array
+ */
 function void removevalues(int numbers[]; const int remove[]) {
 	foreach(int i; remove){
 		while(1) {
@@ -126,7 +153,11 @@ function void removevalues(int numbers[]; const int remove[]) {
 	}
 }
 
-//Returns int array of unique values of an arbitrary attribute at input 0
+/**
+ * Returns int array of only unique values of an arbitrary attribute at input 0
+ * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
+ * @param {string}	{attribName}   Arbitrary attribute name
+ */
 function int[] uniquevals(const string componentType; const string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(0, componentType, attribName);
@@ -137,7 +168,11 @@ function int[] uniquevals(const string componentType; const string attribName){
 	return clean;
 }
 
-//Returns int array of unique values of an arbitrary attribute at input
+/**
+ * Returns int array of only unique values of an arbitrary attribute at input
+ * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
+ * @param {string}	{attribName}   Arbitrary attribute name
+ */
 function int[] uniquevals(const int input; const string componentType; const string attribName){	
 	int clean[] = {};
 	int count = nuniqueval(input, componentType, attribName);
@@ -148,39 +183,70 @@ function int[] uniquevals(const int input; const string componentType; const str
  	return clean;
 }
 
-//Returns point position at input
+/**
+ * Returns point position at input
+ * @param {int}	{input}	 number of the input that we look at to find the geometry
+ * @param {int}	{point}  point index
+ */
 function vector pointp(const int input; const int point){
 	return point(input,"P",point);
 }
 
-//Returns point position at input 0
+/**
+ * Returns point position at input 0
+ * @param {int}	{point}  point index
+ */
 function vector pointp(const int point){
 	return point(0,"P",point);
 }
 
-//Returns the angle between two vectors in degrees
-//Example: f@angle = angle({0,1,0},{1,0,0});
+
+/**
+ * Returns the angle between two vectors in degrees
+ * @param {vector}	{u}  arbitrary vector
+ * @param {vector}	{v}  arbitrary vector
+ * 
+ * Example: f@angle = angle({0,1,0},{1,0,0}); //f@angle == 90
+ */
 function float angle_d(const vector u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 
-//Returns the angle between two 2d vectors in degrees
-//Example: f@angle = angle({0,1},{1,0});
+/**
+ * Returns the angle between two 2d vectors in degrees
+ * @param {vector2}	{u}  arbitrary 2d vector
+ * @param {vector2}	{v}  arbitrary 2d vector
+ * 
+ * Example: f@angle = angle({0,1},{1,0}); //f@angle == 90
+ */
 function float angle_d(const vector2 u,v){
 	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
 }
 
-//Returns dot product of two vectors, but normalizes the vectors beforehand
+/**
+ * Returns dot product of two vectors, but normalizes the vectors beforehand
+ * @param {vector}	{u}  arbitrary vector
+ * @param {vector}	{v}  arbitrary vector
+ */
 float dot_n(const vector u,v ){
 	return dot(normalize(u),normalize(v));
 }
 
-//Returns dot product of two vector2s, but normalizes the vectors beforehand
+/**
+ * Returns dot product of two vector2s, but normalizes the vectors beforehand
+ * @param {vector2}	{u}  arbitrary 2d vector
+ * @param {vector2}	{v}  arbitrary 2d vector
+ */
 float dot_n(const vector2 u,v ){
 	return dot(normalize(u),normalize(v));
 }
 
-//Return the area of a triangle given by points A B C
+/**
+ * Return the area of a triangle given by points A B C
+ * @param {vector}	{A}  arbitrary vector describing a position
+ * @param {vector}	{B}  arbitrary vector describing a position
+ * @param {vector}	{C}  arbitrary vector describing a position
+ */
 float trianglearea(const vector A,B,C){
 	float a = distance2(A,B); //squared distance A to B
 	float b = distance2(B,C); //squared distance B to C
@@ -590,6 +656,9 @@ edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
 
 //Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
 //Example: printf(getfullname( sort(edges) ));
+/* FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 edgeStruct[] sort(const edgeStruct edges[]){
 	int amount;
 	edgeStruct result[];
@@ -625,7 +694,7 @@ edgeStruct[] sort(const edgeStruct edges[]){
 		push(result, temp);
 	}
 	return result;
-}
+}*/
 
 //Returns the edges connected to point A
 //Example: printf(getfullname( neighbours_a(ed1) ));
