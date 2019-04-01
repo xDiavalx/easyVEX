@@ -15,7 +15,7 @@ Add and suggest new functions.
 I want to learn from you!
 
 How to use:
-Include files go into 
+Put the files into 
 $HFS/houdini/vex/include/ 
 path, or into something like 
 C:\Users\[USER]\Documents\houdini[VERSION]\vex\include (for Windows).
@@ -31,5 +31,12 @@ Note: If your filepath is soemthing like:
 C:\Users\[USER]\Documents\houdini[VERSION]\vex\include\easyVex\easyVex.h
 You will need to use
 #include "easyVex/easyVex.h"
+
+There is an automatically generated documentation!
+Open:
+\easyVexDocs\html\index.html
+in a browser of choice.
+
+Then go to Files/File List/easyVex.h and you will get a full overview of all functions, structs and the Sturct's functions!
 
 Enjoy! XD
