@@ -183,7 +183,7 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00265">265</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00280">280</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa91401aa40f4aebf60ba84df9677d14b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa91401aa40f4aebf60ba84df9677d14b">&#9670;&nbsp;</a></span>compare()</h2>
@@ -207,8 +207,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns 1 if a&gt;b and 0 if b&gt;a</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: compare(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00347">347</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00400">400</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -234,8 +242,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the int for point a of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: int pt_a = geta(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00315">315</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00341">341</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -261,8 +277,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the int for point b of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: int pt_b = getb(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00320">320</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00352">352</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -288,8 +312,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns a string in standard Houdini edge format</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: printf(getfullname(ed1)); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00332">332</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00374">374</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -315,8 +347,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the int of the input of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: int input = getinput(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00310">310</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00330">330</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -342,8 +382,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the length of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: f@len = length(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00377">377</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00457">457</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -370,8 +418,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the length of the edge at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: f@len = length(ed1,2); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00385">385</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00471">471</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -397,8 +454,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the center position of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@halfpos = halfpoint(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00448">448</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00584">584</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -425,8 +491,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the center position of the edge at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@halfpos = halfpoint(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00454">454</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00596">596</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -453,8 +528,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the position of the edgepoint a at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@pos = posa(ed1,2); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00353">353</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00412">412</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -480,8 +564,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the position of the edgepoint a</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@pos = posa(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00359">359</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00423">423</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -508,8 +600,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the position of the edgepoint b at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@pos = posb(ed1,2); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00365">365</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00435">435</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -535,8 +636,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the position of the edgepoint b</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@pos = posb(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00371">371</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00446">446</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -562,8 +671,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Print verbose edge description to log</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: printfverbose(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00326">326</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00363">363</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -589,8 +706,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Swaps edge direction (a will b, and b will be a)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: swap(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00338">338</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00386">386</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -617,8 +742,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the non-normalized vector AB == posB - posA at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorAB = vectorab(ed1,2); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00400">400</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00492">492</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -644,8 +778,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the non-normalized vector AB == posB - posA</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorAB = vectorab(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00406">406</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00503">503</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -672,8 +814,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the normalized vector AB == posB - posA at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorAB = vectorab_n(ed1,2); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00424">424</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00538">538</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -699,8 +850,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the normalized vector AB == posB - posA</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorAB = vectorab_n(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00430">430</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00549">549</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -727,8 +886,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the non-normalized vector BA == posA - posB at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorBA = vectorba(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00412">412</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00515">515</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -754,8 +922,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the non-normalized vector BA == posA - posB</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorBA = vectorba(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00418">418</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00526">526</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -782,8 +958,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the normalized vector BA == posA - posB at input</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a> </td></tr>
+    <tr><td class="paramname">{int}</td><td>{input} an integer that describes an input</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorBA = vectorba_n(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00436">436</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00561">561</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -809,8 +994,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Returns the normalized vector BA == posA - posB</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">{edgeStruct}</td><td>{} an <a class="el" href="../../d0/d01/structedge_struct.html">edgeStruct</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: v@vectorBA = vectorba_n(ed1); </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00442">442</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00572">572</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -827,7 +1020,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00266">266</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00281">281</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -843,7 +1036,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00266">266</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00281">281</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>
@@ -859,7 +1052,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00266">266</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dff/easy_vex_8h_source.html#l00281">281</a> of file <a class="el" href="../../d5/dff/easy_vex_8h_source.html">easyVex.h</a>.</p>
 
 </div>
 </div>

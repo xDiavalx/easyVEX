@@ -63,6 +63,7 @@
 
 /**
  * Returns position of the point closest to given position at input 0
+ * 
  * @param	{vector}	{pos}	position that we examine 
  */
 function vector nearptpos( const vector pos)
@@ -72,6 +73,7 @@ function vector nearptpos( const vector pos)
 
 /**
  * Returns position of the point closest to given position at input
+ * 
  * @param {int}	{input}   number of the input that we look at to find the geometry   
  * @param {vector}	{pos}	position that we examine 
  * 
@@ -84,6 +86,7 @@ function vector nearptpos( const int input; const vector pos)
 
 /**
  * Returns int array of unique values (no duplicates) sorted in ascending order.
+ * 
  * @param {int array}	{numbers}   arbitrary integer array
  */
 function int[] uniquearray(const int numbers[]) {
@@ -112,6 +115,7 @@ function int[] uniquearray(const int numbers[]) {
 
 /**
  * Adds only new int values (no duplicates) to an int array and returns the modified array.
+ * 
  * @param {int array}	{numbers}   arbitrary integer array
  */
 function int[] appendunique(int numbers[]; const int num) {
@@ -123,6 +127,7 @@ function int[] appendunique(int numbers[]; const int num) {
 
 /**
  * Removes all instances of int value from int array
+ * 
  * @param {int array}	{numbers}   arbitrary integer array
  * @param {int}	{remove}   integer value to be removed from the array
  */
@@ -138,6 +143,7 @@ function void removevalues(int numbers[]; const int remove) {
 
 /**
  * Removes all instances of all int values in seccond array from first int array
+ * 
  * @param {int array}	{numbers}   arbitrary integer array
  * @param {int array}	{remove}   arbitrary integer array to be removed from the numbers array
  */
@@ -155,6 +161,7 @@ function void removevalues(int numbers[]; const int remove[]) {
 
 /**
  * Returns int array of only unique values of an arbitrary attribute at input 0
+ * 
  * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
  * @param {string}	{attribName}   Arbitrary attribute name
  */
@@ -170,6 +177,7 @@ function int[] uniquevals(const string componentType; const string attribName){
 
 /**
  * Returns int array of only unique values of an arbitrary attribute at input
+ * 
  * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
  * @param {string}	{attribName}   Arbitrary attribute name
  */
@@ -185,6 +193,7 @@ function int[] uniquevals(const int input; const string componentType; const str
 
 /**
  * Returns point position at input
+ * 
  * @param {int}	{input}	 number of the input that we look at to find the geometry
  * @param {int}	{point}  point index
  */
@@ -194,6 +203,7 @@ function vector pointp(const int input; const int point){
 
 /**
  * Returns point position at input 0
+ * 
  * @param {int}	{point}  point index
  */
 function vector pointp(const int point){
@@ -203,6 +213,7 @@ function vector pointp(const int point){
 
 /**
  * Returns the angle between two vectors in degrees
+ * 
  * @param {vector}	{u}  arbitrary vector
  * @param {vector}	{v}  arbitrary vector
  * 
@@ -214,6 +225,7 @@ function float angle_d(const vector u,v){
 
 /**
  * Returns the angle between two 2d vectors in degrees
+ * 
  * @param {vector2}	{u}  arbitrary 2d vector
  * @param {vector2}	{v}  arbitrary 2d vector
  * 
@@ -225,6 +237,7 @@ function float angle_d(const vector2 u,v){
 
 /**
  * Returns dot product of two vectors, but normalizes the vectors beforehand
+ * 
  * @param {vector}	{u}  arbitrary vector
  * @param {vector}	{v}  arbitrary vector
  */
@@ -234,6 +247,7 @@ float dot_n(const vector u,v ){
 
 /**
  * Returns dot product of two vector2s, but normalizes the vectors beforehand
+ * 
  * @param {vector2}	{u}  arbitrary 2d vector
  * @param {vector2}	{v}  arbitrary 2d vector
  */
@@ -242,7 +256,8 @@ float dot_n(const vector2 u,v ){
 }
 
 /**
- * Return the area of a triangle given by points A B C
+ * Returns the area of a triangle described by point positions A B C
+ * 
  * @param {vector}	{A}  arbitrary vector describing a position
  * @param {vector}	{B}  arbitrary vector describing a position
  * @param {vector}	{C}  arbitrary vector describing a position
@@ -294,7 +309,7 @@ struct edgeStruct{
 	/////////////////////////////////////////
 	/////////////////////////////////////////
 	/////////////////////////////////////////
-	/////////REFACTOR INCOMMING!!!!!!!!!!!!!!
+	/////////REFACTOR INCOMMING//////////////
 	/////////////////////////////////////////
 	/////////////////////////////////////////
 	/////////////////////////////////////////
@@ -305,36 +320,69 @@ struct edgeStruct{
 	//Since we cannot maintain it if we use the definitions in the struct, we need to put those function variations outside.
 	*/
 
-	//Returns the int for the input
-	//Example: int input = getinput(ed1);
+	/**
+	 * Returns the int of the input of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: int input = getinput(ed1);
+	 */
 	int getinput(){
 		return this.input;
 	}
-	//Returns the int for pt a
-	//Example: int pt_a = geta(ed1);
+
+	/**
+	 * Returns the int for point a of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: int pt_a = geta(ed1);
+	 */
 	int geta(){
 		return this.a;
 	}
-	//Returns the int for pt b
-	//Example: int pt_b = getb(ed1);
+
+	/**
+	 * Returns the int for point b of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: int pt_b = getb(ed1);
+	 */
 	int getb(){
 		return this.b;
 	}
 
-	//Print verbose edge description to log
-	//Example: printfverbose(ed1); 
+	/**
+	 * Print verbose edge description to log
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: printfverbose(ed1);
+	 */
 	void printfverbose(){
 		printf("edge between points %i and %i, at input %i\n", this.a,this.b,this.input);
 	}
 
-	//Returns a string in standard Houdini edge format
-	//Example: printf(getfullname(ed1)); 
+	/**
+	 * Returns a string in standard Houdini edge format
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: printf(getfullname(ed1));
+	 */
 	string getfullname(){
 		return sprintf("p%i_%i", this.a, this.b);
 	}
 
-	//Swaps edge direction (a will b, and b will be a)
-	//Example: swap(ed1);
+	/**
+	 * Swaps edge direction (a will b, and b will be a)
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: swap(ed1);
+	 */
+	
 	void swap(){
 		int c;
 		c = this.a;
@@ -342,46 +390,84 @@ struct edgeStruct{
 		this.b=c;
 	}
 
-	//Returns 1 if a>b and 0 if b>a
-	//Example: compare(ed1);
+	/**
+	 * Returns 1 if a>b and 0 if b>a
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: compare(ed1);
+	 */
 	int compare(){
 		return this.a>this.b;
 	}
 
-	//Returns the position of the edgepoint a at input
-	//Example: v@pos = posa(ed1,2);
+	/**
+	 * Returns the position of the edgepoint a at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@pos = posa(ed1,2);
+	 */
 	vector posa(const int input){
 		return point(input,"P",this.a);
 	}
 
-	//Returns the position of the edgepoint a
-	//Example: v@pos = posa(ed1);
+	/**
+	 * Returns the position of the edgepoint a
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@pos = posa(ed1);
+	 */
 	vector posa(){
 		return point(this.input,"P",this.a);
 	}
 
-	//Returns the position of the edgepoint b at input
-	//Example: v@pos = posb(ed1,2);
+	/**
+	 * Returns the position of the edgepoint b at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@pos = posb(ed1,2);
+	 */
 	vector posb(const int input){
 		return point(input,"P",this.b);
 	}
 
-	//Returns the position of the edgepoint b
-	//Example: v@pos = posb(ed1);
+	/**
+	 * Returns the position of the edgepoint b
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@pos = posb(ed1);
+	 */
 	vector posb(){
 		return point(this.input,"P",this.b);
 	}
 
-	//Returns the length of the edge
-	//Example: f@len = length(ed1);
+	/**
+	 * Returns the length of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: f@len = length(ed1);
+	 */
 	float length(){
 		vector A = point(this.input,"P",this.a);
 		vector B = point(this.input,"P",this.b);
 		return distance(A,B);
 	}
 
-	//Returns the length of the edge at input
-	//Example: f@len = length(ed1,2);
+	/**
+	 * Returns the length of the edge at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: f@len = length(ed1,2);
+	 */
 	float length(const int input){
 		vector A = point(input,"P",this.a);
 		vector B = point(input,"P",this.b);
@@ -395,118 +481,231 @@ struct edgeStruct{
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
 
-	//Returns the non-normalized vector AB == posB - posA at input
-	//Example: v@vectorAB = vectorab(ed1,2);
+	/**
+	 * Returns the non-normalized vector AB == posB - posA at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@vectorAB = vectorab(ed1,2);
+	 */
 	vector vectorab(const int input){
 		return point(input,"P",this.b) - point(input,"P",this.a);
 	}
 
-	//Returns the non-normalized vector AB == posB - posA
-	//Example: v@vectorAB = vectorab(ed1);
+	/**
+	 * Returns the non-normalized vector AB == posB - posA
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@vectorAB = vectorab(ed1);
+	 */
 	vector vectorab(){
 		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
 	}
 
-	//Returns the non-normalized vector BA == posA - posB at input
-	//Example: v@vectorBA = vectorba(ed1);
+	/**
+	 * Returns the non-normalized vector BA == posA - posB at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@vectorBA = vectorba(ed1);
+	 */
 	vector vectorba(const int input){
 		return point(input,"P",this.a) - point(input,"P",this.b);
 	}
 
-	//Returns the non-normalized vector BA == posA - posB
-	//Example: v@vectorBA = vectorba(ed1);
+	/**
+	 * Returns the non-normalized vector BA == posA - posB
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@vectorBA = vectorba(ed1);
+	 */
 	vector vectorba(){
 		return point(this.input,"P",this.a) - point(this.input,"P",this.b);
 	}
 
-	//Returns the normalized vector AB == posB - posA at input
-	//Example: v@vectorAB = vectorab_n(ed1,2);
+	/**
+	 * Returns the normalized vector AB == posB - posA at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@vectorAB = vectorab_n(ed1,2);
+	 */
 	vector vectorab_n(const int input){
 		return normalize( point(input,"P",this.b) - point(input,"P",this.a) );
 	}
 
-	//Returns the normalized vector AB == posB - posA
-	//Example: v@vectorAB = vectorab_n(ed1);
+	/**
+	 * Returns the normalized vector AB == posB - posA
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@vectorAB = vectorab_n(ed1);
+	 */
 	vector vectorab_n(){
 		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
 	}
 
-	//Returns the normalized vector BA == posA - posB at input
-	//Example: v@vectorBA = vectorba_n(ed1);
+	/**
+	 * Returns the normalized vector BA == posA - posB at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@vectorBA = vectorba_n(ed1);
+	 */
 	vector vectorba_n(const int input){
 		return normalize( point(input,"P",this.a) - point(input,"P",this.b) );
 	}
 
-	//Returns the normalized vector BA == posA - posB
-	//Example: v@vectorBA = vectorba_n(ed1);
+	/**
+	 * Returns the normalized vector BA == posA - posB
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
+	 * Example: v@vectorBA = vectorba_n(ed1);
+	 */
 	vector vectorba_n(){
 		return normalize( point(this.input,"P",this.a) - point(this.input,"P",this.b) );
 	}
 
-	//Returns the center position of the edge
-	//Example: v@halfpos = halfpoint(ed1);
+	/**
+	 * Returns the center position of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@halfpos = halfpoint(ed1);
+	 */
 	vector midpoint(){
 		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
 	}
 
-	//Returns the center position of the edge at input
-	//Example: v@halfpos = halfpoint(ed1);
+	/**
+	 * Returns the center position of the edge at input
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   an integer that describes an input
+	 * 
+	 * Example: v@halfpos = halfpoint(ed1);
+	 */
 	vector midpoint(const int input){
 		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
 	}
 
 }
 
-//Returns a version of the edgeStruct where a<b
-edgeStruct sort(const edgeStruct ed){
-	if( compare(ed) ){
-		return edgeStruct(getinput(ed), getb(ed),geta(ed));
+
+/**
+ * Returns a version of the edgeStruct where a<b
+ *
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ */
+edgeStruct sort(const edgeStruct edge){
+	if( compare(edge) ){
+		return edgeStruct(getinput(edge), getb(edge),geta(edge));
 		}
-	return ed;
+	return edge;
 }
 
-//Returns the position of the edgepoint a at input
-//Example: v@pos = posa(2,ed1);
+/**
+ * Returns the position of the edgepoint a at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@pos = posa(2,ed1);
+ */
 vector posa(const int input; const edgeStruct edge){
 	return point(input,"P",edge.a);
 }
 
-//Returns the position of the edgepoint b at input
-//Example: v@pos = posb(2,ed1);
+/**
+ * Returns the position of the edgepoint b at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@pos = posb(2,ed1);
+ */
 vector posb(const int input; const edgeStruct edge){
 	return point(input,"P",edge.b);
 }
 
-//Returns the length of the edge at input
-//Example: f@len = length(2,ed1);
+/**
+ * Returns the length of the edge at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: f@len = length(2,ed1);
+ */
 float length(const int input; const edgeStruct edge){
 	vector A = point(input,"P",edge.a);
 	vector B = point(input,"P",edge.b);
 	return distance(A,B);
 }
 
-//Returns the non-normalized vector AB == posB - posA at input
-//Example: v@vectorAB = vectorab(ed1,2);
+/**
+ * Returns the (not normalized) vector AB == posB - posA at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@vectorAB = vectorab(ed1,2);
+ */
 vector vectorab(const int input; const edgeStruct edge){
 	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
 }
-//Returns the non-normalized vector BA == posA - posB at input
-//Example: v@vectorBA = vectorba(ed1);
-vector vectorba(const int input; const edgeStruct edge; const edgeStruct edge){
+
+/**
+ * Returns the (not normalized) vector BA == posA - posB at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@vectorBA = vectorba(ed1);
+ */
+vector vectorba(const int input; const edgeStruct edge){
 		return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
 }
-//Returns the normalized vector AB == posB - posA at input
-//Example: v@vectorAB = vectorab_n(ed1,2);
+
+/**
+ * Returns the normalized vector AB == posB - posA at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@vectorAB = vectorab_n(ed1,2);
+ */
 vector vectorab_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",getb(edge)) - point(input,"P",geta(edge)) );
 }
-//Returns the normalized vector BA == posA - posB at input
-//Example: v@vectorBA = vectorba_n(ed1);
+
+/**
+ * Returns the normalized vector BA == posA - posB at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ *
+ * Example: v@vectorBA = vectorba_n(ed1);
+ */
 vector vectorba_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",geta(edge)) - point(input,"P",getb(edge)) );
 }
-//Returns the center position of the edge at input
-//Example: v@halfpos = halfpoint(ed1);
+
+/**
+ * Returns the center position of the edge at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@halfpos = halfpoint(ed1);
+ */
 vector midpoint(const int input; const edgeStruct edge){
 	return ( point(input,"P",geta(edge)) + point(input,"P",getb(edge)) )*.5;
 }
@@ -517,8 +716,13 @@ vector midpoint(const int input; const edgeStruct edge){
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 
-//Returns a string in standard Houdini edge format
-//Example: printf(getfullname(edges)); 
+/**
+ * Returns a string in standard Houdini edge format
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * 
+ * Example: printf(getfullname(edges)); 
+ */
 string getfullname(const edgeStruct edges[]){
 	string result;
 	foreach(edgeStruct ed; edges){
@@ -527,8 +731,13 @@ string getfullname(const edgeStruct edges[]){
 	return result;
 }
 
-//Returns edges as an int array of point indexes
-//Example: i[]@display1=getint(edges); 
+/**
+ * Returns edges as an int array of point indexes
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * 
+ * Example: i[]@display1=getint(edges); 
+ */
 int[] getint(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
@@ -538,8 +747,13 @@ int[] getint(const edgeStruct edges[]){
 	return result;
 }
 
-//Returns point indexes of first points of an array of edges
-//Example: i[]@display1=getinta(edges); 
+/**
+ * Returns point indexes of first points of an array of edges
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * 
+ * Example: i[]@display1=getinta(edges); 
+ */
 int[] getinta(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
@@ -548,8 +762,13 @@ int[] getinta(const edgeStruct edges[]){
 	return result;
 }
 
-//Returns point indexes of seccond points of an array of edges
-//Example: i[]@display1=getintb(edges); 
+/**
+ * Returns point indexes of seccond points of an array of edges
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * 
+ * Example: i[]@display1=getintb(edges);  
+ */
 int[] getintb(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
@@ -558,15 +777,21 @@ int[] getintb(const edgeStruct edges[]){
 	return result;
 }
 
-//Returns an array of int that represents edges, without a given edge 
-//and without a swapped version of that edge. 
-//Example:
-//i[]@display1=getint(edges); 
-//i[]@display2=removeedge(@display1, ed1);
-int[] removeedge(const int edges[]; const edgeStruct ed){
+/**
+ * Returns new array of point id pairs representing edges
+ * that does not contain given edge or the swapped (reversed) version of that edge
+ *
+ * @param {int array}	{edges}   an array of integers where every two numbers describe an edge start and end point
+ * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
+ * 
+ * Example:
+ * i[]@display1=getint(edges); 
+ * i[]@display2=removeedge(@display1, ed1);
+ */
+int[] removeedge(const int edges[]; const edgeStruct edge){
 	int result[];
 	for(int i=0; i<len(edges); i = i+2) {
-		if(!( (edges[i]==geta(ed) && edges[i+1]==getb(ed) ) || (edges[i]==getb(ed) && edges[i+1]==geta(ed) ) )  ){
+		if(!( (edges[i]==geta(edge) && edges[i+1]==getb(edge) ) || (edges[i]==getb(edge) && edges[i+1]==geta(edge) ) )  ){
 			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
 			append(result,edges[i]);
 			append(result,edges[i+1]);
@@ -575,26 +800,39 @@ int[] removeedge(const int edges[]; const edgeStruct ed){
 	return result;
 }
 
-//Returns new array that does not contain given edge or the swapped version of that edge
-//Example:
-//i[]@display1=getint(edges); 
-//i[]@display2=removeedge(@display1, ed1);
-int[] removeedge(const edgeStruct edges[]; const edgeStruct ed){
+/**
+ * Returns new array of point id pairs representing edges
+ * that does not contain given edge or the swapped (reversed) version of that edge
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
+ * 
+ * Example:
+ * i[]@display1=getint(edges); 
+ * i[]@display2=removeedge(@display1, ed1);
+ */
+int[] removeedge(const edgeStruct edges[]; const edgeStruct edge){
 	/*int nums[] = getint(edges);
 	int result[];
 	for(int i=0; i<len(nums); i = i+2) {
-		if(!( (nums[i]==ed.a && nums[i+1]==ed.b) || (nums[i]==ed.b && nums[i+1]==ed.a) )  ){
+		if(!( (nums[i]==edge.a && nums[i+1]==edge.b) || (nums[i]==edge.b && nums[i+1]==edge.a) )  ){
 			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
 			append(result,nums[i]);
 			append(result,nums[i+1]);
 		}
 	}
 	return result;*/
-	return removeedge(getint(edges),ed);
+	return removeedge(getint(edges),edge);
 }
 
-//Returns all edges connected to a point at input
-//Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
+/**
+ * Returns all edges connected to a point at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int}	{point}   an integer that describes a point number
+ * 
+ * Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
+ */
 edgeStruct[] edgestruct_frompoint(const int input; const int point){
 	int numbers[] = neighbours(input, point); 
 	edgeStruct result[];
@@ -604,29 +842,46 @@ edgeStruct[] edgestruct_frompoint(const int input; const int point){
 	return result;
 }
 
-//Returns a edgeStruct array given an input and an array of point id pairs.
-edgeStruct[] edgestruct_fromarray(const int input; const int numbers[]){
+/**
+ * Returns a edgeStruct array given an input and an array of point id pairs.
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int array}	{edges}   an array of integers where every two numbers describe an edge start and end point
+ */
+edgeStruct[] edgestruct_fromarray(const int input; const int edges[]){
 	edgeStruct result[];
-	for(int i = 0; i<len(numbers); i=i+2 ){
-		push( result, edgeStruct(input, numbers[i],numbers[i+1]) );
+	for(int i = 0; i<len(edges); i=i+2 ){
+		push( result, edgeStruct(input, edges[i], edges[i+1]) );
 	}
 	return result;
 }
 
-//Returns all edges connected to both points of an edge - without the source edge
-//Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
-function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct ed){
+/**
+ * Returns all edges connected to both points of an edge - without the source edge
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct 
+ * 
+ * Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
+ */
+function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct edge){
 	//int numbers[];
 	edgeStruct result[];
 	//numbers = getint(edgestruct_frompoint(input,ed.a) ) ;
 	//append(numbers, getint(edgestruct_frompoint(input,ed.b) ) );
-	push(result, edgestruct_frompoint(input,geta(ed)) );
-	push(result, edgestruct_frompoint(input,getb(ed)) );
-	return edgestruct_fromarray(input,removeedge(result,ed) );
+	push(result, edgestruct_frompoint(input,geta(edge)) );
+	push(result, edgestruct_frompoint(input,getb(edge)) );
+	return edgestruct_fromarray(input,removeedge(result,edge) );
 }
 
-//Returns an edgeStruct array given a Houdini edge group by input and name 
-//Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+/**
+ * Returns an edgeStruct array given a Houdini edge group by input and name 
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {string}	{name}   name of a Houdini edge group
+ * 
+ * Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+ */
 edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	/*
 	int numbers[] = expandedgegroup(input, name); 
@@ -639,8 +894,12 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	return edgestruct_fromarray(input,expandedgegroup(input, name));
 }
 
-//Returns an edgeStruct array given an input and a primitive.
-//In other words, turns all edges of a polygon into edgeStructs.
+/**
+ * Returns all edges of a polygon as edgeStructs
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int}	{primnum}   primitive id (primitive number)
+ */
 edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
     
     int skip_last = primintrinsic(input, "closed", primnum)==0 ?1 :0; //if open, don't create an edge between the end points
@@ -653,12 +912,16 @@ edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
     return result;
 }
 
-
-//Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
-//Example: printf(getfullname( sort(edges) ));
-/* FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/**
+ * Returns an array of edgeStructs, sorted by a (primary) and b (secondary) in increasing order
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * 
+ * Example: printf(getfullname( sort(edges) ));
+ */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 edgeStruct[] sort(const edgeStruct edges[]){
 	int amount;
 	edgeStruct result[];
@@ -696,14 +959,19 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	return result;
 }*/
 
-//Returns the edges connected to point A
-//Example: printf(getfullname( neighbours_a(ed1) ));
-edgeStruct[] neighbours_a(const edgeStruct ed){
+/**
+ * Returns the edges connected to point A of a given edgeStruct
+ *
+ * @param {edgeStruct}	{edge}   an edgeStruct 
+ *
+ * Example: printf(getfullname( neighbours_a(ed1) ));
+ */
+edgeStruct[] neighbours_a(const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int input = getinput(ed);
-	int a = geta(ed);
-	int b = getb(ed);
+	int input = getinput(edge);
+	int a = geta(edge);
+	int b = getb(edge);
 	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
@@ -712,13 +980,19 @@ edgeStruct[] neighbours_a(const edgeStruct ed){
 	return result;
 }
 
-//Returns the edges connected to point A at input
-//Example: printf(getfullname( neighbours_a(0,ed1) ));
-edgeStruct[] neighbours_a(const int input; const edgeStruct ed){
+/**
+ * Returns the edges connected to point A of a given edgeStruct at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct 
+ * 
+ * Example: printf(getfullname( neighbours_a(0,ed1) ));
+ */
+edgeStruct[] neighbours_a(const int input; const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int a = geta(ed);
-	int b = getb(ed);
+	int a = geta(edge);
+	int b = getb(edge);
 	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
@@ -727,14 +1001,19 @@ edgeStruct[] neighbours_a(const int input; const edgeStruct ed){
 	return result;
 }
 
-//Returns the edges connected to point B
-//Example: printf(getfullname( neighbours_b(ed1) ));
-edgeStruct[] neighbours_b(const edgeStruct ed){
+/**
+ * Returns the edges connected to point B of a given edgeStruct
+ *
+ * @param {edgeStruct}	{edge}   an edgeStruct 
+ *
+ * Example: printf(getfullname( neighbours_b(ed1) ));
+ */
+edgeStruct[] neighbours_b(const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int input = getinput(ed);
-	int a = geta(ed);
-	int b = getb(ed);
+	int input = getinput(edge);
+	int a = geta(edge);
+	int b = getb(edge);
 	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
@@ -743,13 +1022,19 @@ edgeStruct[] neighbours_b(const edgeStruct ed){
 	return result;
 }
 
-//Returns the edges connected to point B at input
-//Example: printf(getfullname( neighbours_b(0,ed1) ));
-edgeStruct[] neighbours_b(const int input; const edgeStruct ed){
+/**
+ * Returns the edges connected to point B of a given edgeStruct at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct 
+ * 
+ * Example: printf(getfullname( neighbours_b(0,ed1) ));
+ */
+edgeStruct[] neighbours_b(const int input; const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int a = geta(ed);
-	int b = getb(ed);
+	int a = geta(edge);
+	int b = getb(edge);
 	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
@@ -763,56 +1048,110 @@ edgeStruct[] neighbours_b(const int input; const edgeStruct ed){
 //Math operations on edgeStructs://
 ///////////////////////////////////
 
-//Check if two given edges have the same points. Returns 1 if same and 0 if not.
+/**
+ * Returns 1 if two given edges have the same points. Returns 0 otherwise.
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct
+ * @param {edgeStruct}	{ed2}   an edgeStruct 
+ */
 int isequal(const edgeStruct ed1,ed2){
 	return (geta(ed1)==geta(ed2) && getb(ed1)==getb(ed2) ) || (geta(ed1)==getb(ed2) && getb(ed1)==geta(ed2) );
 }
 
-//Dot product of two edges (as vectors). 
-//Example: f@dot = dot(ed1,ed2);
+/**
+ * Returns dot product of two edges (as vectors). 
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {edgeStruct}	{ed2}   an edgeStruct
+ *  
+ * Example: f@dot = dot(ed1,ed2);
+ */
 float dot(const edgeStruct ed1,ed2){
 	return dot(vectorab(ed1),vectorab(ed2));
 }
 
-//Dot product of two edges (as vectors) at inputs
-//Example: f@dot = dot(0,ed1,1,ed2);
+/**
+ * Returns dot product of two edges (as vectors) at inputs
+ *
+ * @param {int}	{input1}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {int}	{input2}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed2}   an edgeStruct 
+ * 
+ * Example: f@dot = dot(0,ed1,1,ed2);
+ */
 float dot(const int input1 ; const edgeStruct ed1 ; const int input2 ; const edgeStruct ed2){
 	return dot(vectorab(input1,ed1),vectorab(input2,ed2));
 }
 
-//Dot product of two normalized edges. Both edges are normalized before the dot product, not after.
-//Example: f@dot = dot_n(ed1,ed2);
+/**
+ * Returns dot product of two normalized edges. 
+ * Both edges are normalized before the dot product, not after.
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {edgeStruct}	{ed2}   an edgeStruct
+ * 
+ * Example: f@dot = dot_n(ed1,ed2);
+ */
 float dot_n(const edgeStruct ed1,ed2){
 	return dot(vectorab_n(ed1),vectorab_n(ed2));
 }
 
-//Dot product of two normalized edges at inputs
-//Example: f@dot = dot_n(0,ed1,0,ed2);
+/**
+ * Returns dot product of two normalized edges at inputs
+ *
+ * @param {int}	{input1}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {int}	{input2}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed2}   an edgeStruct 
+ *
+ * Example: f@dot = dot_n(0,ed1,0,ed2);
+ */
 float dot_n(const int input1 ; const edgeStruct ed1 ;const int input2;  const edgeStruct ed2){
 	return dot(vectorab_n(input1,ed1),vectorab_n(input2,ed2));
 }
 
-//Returns the angle between two edges in degrees
-//Example: f@angle = angle_d(ed1,ed2);
+/**
+ * Returns the angle between two edges in degrees
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {edgeStruct}	{ed2}   an edgeStruct
+ * 
+ * Example: f@angle = angle_d(ed1,ed2);
+ */
 float angle_d(const edgeStruct ed1,ed2){
 	return degrees( acos( dot_n( ed1,ed2)  ) );
 }
 
-//Returns the angle between two edges in radians
-//Example: f@angle = angle(ed1,ed2);
+/**
+ * Returns the angle between two edges in radians
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {edgeStruct}	{ed2}   an edgeStruct
+ * 
+ * Example: f@angle = angle(ed1,ed2);
+ */
 float angle(const edgeStruct ed1,ed2){
 	return acos( dot_n( ed1,ed2)  );
 }
 
-
-
-//Returns the angle between two edges in degrees at inputs
-//Example: f@angle = angle_d(ed1,0,ed2,1);
-float angle_d(const int input1 ; const edgeStruct ed1 ;const int input2;  const edgeStruct ed22){
+/**
+ * Returns the angle between two edges in degrees at inputs
+ *
+ * @param {int}	{input1}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {int}	{input2}   an integer that describes an input of ed1
+ * @param {edgeStruct}	{ed2}   an edgeStruct 
+ *
+ * Example: f@angle = angle_d(0,ed1,1,ed2);
+ */
+float angle_d(const int input1 ; const edgeStruct ed1 ;const int input2;  const edgeStruct ed2){
 	return degrees( acos( dot_n(input1,ed1,input2,ed2) )  );
 }
 
-//Returns angle between two edges in radians around a rotation axis 
+/**
+ * Returns angle between two edges in radians around a rotation axis 
+ */
 float angle_around(const edgeStruct ed1,ed2; vector axis){
     vector a = vectorab_n(ed1); 
     vector b = vectorab_n(ed2); 
@@ -828,7 +1167,15 @@ float angle_around(const edgeStruct ed1,ed2; vector axis){
     b = qrotate(q_align, b); 
     return atan2( b.x, b.z);
 }
-//Returns angle between two edges in degrees around a rotation axis
+
+
+/**
+ * Returns angle between two edges in degrees around a rotation axis
+ *
+ * @param {edgeStruct}	{ed1}   an edgeStruct 
+ * @param {edgeStruct}	{ed2}   an edgeStruct 
+ * @param {vector}	{axis}	rotation axis around which we measure the angle
+ */
 float angle_around_d(const edgeStruct ed1,ed2; vector axis){
     return degrees(angle_around( ed1,ed2, axis));
 }
@@ -858,60 +1205,122 @@ struct lineStruct{
 	*/
 	int type; //closed==0, open==1, openA==2, openB==3; See comment above 
 
-	//Returns point A on line
+	/**
+ 	 * Returns point A position on line
+ 	 *
+ 	 *  @param {lineStruct}	{}   a lineStruct
+ 	 */
 	vector posa(){
 		return this.A;
 	}
-	//Returns point B on line
+
+	/**
+ 	 * Returns point B position on line
+ 	 *
+ 	 *  @param {lineStruct}	{}   a lineStruct
+ 	 */
 	vector posb(){
 		return this.B;
 	}
-	//Returns type of line
-	/*The type determines whether it is
-	(0) a line-segment, 
-	(1) an infinite line, 
-	(2) a line starting at B and extending (infinitely) in direction A or
-	(3) a line starting at A and extending (infinitely) in direction B.
-	*/
+
+	/**
+	 * Returns type of line
+ 	 * 
+	 * The type determines whether it is:
+	 * (0) a line-segment
+	 * (1) an infinite line 
+	 * (2) a line starting at B and extending (infinitely) in direction A
+	 * (3) a line starting at A and extending (infinitely) in direction B
+	 *
+	 * @param {lineStruct}	{}   a lineStruct
+	 */
 	int type(){
 		return this.type;
 	}
-	//Returns vector AB normalized
+
+	/**
+ 	 * Returns vector AB normalized
+ 	 *
+ 	 * @param {lineStruct}	{}   a lineStruct
+ 	 */
 	vector direction_n(){
 		return normalize(this.B-this.A);
 	}
 
-	//Returns 1 if A and B are NOT the same and 0 otherwise. 
-	//If A and B were equal (return 0) the struct would be invalid.
+	/**
+ 	 * Returns 1 if A and B are NOT the same and otherwise returns 0. 
+ 	 * If A and B were equal (return 0) the struct would be invalid.
+ 	 *
+ 	 * @param {lineStruct}	{}   a lineStruct
+ 	 */
 	int verify(){
 		return this.A==this.B ? 0 : 1; 
 	}
 }
 
-
-//Returns a line struct from an edgeStruct at input 0, of type 0 (closed)
+/**
+ * Returns a line struct from an edgeStruct at input 0, of type 0 (closed)
+ *
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ */
 lineStruct linefromedge(const edgeStruct edge){
 	lineStruct line = lineStruct(posa(edge),posb(edge),0);
 	return line;
 }
-//Returns a line struct from an edgeStruct at input 0, of type
+
+/**
+ * Returns a line struct from an edgeStruct at input 0, of type
+ *
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * @param {int}	{type}	an integer indicating the type of the lineStruct (see lineStruct types)
+ *
+ * lineStruct types:
+ * (0) a line-segment
+ * (1) an infinite line 
+ * (2) a line starting at B and extending (infinitely) in direction A
+ * (3) a line starting at A and extending (infinitely) in direction B
+ */
 lineStruct linefromedge(const edgeStruct edge; const int type){
 	lineStruct line = lineStruct(posa(edge),posb(edge),type);
 	return line;
 }
-//Returns a line struct from an edgeStruct at input, of type 0 (closed)
+
+/**
+ * Returns a line struct from an edgeStruct at input, of type 0 (closed)
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ */
 lineStruct linefromedge(const int input; const edgeStruct edge){
 	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),0);
 	return line;
 }
-//Returns a line struct from an edgeStruct at input, of type
+
+/**
+ * Returns a line struct from an edgeStruct at input, of type
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * @param {int}	{type}	an integer indicating the type of the lineStruct (see lineStruct types)
+ *
+ * lineStruct types:
+ * (0) a line-segment
+ * (1) an infinite line 
+ * (2) a line starting at B and extending (infinitely) in direction A
+ * (3) a line starting at A and extending (infinitely) in direction B
+ */
 lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
 	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),type);
 	return line;
 }
 
-//Returns minimum distance between a lineStruct and pos X 
-//http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+/**
+ * Returns minimum distance between a lineStruct and pos X 
+ * http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+ *
+ * @param {lineStruct}	{line}	a lineStruct
+ * @param {vector}	{X}	a position
+ */
 float linetoposdist(const lineStruct line; const vector X){
 	vector A = posa(line);
 	vector B = posb(line);
@@ -951,13 +1360,23 @@ float linetoposdist(const lineStruct line; const vector X){
 	return dist;
 }
 
-//Returns whether two lines are similar encoded as a result vector
-//result.x == 1 -> all points of both lines lie on the same infinite line
-//result.x == 0 -> both lines lie on the same infinite line
-//result.y == 1 -> points on both lines are the same (ignoring point order)
-//result.y == 0 -> points on both lines are not the same (ignoring point order)
-//result.z == 1 -> types are the same
-//result.z == 0 -> types are different
+/**
+ * Returns a vector (result) that describes the relationships between two lineStructs
+ *
+ * result.x == 1 -> all points of both lines lie on the same infinite line
+ * result.x == 0 -> both lines lie on the same infinite line
+ * 
+ * result.y == 1 -> points on both lines are the same (ignoring point order)
+ * result.y == 0 -> points on both lines are not the same (ignoring point order)
+ * 
+ * result.z == 1 -> lineStruct types are the same
+ * result.z == 0 -> lineStruct types are different
+ *
+ * @param {lineStruct}	{l1}	a lineStruct
+ * @param {lineStruct}	{l2}	a lineStruct
+ * 
+ * Example: result=={1,1,1} -> l1 and l2 are identical (but their direction may be different)
+ */
 vector isequal(const lineStruct l1,l2){
 	vector result; 
 	vector p1 = direction_n(l1);
@@ -973,7 +1392,15 @@ vector isequal(const lineStruct l1,l2){
 //to do: line to line angle (angle between two lines)
 //to do: angle around and angle around_d for lines
 
-//The planeStruct represents an infinite plane in 3D space. It has a normal direction.
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////planeStruct//////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * The planeStruct represents an infinite plane in 3D space. It has a normal direction.
+ */
 struct planeStruct{
 	vector normal, pos; //normal = direction and normal of the plane. pos = a point on the plane
 
@@ -985,8 +1412,12 @@ struct planeStruct{
 	} 
 }
 
-
-//Returns a planeStruct given a primitive number and the input
+/**
+ * Returns a planeStruct given a primitive number and the input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int}	{prim}   a primitive number (primitive id)
+ */
 planeStruct planestruct_fromprim(const int input; const int prim){
 	int pts[] = primpoints(input, prim);
 	vector pos = pointp(input,pts[0]);
@@ -1011,7 +1442,12 @@ planeStruct planestruct_fromprim(const int input; const int prim){
 	warning("planestruct_fromprim: Could not find or generate normal. Using fallback {0,1,0}.");
 	return planeStruct(normal, pos); // Backup
 }
-//Returns a planeStruct given a primitive number at input 0
+
+/**
+ * Returns a planeStruct given a primitive number at input 0
+ *
+ * @param {int}	{prim}   a primitive number (primitive id)
+ */
 planeStruct planestruct_fromprim(const int prim){
 	int input = 0;
 	int pts[] = primpoints(input, prim);
@@ -1038,21 +1474,37 @@ planeStruct planestruct_fromprim(const int prim){
 	return planeStruct(normal, pos); // Backup
 }
 
-//Returns the closest distance between a point and an (infinite) plane defined by a planeStruct.
-//If the point is under the plane (based on plane's normal) the value is negative.
+/**
+ * Returns the closest distance between a point and an (infinite) plane defined by a planeStruct.
+ * If the point is under the plane (based on plane's normal) the value is negative.
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int}	{point}   a point number (point id)
+ * @param {planeStruct}	{plane}	a planeStruct
+ */
 float dist(const int input; const  int point; const planeStruct plane){
 	float dist = dot( pointp(input,point)-pos(plane), normal(plane));
 	return dist;
 }
 
-
-//Returns intersection point between line and plane
-//success
-//0 => disjoint (no intersection)
-//1 => the plane intersects the line in the returned point
-//2 => the segment lies in the plane
-//3 => the intersection lies outside the segment
-//From: https://de.mathworks.com/matlabcentral/fileexchange/17751-straight-line-and-plane-intersection
+/////////////////////////////////////////FIX THIS TO ACCOUNT FOR DIFFERENT lineStruct types/////////////////////
+/**
+ * Returns intersection location between lineStruct and planeStruct and edits an int "success" variable
+ * WARNING: This currently does not account for different line types. 
+ * Also the success results will be changed so failure will be encoded with 0 or a negative number and success will be a number greater
+ * 
+ * success:
+ * 0 => Failure, no intersection. The planeStruct and the lineStruct never intersect
+ * 1 => The plane intersects the line in the returned position
+ * 2 => Failure. The lineStruct lies in the plane (is parallel to it) 
+ * 3 => The intersection lies outside the segment
+ *
+ * @param {planeStruct}	{plane}	a planeStruct
+ * @param {lineStruct}	{line}	a lineStruct
+ * @param {int}	{success}	a variable that is passed by reference (is manipulated by the function). It will return "success" (as explained above) 
+ * 
+ * From: https://de.mathworks.com/matlabcentral/fileexchange/17751-straight-line-and-plane-intersection
+ */
 vector intersection(const planeStruct plane; const lineStruct line; int success){
 	vector result = {0,0,0};
 	vector linedir = posb(line) - posa(line);
@@ -1077,12 +1529,16 @@ vector intersection(const planeStruct plane; const lineStruct line; int success)
 	success = sI<0||sI>1 ? 3:1; //If true, the intersection point lies outside the segment, so there is no intersection
 
 	return result; 
-	////////////////////////Fix this to account for different line types!!!!
 }
 
-
-//Returns line at the intersection of two planes
-//Solution based on https://forum.unity.com/threads/how-to-find-line-of-intersecting-planes.109458/
+/**
+ * Returns lineStruct at the intersection of two planes
+ *
+ * @param {planeStruct}	{p1}	a planeStruct
+ * @param {planeStruct}	{p2}	a planeStruct
+ * 
+ * Solution based on https://forum.unity.com/threads/how-to-find-line-of-intersecting-planes.109458/
+ */
 lineStruct linestruct_fromplanes(const planeStruct p1,p2){
 	vector dir = cross(normal(p1),normal(p2)); //direction of line
 
