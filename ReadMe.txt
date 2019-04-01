@@ -37,6 +37,6 @@ Open:
 \easyVexDocs\html\index.html
 in a browser of choice.
 
-Then go to Files/File List/easyVex.h and you will get a full overview of all functions, structs and the Sturct's functions!
+Then go to Files/File List/easyVex.h and you will get a full overview of all functions, structs and the sturct's functions!
 
 Enjoy! XD
