@@ -277,7 +277,7 @@ float trianglearea(const vector A,B,C){
  * @param {string}	{name}  point attribute to write to
  * @param {vector}	{target}  target position that we calculate distance to
  */
-float n_disttopoint(const string name; const vector target){
+void n_disttopoint(const string name; const vector target){
 	float maxDistance,minDistance;
 	float distancesToTarget[];
 	//Store distances
