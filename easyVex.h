@@ -270,6 +270,34 @@ float trianglearea(const vector A,B,C){
 }
 
 
+/**
+ * Calculates the distance to target position for every point and normalizes it across the geometry. 
+ * Sets a point attribute "name" to have this value. 
+ * 
+ * @param {string}	{name}  point attribute to write to
+ * @param {vector}	{target}  target position that we calculate distance to
+ */
+float n_disttopoint(const string name; const vector target){
+	float maxDistance,minDistance;
+	float distancesToTarget[];
+	//Store distances
+	for(int perPoint=0;perPoint<@numpt;perPoint++){
+    	vector targetPos = point(0,"P",perPoint);
+    	float distanceToTarget = distance(targetPos,target);
+    	append(distancesToTarget,distanceToTarget);
+	}
+	//Calculate min and max distances
+	minDistance = min(distancesToTarget);
+	maxDistance = max(distancesToTarget);
+	maxDistance -= minDistance;
+	//Set normalized attribute
+	for(int i=0;i<@numpt;i++ ){
+	    float normalizedDistanceToTarget = (distancesToTarget[i]-minDistance)/maxDistance; 
+	    setpointattrib(0,name,i,normalizedDistanceToTarget,"set");
+	}
+}
+
+
 ////////////////////////////////////
 ////////////////////////////////////
 ////////////////////////////////////
