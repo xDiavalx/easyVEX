@@ -281,7 +281,7 @@ float n_disttopoint(const string name; const vector target){
 	float maxDistance,minDistance;
 	float distancesToTarget[];
 	//Store distances
-	for(int perPoint=0;perPoint<@numpt;perPoint++){
+	for(int perPoint=0;perPoint<npoints(0);perPoint++){
     	vector targetPos = point(0,"P",perPoint);
     	float distanceToTarget = distance(targetPos,target);
     	append(distancesToTarget,distanceToTarget);
@@ -291,7 +291,7 @@ float n_disttopoint(const string name; const vector target){
 	maxDistance = max(distancesToTarget);
 	maxDistance -= minDistance;
 	//Set normalized attribute
-	for(int i=0;i<@numpt;i++ ){
+	for(int i=0;i<npoints(0);i++ ){
 	    float normalizedDistanceToTarget = (distancesToTarget[i]-minDistance)/maxDistance; 
 	    setpointattrib(0,name,i,normalizedDistanceToTarget,"set");
 	}
