@@ -987,9 +987,6 @@ edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
  * 
  * Example: printf(getfullname( sort(edges) ));
  */
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 edgeStruct[] sort(const edgeStruct edges[]){
 	int amount;
 	edgeStruct result[];
@@ -1025,7 +1022,7 @@ edgeStruct[] sort(const edgeStruct edges[]){
 		push(result, temp);
 	}
 	return result;
-}*/
+}
 
 /**
  * Returns the edges connected to point A of a given edgeStruct
@@ -1395,27 +1392,34 @@ float linetoposdist(const lineStruct line; const vector X){
 	int type = type(line);
 	float dist = length( cross(X-A,X-B) )/length(B-A);
 
-	if(type==1){ //infinite line
+	//infinite line
+	if(type==1){ 
 		return dist;
 	}
 	float dista = distance(A,X);
 	float distb = distance(B,X);
 
 	float dirAX = dot((X-A),(B-A));
-	if(type==3){ //closed at A
+
+	//closed at A
+	if(type==3){ 
 		if(dirAX<0){ //if X further from B than A
 			return length((X-A));
 		}
 		return dist;
 	}
 	float dirBX = dot((X-B),(A-B));
-	if(type==2){ //closed at B
+
+	//closed at B
+	if(type==2){
 		if(dirBX<0){
 			return length((X-B));
 		}
 		return dist;
 	}
-	if(type==0){ //closed line segment
+
+	//closed line segment
+	if(type==0){
 		if(dirAX<0){
 			return dista;
 		}
@@ -1455,6 +1459,10 @@ vector isequal(const lineStruct l1,l2){
 	return result;
 }
 
+////////////////////////////////////////
+////////////////////////////////////////
+///////////////do this//////////////////
+////////////////////////////////////////
 //to do: line to line has intersection point?
 //to do: line to line intersection point or closest point (with success parameter)
 //to do: line to line angle (angle between two lines)
@@ -1623,6 +1631,11 @@ lineStruct linestruct_fromplanes(const planeStruct p1,p2){
 
 	return lineStruct(pos,dir+pos,1); 
 }
+
+////////////////////////////////////////
+////////////////////////////////////////
+///////////////do this//////////////////
+////////////////////////////////////////
 
 //to do: angle between line and plane https://www.vitutor.com/geometry/distance/line_plane.html
 //to do: is line on plane? (both points have dist 0 to plane)
