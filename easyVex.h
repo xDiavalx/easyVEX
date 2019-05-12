@@ -272,7 +272,8 @@ float trianglearea(const vector A,B,C){
 
 /**
  * Calculates the distance to target position for every point and normalizes it across the geometry. 
- * Sets a point attribute "name" to have this value. 
+ * Sets a point attribute "name" to have this value.
+ * Processes all points at first input when executed once. 
  * 
  * @param {string}	{name}  point attribute to write to
  * @param {vector}	{target}  target position that we calculate distance to
@@ -297,6 +298,45 @@ void n_disttopoint(const string name; const vector target){
 	}
 }
 
+/**
+ * Creates a polyline in a circle around "axis" with startpoint facing "up".
+ * 
+ * @param {vector}	{origin}  Location of the center/origin of the circle
+ * @param {int}	{divisions}  Number of segments on the circle
+ * @param {vector}	{up}  Direction in which the first and last points face. Should be different from axis. 
+ * @param {vector}	{axis}  Center axis of the circle. Should be different from up.
+ * @param {float}	{radius}  Radius of circle
+ * @param {float}	{uv_v_offset}  The circle UVs are laid out left to right in UV space. This parameter shifts the UVs in height in UV space. 
+ *                               	If you make two circles, one with uv_v_offset=0, the other with uv_v_offset=1 and use the skin sop to connect them, you get a cylinder with proper UVs.
+ *
+ * Thanks to Kyro from Think Procedural (Discord) for figuring out a bug in this!
+ */
+void circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset){
+	//init variables
+	int points[];
+	vector up_n = normalize(up);
+	vector axis_n = normalize(axis);
+	int divisions_n = max(divisions,2); //make sure we get at least two divisions.
+	matrix3 adjustmentMatrix = maketransform(axis_n,up_n);
+	int pointid = 0;
+	vector z = cross(up_n,axis_n); //Use z to ensure that the vectors are orthogonal to each other.
+
+	//For each division + 1 (for endpoint that overlaps start point)
+	for(int div=0; div<divisions_n+1; div++){
+	    float angle = 2*PI*(div)/divisions_n; //angle of segment in radians
+	    vector dir = set(sin(angle), cos(angle), 0); //Direction of segment point
+	    dir *= adjustmentMatrix; //Adjust for axis and up
+	    vector pos = dir * radius + origin; //And set radius
+	    //Create point and set attributes
+	    pointid = addpoint(0,pos);
+	    float uv_u = float(div)/float(divisions_n);
+	    append(points,pointid);
+	    setpointattrib(0, "N", pointid, dir, "set");
+	    setpointattrib(0, "up", pointid, axis_n, "set");
+	    setpointattrib(0, "uv", pointid, set(uv_u,uv_v_offset,0), "set");
+	}
+	addprim(0,"polyline",points);
+}
 
 ////////////////////////////////////
 ////////////////////////////////////
