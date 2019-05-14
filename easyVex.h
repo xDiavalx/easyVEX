@@ -300,6 +300,7 @@ void n_disttopoint(const string name; const vector target){
 
 /**
  * Creates a polyline in a circle around "axis" with startpoint facing "up".
+ * Returns array of temporary point IDs.
  * 
  * @param {vector}	{origin}  Location of the center/origin of the circle
  * @param {int}	{divisions}  Number of segments on the circle
@@ -309,9 +310,24 @@ void n_disttopoint(const string name; const vector target){
  * @param {float}	{uv_v_offset}  The circle UVs are laid out left to right in UV space. This parameter shifts the UVs in height in UV space. 
  *                               	If you make two circles, one with uv_v_offset=0, the other with uv_v_offset=1 and use the skin sop to connect them, you get a cylinder with proper UVs.
  *
+ * Example:
+ * //Make two circles and set point attribute "test" on the second one to 4
+ * int divisions=8;
+ * vector up = set(0,1,0);
+ * vector axis = set(1,0,0);
+ * float radius = 1;
+ * int points[];
+ * 
+ * circle(set(0,0,0),divisions, up, axis, radius,0);
+ * points = circle(set(1,0,0),divisions, up, axis, radius,1);
+ * foreach(int pt; points){
+ * 	setpointattrib(0,"test",pt,4,"set");
+ * }
+ *
+ * 
  * Thanks to Kyro from Think Procedural (Discord) for figuring out a bug in this!
  */
-void circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset){
+int[] circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset){
 	//init variables
 	int points[];
 	vector up_n = normalize(up);
@@ -336,7 +352,9 @@ void circle(const vector origin; const int divisions; const vector up; const vec
 	    setpointattrib(0, "uv", pointid, set(uv_u,uv_v_offset,0), "set");
 	}
 	addprim(0,"polyline",points);
+	return(points);
 }
+
 
 ////////////////////////////////////
 ////////////////////////////////////
