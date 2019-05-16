@@ -1288,6 +1288,8 @@ struct lineStruct{
 	*/
 	int type; //closed==0, open==1, openA==2, openB==3; See comment above 
 
+	//Functions:
+	
 	/**
  	 * Returns point A position on line
  	 *
@@ -1451,30 +1453,193 @@ float linetoposdist(const lineStruct line; const vector X){
 }
 
 /**
- * Returns a vector (result) that describes the relationships between two lineStructs
- *
- * result.x == 1 -> all points of both lines lie on the same infinite line
- * result.x == 0 -> both lines lie on the same infinite line
- * 
- * result.y == 1 -> points on both lines are the same (ignoring point order)
- * result.y == 0 -> points on both lines are not the same (ignoring point order)
- * 
- * result.z == 1 -> lineStruct types are the same
- * result.z == 0 -> lineStruct types are different
+ * Returns 1 if both lines are on the same infinite line (otherwise 0)
  *
  * @param {lineStruct}	{l1}	a lineStruct
  * @param {lineStruct}	{l2}	a lineStruct
- * 
- * Example: result=={1,1,1} -> l1 and l2 are identical (but their direction may be different)
  */
-vector isequal(const lineStruct l1,l2){
-	vector result; 
-	vector p1 = direction_n(l1);
-	vector p2 = direction_n(l2);
-	result.x = normal1==normal2 || normal1==-normal2 ? 1 : 0;//if normals match, then 1
-	result.y = ( posa(l1)==posa(l2)&&posb(l1)==posb(l2)) || (posa(l1)==posb(l2)&&posb(l1)==posa(l2)) ? 1 : 0;//if points match, then 1
-	result.z = type(l1)==type(l2);
+int sameline(const lineStruct l1,l2){
+	lineStruct line = lineStruct(posa(l1),posb(l1),1);
+	vector normal1 = direction_n(l1);
+	vector normal2 = direction_n(l2);
+	float threshold = 0.0001;
+	if( (length( normal1 - normal2)<threshold)||(length(-normal1 - normal2)<threshold) ){
+		if(  linetoposdist(line,posa(l2))<threshold ){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+/**
+ * Returns 1 or 2 if both lines share the same points (otherwise 0)
+ *
+ * Returns == 2 -> locations a and b are exactly the same
+ * Returns == 1 -> locations a and b are exactly the same, but swapped
+ * Returns == 0 -> one or more locations are different
+ * 
+ * @param {lineStruct}	{l1}	a lineStruct
+ * @param {lineStruct}	{l2}	a lineStruct
+ */
+int samepoints(const lineStruct l1,l2){
+	vector pa1 = posa(l1);
+	vector pb1 = posb(l1);
+	vector pa2 = posa(l2);
+	vector pb2 = posb(l2);
+	if( pa1==pa2 && pb1==pb2 ){
+		return 2; 
+	}
+	if( pa1==pb2 && pb1==pa2 ){
+		return 1;
+	}
+	return 0;
+}
+
+/**
+ * Returns 1 or 2 if both lines share the same direction (otherwise 0)
+ *
+ * Returns == 2 -> directions for l1 and l2 are exactly the same
+ * Returns == 1 -> directions for l1 and l2 are exactly the same, but swapped
+ * Returns == 0 -> one or more directions are different
+ * 
+ * @param {lineStruct}	{l1}	a lineStruct
+ * @param {lineStruct}	{l2}	a lineStruct
+ */
+int samedirections(const lineStruct l1,l2){
+	vector normal1 = direction_n(l1);
+	vector normal2 = direction_n(l2);
+	float threshold = 0.0001;
+	if( length( normal1 - normal2)<threshold ){
+		return 2;
+	}
+	if( length(-normal1 - normal2)<threshold ){
+		return 1;
+	}
+	return 0;
+}
+
+/**
+ * Returns an integer array that describes the relationships between two lineStructs
+ *
+ * result[0] == 2 -> locations a and b are exactly the same
+ * result[0] == 1 -> locations a and b are exactly the same, but swapped
+ * result[0] == 0 -> one or more locations are different
+ *
+ * result[1] == 2 -> normalized directions are exactly the same
+ * result[1] == 1 -> normalized directions exactly the same, but reversed
+ * result[1] == 0 -> normalized directions are different
+ *
+ * result[2] == 3 -> position of point a2 and b2 is on line l1
+ * result[2] == 2 -> position of point b2 is on line l1
+ * result[2] == 1 -> position of point a2 is on line l1
+ * result[2] == 0 -> neither point a2 or b2 are on line l1
+ *
+ * result[3] == 3 -> position of point a1 and b1 is on line l2
+ * result[3] == 2 -> position of point b1 is on line l2
+ * result[3] == 1 -> position of point a1 is on line l2
+ * result[3] == 0 -> neither point a1 or b1 are on line l2
+ *
+ * result[4] == 3 -> position of point a2 and b2 is on line segment a1b1
+ * result[4] == 2 -> position of point b2 is on line segment a1b1
+ * result[4] == 1 -> position of point a2 is on line segment a1b1
+ * result[4] == 0 -> neither point a2 or b2 are on line segment a1b1
+ *
+ * result[5] == 3 -> position of point a1 and b1 is on line segment a2b2
+ * result[5] == 2 -> position of point b1 is on line segment a2b2
+ * result[5] == 1 -> position of point a1 is on line segment a2b2
+ * result[5] == 0 -> neither point a1 or b1 are on line segment a2b2
+ * 
+ * @param {lineStruct}	{l1}	a lineStruct
+ * @param {lineStruct}	{l2}	a lineStruct
+ */
+int[] same(const lineStruct l1,l2){
+	int result[] = {0,0,0,0,0}; 
+	vector normal1 = direction_n(l1);
+	vector normal2 = direction_n(l2);
+	vector pa1 = posa(l1);
+	vector pb1 = posb(l1);
+	vector pa2 = posa(l2);
+	vector pb2 = posb(l2);
+	float threshold = 0.0001;
+	//position comparison
+	if( pa1==pa2 && pb1==pb2 ){
+		result[0] = 2;
+	}
+	if( pa1==pb2 && pb1==pa2 ){
+		result[0] = 1;
+	}
+
+	//directions comparison
+	if( length( normal1 - normal2)<threshold ){
+		result[1] = 2;
+	}
+	if( length(-normal1 - normal2)<threshold ){
+		result[1] = 1;
+	}
+
+	//l2 inside l1
+	if( linetoposdist(l1, pa2)<threshold ){
+		result[2] = 1; //a2 is on l1
+	}
+	if( linetoposdist(l1, pb2)<threshold ){
+		//are both points inside? 
+		if(result[2] == 1){ 
+			result[2] = 3; //a2 and b2 are on l1
+		}
+		else{
+			result[2] = 2; //b2 is on l1
+		}
+	}
+	//l1 inside l2
+	if( linetoposdist(l2, pa1)<threshold ){
+		result[3] = 1; //a1 is on l1
+	}
+	if( linetoposdist(l2, pb1)<threshold ){
+		//are both points inside? 
+		if(result[3] == 1){ 
+			result[3] = 3; //a1 and b1 are on l1
+		}
+		else{
+			result[3] = 2; //b2 is on l1
+		}
+	}
+
+	if( distance(pa2,pa1)+distance(pa2,pb1)-distance(pa1,pb1)<threshold ){
+		result[4] = 1; //a2 lies on segment a1b1
+	}
+	if( distance(pb2,pa1)+distance(pb2,pb1)-distance(pa1,pb1)<threshold ){
+		if(result[4] == 1){ 
+			result[4] = 3; //segement a2b2 lies on segment a1b1
+		}
+		result[4] = 2; //b2 lies on segment a1b1
+	}
+
+	if( distance(pa1,pa2)+distance(pa1,pb2)-distance(pa2,pb2)<threshold ){
+		result[5] = 1; //a1 lies on segment a2b2
+	}
+	if( distance(pb1,pa2)+distance(pb1,pb2)-distance(pa2,pb2)<threshold ){
+		if(result[5] == 1){ 
+			result[5] = 3; //segement a1b1 lies on segment a2b2
+		}
+		result[5] = 2; //b1 lies on segment a2b2
+	}
+
+	//result.z = type(l1)==type(l2);
 	return result;
+}
+
+/**
+ * Returns the angle between two lines
+ * 
+ * @param {vector}	{u}  arbitrary vector
+ * @param {vector}	{v}  arbitrary vector
+ * 
+ * Example: f@angle = angle(l1,l2);
+ */
+function float angle_d(const lineStruct l1,l2){
+	vector u = direction_n(l1);
+	vector v = direction_n(l2);
+	return degrees( acos( dot(u,v)  ) );
 }
 
 ////////////////////////////////////////
@@ -1483,7 +1648,6 @@ vector isequal(const lineStruct l1,l2){
 ////////////////////////////////////////
 //to do: line to line has intersection point?
 //to do: line to line intersection point or closest point (with success parameter)
-//to do: line to line angle (angle between two lines)
 //to do: angle around and angle around_d for lines
 
 
