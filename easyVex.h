@@ -278,7 +278,7 @@ float trianglearea(const vector A,B,C){
  * @param {string}	{name}  point attribute to write to
  * @param {vector}	{target}  target position that we calculate distance to
  */
-void n_disttopoint(const string name; const vector target){
+void n_distances(const string name; const vector target){
 	float maxDistance,minDistance;
 	float distancesToTarget[];
 	//Store distances
@@ -1333,6 +1333,16 @@ struct lineStruct{
 	}
 
 	/**
+ 	 * Returns vector AB
+ 	 *
+ 	 * @param {lineStruct}	{}   a lineStruct
+ 	 */
+	vector direction(){
+		return this.B-this.A;
+	}
+
+
+	/**
  	 * Returns 1 if A and B are NOT the same and otherwise returns 0. 
  	 * If A and B were equal (return 0) the struct would be invalid.
  	 *
@@ -1348,7 +1358,7 @@ struct lineStruct{
  *
  * @param {edgeStruct}	{edge}   an edgeStruct
  */
-lineStruct linefromedge(const edgeStruct edge){
+lineStruct lineStruct(const edgeStruct edge){
 	lineStruct line = lineStruct(posa(edge),posb(edge),0);
 	return line;
 }
@@ -1365,7 +1375,7 @@ lineStruct linefromedge(const edgeStruct edge){
  * (2) a line starting at B and extending (infinitely) in direction A
  * (3) a line starting at A and extending (infinitely) in direction B
  */
-lineStruct linefromedge(const edgeStruct edge; const int type){
+lineStruct lineStruct(const edgeStruct edge; const int type){
 	lineStruct line = lineStruct(posa(edge),posb(edge),type);
 	return line;
 }
@@ -1376,7 +1386,7 @@ lineStruct linefromedge(const edgeStruct edge; const int type){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  */
-lineStruct linefromedge(const int input; const edgeStruct edge){
+lineStruct lineStruct(const int input; const edgeStruct edge){
 	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),0);
 	return line;
 }
@@ -1394,7 +1404,7 @@ lineStruct linefromedge(const int input; const edgeStruct edge){
  * (2) a line starting at B and extending (infinitely) in direction A
  * (3) a line starting at A and extending (infinitely) in direction B
  */
-lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
+lineStruct lineStruct(const int input; const edgeStruct edge; const int type){
 	lineStruct line = lineStruct(posa(input, edge),posb(input, edge),type);
 	return line;
 }
@@ -1406,7 +1416,7 @@ lineStruct linefromedge(const int input; const edgeStruct edge; const int type){
  * @param {lineStruct}	{line}	a lineStruct
  * @param {vector}	{X}	a position
  */
-float linetoposdist(const lineStruct line; const vector X){
+float distance(const lineStruct line; const vector X){
 	vector A = posa(line);
 	vector B = posb(line);
 	int type = type(line);
@@ -1464,7 +1474,7 @@ int sameline(const lineStruct l1,l2){
 	vector normal2 = direction_n(l2);
 	float threshold = 0.0001;
 	if( (length( normal1 - normal2)<threshold)||(length(-normal1 - normal2)<threshold) ){
-		if(  linetoposdist(line,posa(l2))<threshold ){
+		if( distance(line,posa(l2))<threshold ){
 			return 1;
 		}
 	}
@@ -1578,10 +1588,10 @@ int[] same(const lineStruct l1,l2){
 	}
 
 	//l2 inside l1
-	if( linetoposdist(l1, pa2)<threshold ){
+	if( distance(l1, pa2)<threshold ){
 		result[2] = 1; //a2 is on l1
 	}
-	if( linetoposdist(l1, pb2)<threshold ){
+	if( distance(l1, pb2)<threshold ){
 		//are both points inside? 
 		if(result[2] == 1){ 
 			result[2] = 3; //a2 and b2 are on l1
@@ -1591,10 +1601,10 @@ int[] same(const lineStruct l1,l2){
 		}
 	}
 	//l1 inside l2
-	if( linetoposdist(l2, pa1)<threshold ){
+	if( distance(l2, pa1)<threshold ){
 		result[3] = 1; //a1 is on l1
 	}
-	if( linetoposdist(l2, pb1)<threshold ){
+	if( distance(l2, pb1)<threshold ){
 		//are both points inside? 
 		if(result[3] == 1){ 
 			result[3] = 3; //a1 and b1 are on l1
@@ -1676,7 +1686,7 @@ struct planeStruct{
  * @param {int}	{input}   an integer that describes an input
  * @param {int}	{prim}   a primitive number (primitive id)
  */
-planeStruct planestruct_fromprim(const int input; const int prim){
+planeStruct planeStruct(const int input; const int prim){
 	int pts[] = primpoints(input, prim);
 	vector pos = pointp(input,pts[0]);
 	vector normal = {0,1,0}; //Definition for fallback
@@ -1706,7 +1716,7 @@ planeStruct planestruct_fromprim(const int input; const int prim){
  *
  * @param {int}	{prim}   a primitive number (primitive id)
  */
-planeStruct planestruct_fromprim(const int prim){
+planeStruct planeStruct(const int prim){
 	int input = 0;
 	int pts[] = primpoints(input, prim);
 	vector pos = pointp(input,pts[0]);
@@ -1740,9 +1750,36 @@ planeStruct planestruct_fromprim(const int prim){
  * @param {int}	{point}   a point number (point id)
  * @param {planeStruct}	{plane}	a planeStruct
  */
-float dist(const int input; const  int point; const planeStruct plane){
+float distance(const int input; const int point; const planeStruct plane){
 	float dist = dot( pointp(input,point)-pos(plane), normal(plane));
 	return dist;
+}
+
+/**
+ * Returns the closest distance between a position and an (infinite) plane defined by a planeStruct.
+ * If the position is under the plane (based on plane's normal) the value is negative.
+ *
+ * @param {vector}	{pos}   position
+ * @param {planeStruct}	{plane}	a planeStruct
+ */
+float distance(const vector pos; const planeStruct plane){
+	float dist = dot( pos-pos(plane), normal(plane));
+	return dist;
+}
+
+/**
+ * Returns 1 if the line is on the plane. Otherwise it returns 0.
+ *
+ * @param {lineStruct}	{line}   a lineStruct
+ * @param {planeStruct}	{plane}	a planeStruct
+ */
+int lineonplane(const lineStruct line; const planeStruct plane){
+	vector a = posa(line);
+	vector b = posb(line);
+	if( distance(a,plane)==0 && distance(b,plane)==0 ){
+		return 1;
+	}
+	return 0;
 }
 
 /////////////////////////////////////////FIX THIS TO ACCOUNT FOR DIFFERENT lineStruct types/////////////////////
@@ -1765,7 +1802,7 @@ float dist(const int input; const  int point; const planeStruct plane){
  */
 vector intersection(const planeStruct plane; const lineStruct line; int success){
 	vector result = {0,0,0};
-	vector linedir = posb(line) - posa(line);
+	vector linedir = direction(line);
 	vector toline = posa(line) - pos(plane);
 	float D = dot( normal(plane) - linedir);
 	float N = - dot( normal(plane) , toline);
@@ -1790,6 +1827,22 @@ vector intersection(const planeStruct plane; const lineStruct line; int success)
 }
 
 /**
+ * Returns 1 if two planeStructs are the same. Otherwise it returns 0.
+ *
+ * @param {planeStruct}	{p1}	a planeStruct
+ * @param {planeStruct}	{p2}	a planeStruct
+ */
+int same(const planeStruct p1,p2){
+	vector dir = cross(normal(p1),normal(p2)); //direction of line
+    vector orthogonalp1 = cross( normal(p2), dir); //similar to p1 but orthogonal to p2    
+    float numerator = dot( normal(p1), orthogonalp1); //length of p1 on orthogonalp1
+    if(abs(numerator) <0.000001){ //bail if the planes are essentially the same
+		return 1;
+	}
+	return 0;
+}
+
+/**
  * Returns lineStruct at the intersection of two planes
  *
  * @param {planeStruct}	{p1}	a planeStruct
@@ -1797,7 +1850,7 @@ vector intersection(const planeStruct plane; const lineStruct line; int success)
  * 
  * Solution based on https://forum.unity.com/threads/how-to-find-line-of-intersecting-planes.109458/
  */
-lineStruct linestruct_fromplanes(const planeStruct p1,p2){
+lineStruct lineStruct(const planeStruct p1,p2){
 	vector dir = cross(normal(p1),normal(p2)); //direction of line
 
     vector orthogonalp1 = cross( normal(p2), dir); //similar to p1 but orthogonal to p2    
@@ -1833,7 +1886,6 @@ function float angle_d(const lineStruct l1; const planeStruct plane){
 	return degrees( acos( dot(u,v)  ) );
 }
 
-//to do: is line on plane? (both points have dist 0 to plane)
 //to do: line - plane intersection point (if line on plane return plane reference point, will require success parameter)
 //to do: intersection of 3 planes http://geomalgorithms.com/a05-_intersect-1.html ?maybe
 //to do: point closest to 3 planes ?maybe
