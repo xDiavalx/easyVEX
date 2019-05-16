@@ -1629,10 +1629,10 @@ int[] same(const lineStruct l1,l2){
 }
 
 /**
- * Returns the angle between two lines
+ * Returns the angle between two lines in degrees
  * 
- * @param {vector}	{u}  arbitrary vector
- * @param {vector}	{v}  arbitrary vector
+ * @param {lineStruct}	{l1}  a lineStruct
+ * @param {lineStruct}	{l2}  a lineStruct
  * 
  * Example: f@angle = angle(l1,l2);
  */
@@ -1819,7 +1819,20 @@ lineStruct linestruct_fromplanes(const planeStruct p1,p2){
 ///////////////do this//////////////////
 ////////////////////////////////////////
 
-//to do: angle between line and plane https://www.vitutor.com/geometry/distance/line_plane.html
+/**
+ * Returns the angle between a planeStruct and a lineStruct in degrees
+ * 
+ * @param {lineStruct}	{l1}  a lineStruct
+ * @param {planeStruct}	{plane}  a planeStruct
+ * 
+ * Example: f@angle = angle(line,plane);
+ */
+function float angle_d(const lineStruct l1; const planeStruct plane){
+	vector u = direction_n(l1);
+	vector v = normal(plane);
+	return degrees( acos( dot(u,v)  ) );
+}
+
 //to do: is line on plane? (both points have dist 0 to plane)
 //to do: line - plane intersection point (if line on plane return plane reference point, will require success parameter)
 //to do: intersection of 3 planes http://geomalgorithms.com/a05-_intersect-1.html ?maybe
