@@ -297,6 +297,7 @@ void n_distances(const string name; const vector target){
 	    setpointattrib(0,name,i,normalizedDistanceToTarget,"set");
 	}
 }
+///////////TO DO: n_distances for an array of input locations, potentially with varying interpolation methods
 
 /**
  * Creates a polyline in a circle around "axis" with startpoint facing "up".
@@ -365,8 +366,7 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
 ////////////////////////////////////
 struct edgeStruct{
 	int input,a,b;
-  //Bjorns note, the struct should keep what input it's using, defaulting to 0
-	/*General info: 
+	/*General info:
 	//To create a variable of type custom struct:
 	edgeStruct ed1 = edgeStruct(0,1,2);
 	
@@ -388,22 +388,25 @@ struct edgeStruct{
 
 	//To loop over a custom struct:
 	foreach(edgeStruct test; edges){
-	printfverbose(test);
-	printf("a is %i \n",geta(test));
+		printfverbose(test);
+		printf("a is %i \n",geta(test));
 	}
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	/////////REFACTOR INCOMMING//////////////
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	/////////////////////////////////////////
-	//THE PROBLEM: Defining functins in here defies convention
-	//Usually input parameter is the first input. 
-	//This convention needs to be maintained! 
-	//Since we cannot maintain it if we use the definitions in the struct, we need to put those function variations outside.
+
+	////////////////////////////////////////////
+	////////////////////////////////////////////
+	/////////////DESIGN CHOICE/////////////////
+	////////////////////////////////////////////
+	////////////////////////////////////////////
+	//Motivation
+	Usually an input parameter is the first input. 
+	(example: point(0,"P",@ptnum) //0 is the input)
+	If a function is defined inside the Struct definition the first paramater will be the Struct.
+
+	To uphold convention, we put such functions outside the struct defintion.
+
+	-So what goes into the Struct defintion?
+	It should probably only contain the most basic getters and trivial operations.
+	But I am not sure where the line is, yet.
 	*/
 
 	/**
@@ -468,7 +471,6 @@ struct edgeStruct{
 	 * 
 	 * Example: swap(ed1);
 	 */
-	
 	void swap(){
 		int c;
 		c = this.a;
@@ -488,18 +490,6 @@ struct edgeStruct{
 	}
 
 	/**
-	 * Returns the position of the edgepoint a at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@pos = posa(ed1,2);
-	 */
-	vector posa(const int input){
-		return point(input,"P",this.a);
-	}
-
-	/**
 	 * Returns the position of the edgepoint a
 	 *
 	 * @param {edgeStruct}	{}   an edgeStruct
@@ -510,17 +500,6 @@ struct edgeStruct{
 		return point(this.input,"P",this.a);
 	}
 
-	/**
-	 * Returns the position of the edgepoint b at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@pos = posb(ed1,2);
-	 */
-	vector posb(const int input){
-		return point(input,"P",this.b);
-	}
 
 	/**
 	 * Returns the position of the edgepoint b
@@ -546,38 +525,12 @@ struct edgeStruct{
 		return distance(A,B);
 	}
 
-	/**
-	 * Returns the length of the edge at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: f@len = length(ed1,2);
-	 */
-	float length(const int input){
-		vector A = point(input,"P",this.a);
-		vector B = point(input,"P",this.b);
-		return distance(A,B);
-	}
-
 
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
 	//Following are functions for interpreting the edge as a vector//
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
-
-	/**
-	 * Returns the non-normalized vector AB == posB - posA at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@vectorAB = vectorab(ed1,2);
-	 */
-	vector vectorab(const int input){
-		return point(input,"P",this.b) - point(input,"P",this.a);
-	}
 
 	/**
 	 * Returns the non-normalized vector AB == posB - posA
@@ -588,18 +541,6 @@ struct edgeStruct{
 	 */
 	vector vectorab(){
 		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
-	}
-
-	/**
-	 * Returns the non-normalized vector BA == posA - posB at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@vectorBA = vectorba(ed1);
-	 */
-	vector vectorba(const int input){
-		return point(input,"P",this.a) - point(input,"P",this.b);
 	}
 
 	/**
@@ -614,18 +555,6 @@ struct edgeStruct{
 	}
 
 	/**
-	 * Returns the normalized vector AB == posB - posA at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@vectorAB = vectorab_n(ed1,2);
-	 */
-	vector vectorab_n(const int input){
-		return normalize( point(input,"P",this.b) - point(input,"P",this.a) );
-	}
-
-	/**
 	 * Returns the normalized vector AB == posB - posA
 	 *
 	 * @param {edgeStruct}	{}   an edgeStruct
@@ -634,18 +563,6 @@ struct edgeStruct{
 	 */
 	vector vectorab_n(){
 		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
-	}
-
-	/**
-	 * Returns the normalized vector BA == posA - posB at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@vectorBA = vectorba_n(ed1);
-	 */
-	vector vectorba_n(const int input){
-		return normalize( point(input,"P",this.a) - point(input,"P",this.b) );
 	}
 
 	/**
@@ -670,21 +587,22 @@ struct edgeStruct{
 	vector midpoint(){
 		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
 	}
-
-	/**
-	 * Returns the center position of the edge at input
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
-	 * @param {int}	{input}   an integer that describes an input
-	 * 
-	 * Example: v@halfpos = halfpoint(ed1);
-	 */
-	vector midpoint(const int input){
-		return ( point(input,"P",this.a) + point(input,"P",this.b) )*.5;
-	}
-
 }
 
+/////edgeStruct defintion end. Following are functions using edgeStructs//////
+
+/**
+ * Returns an edgeStruct at input 0
+ *
+ * @param {int}	{a}   a point number
+ * @param {int}	{a}   a point number
+ *
+ * This function will simplify working with edgeStructs. 
+ * Basically if you want to work with just first input, there is no need to specify the input. 
+ */
+edgeStruct sort(const int a,b){
+	return edgeStruct(0,a,b);
+}
 
 /**
  * Returns a version of the edgeStruct where a<b
@@ -706,8 +624,74 @@ edgeStruct sort(const edgeStruct edge){
  * 
  * Example: v@pos = posa(2,ed1);
  */
+vector posa(const int input, const edgeStruct edge){
+	return point(input,"P",geta(edge));
+}
+
+/**
+ * Returns the position of the edgepoint b at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@pos = posb(2,ed1);
+ */
+vector posb(const int input, const edgeStruct edge){
+	return point(input,"P",getb(edge));
+}
+
+/**
+ * Returns the length of the edge at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: f@len = length(2,ed1);
+ */
+float length(const int input, const edgeStruct edge){
+	vector A = point(input,"P",geta(edge));
+	vector B = point(input,"P",getb(edge));
+	return distance(A,B);
+}
+
+/////////////////////////////////////////////////////////////////
+//Following are functions for interpreting the edge as a vector//
+/////////////////////////////////////////////////////////////////
+
+/**
+ * Returns the non-normalized vector AB == posB - posA at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@vectorAB = vectorab(2,ed1);
+ */
+vector vectorab(const int input, const edgeStruct edge){
+	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
+}
+
+/**
+ * Returns the non-normalized vector BA == posA - posB at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@vectorBA = vectorba(2,ed1);
+ */
+vector vectorba(const int input, const edgeStruct edge){
+	return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
+}
+
+/**
+ * Returns the position of the edgepoint a at input
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ * 
+ * Example: v@pos = posa(2,ed1);
+ */
 vector posa(const int input; const edgeStruct edge){
-	return point(input,"P",edge.a);
+	return point(input,"P",geta(edge));
 }
 
 /**
@@ -719,7 +703,7 @@ vector posa(const int input; const edgeStruct edge){
  * Example: v@pos = posb(2,ed1);
  */
 vector posb(const int input; const edgeStruct edge){
-	return point(input,"P",edge.b);
+	return point(input,"P",getb(edge));
 }
 
 /**
@@ -731,8 +715,8 @@ vector posb(const int input; const edgeStruct edge){
  * Example: f@len = length(2,ed1);
  */
 float length(const int input; const edgeStruct edge){
-	vector A = point(input,"P",edge.a);
-	vector B = point(input,"P",edge.b);
+	vector A = point(input,"P",geta(edge));
+	vector B = point(input,"P",getb(edge));
 	return distance(A,B);
 }
 
@@ -742,7 +726,7 @@ float length(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorAB = vectorab(ed1,2);
+ * Example: v@vectorAB = vectorab(2,ed1);
  */
 vector vectorab(const int input; const edgeStruct edge){
 	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
@@ -754,7 +738,7 @@ vector vectorab(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorBA = vectorba(ed1);
+ * Example: v@vectorBA = vectorba(2,ed1);
  */
 vector vectorba(const int input; const edgeStruct edge){
 		return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
@@ -766,7 +750,7 @@ vector vectorba(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorAB = vectorab_n(ed1,2);
+ * Example: v@vectorAB = vectorab_n(2,ed1);
  */
 vector vectorab_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",getb(edge)) - point(input,"P",geta(edge)) );
@@ -778,7 +762,7 @@ vector vectorab_n(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  *
- * Example: v@vectorBA = vectorba_n(ed1);
+ * Example: v@vectorBA = vectorba_n(2,ed1);
  */
 vector vectorba_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",geta(edge)) - point(input,"P",getb(edge)) );
@@ -790,7 +774,7 @@ vector vectorba_n(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@halfpos = halfpoint(ed1);
+ * Example: v@halfpos = halfpoint(2,ed1);
  */
 vector midpoint(const int input; const edgeStruct edge){
 	return ( point(input,"P",geta(edge)) + point(input,"P",getb(edge)) )*.5;
