@@ -624,7 +624,7 @@ edgeStruct sort(const edgeStruct edge){
  * 
  * Example: v@pos = posa(2,ed1);
  */
-vector posa(const int input, const edgeStruct edge){
+vector posa(const int input; const edgeStruct edge){
 	return point(input,"P",geta(edge));
 }
 
@@ -636,7 +636,7 @@ vector posa(const int input, const edgeStruct edge){
  * 
  * Example: v@pos = posb(2,ed1);
  */
-vector posb(const int input, const edgeStruct edge){
+vector posb(const int input; const edgeStruct edge){
 	return point(input,"P",getb(edge));
 }
 
@@ -648,7 +648,7 @@ vector posb(const int input, const edgeStruct edge){
  * 
  * Example: f@len = length(2,ed1);
  */
-float length(const int input, const edgeStruct edge){
+float length(const int input; const edgeStruct edge){
 	vector A = point(input,"P",geta(edge));
 	vector B = point(input,"P",getb(edge));
 	return distance(A,B);
@@ -666,7 +666,7 @@ float length(const int input, const edgeStruct edge){
  * 
  * Example: v@vectorAB = vectorab(2,ed1);
  */
-vector vectorab(const int input, const edgeStruct edge){
+vector vectorab(const int input; const edgeStruct edge){
 	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
 }
 
@@ -678,7 +678,7 @@ vector vectorab(const int input, const edgeStruct edge){
  * 
  * Example: v@vectorBA = vectorba(2,ed1);
  */
-vector vectorba(const int input, const edgeStruct edge){
+vector vectorba(const int input; const edgeStruct edge){
 	return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
 }
 
