@@ -676,72 +676,10 @@ vector vectorab(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorBA = vectorba(2,ed1);
+ * Example: v@vectorAB = vectorab(2,ed1);
  */
 vector vectorba(const int input; const edgeStruct edge){
 	return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
-}
-
-/**
- * Returns the position of the edgepoint a at input
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {edgeStruct}	{edge}   an edgeStruct
- * 
- * Example: v@pos = posa(2,ed1);
- */
-vector posa(const int input; const edgeStruct edge){
-	return point(input,"P",geta(edge));
-}
-
-/**
- * Returns the position of the edgepoint b at input
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {edgeStruct}	{edge}   an edgeStruct
- * 
- * Example: v@pos = posb(2,ed1);
- */
-vector posb(const int input; const edgeStruct edge){
-	return point(input,"P",getb(edge));
-}
-
-/**
- * Returns the length of the edge at input
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {edgeStruct}	{edge}   an edgeStruct
- * 
- * Example: f@len = length(2,ed1);
- */
-float length(const int input; const edgeStruct edge){
-	vector A = point(input,"P",geta(edge));
-	vector B = point(input,"P",getb(edge));
-	return distance(A,B);
-}
-
-/**
- * Returns the (not normalized) vector AB == posB - posA at input
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {edgeStruct}	{edge}   an edgeStruct
- * 
- * Example: v@vectorAB = vectorab(2,ed1);
- */
-vector vectorab(const int input; const edgeStruct edge){
-	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
-}
-
-/**
- * Returns the (not normalized) vector BA == posA - posB at input
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {edgeStruct}	{edge}   an edgeStruct
- * 
- * Example: v@vectorBA = vectorba(2,ed1);
- */
-vector vectorba(const int input; const edgeStruct edge){
-		return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
 }
 
 /**
@@ -750,7 +688,7 @@ vector vectorba(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorAB = vectorab_n(2,ed1);
+ * Example: v@vectorABn = vectorab_n(2,ed1);
  */
 vector vectorab_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",getb(edge)) - point(input,"P",geta(edge)) );
@@ -762,7 +700,7 @@ vector vectorab_n(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  *
- * Example: v@vectorBA = vectorba_n(2,ed1);
+ * Example: v@vectorBAn = vectorba_n(2,ed1);
  */
 vector vectorba_n(const int input; const edgeStruct edge){
 	return normalize( point(input,"P",geta(edge)) - point(input,"P",getb(edge)) );
