@@ -67,7 +67,7 @@
  * 
  * @param	{vector}	{pos}	position that we examine 
  */
-function vector nearptpos( const vector pos)
+function vector nearpointp( const vector pos)
 {
 	return vector(point(0, “P”, int(nearpoint(0, pos))));
 }
@@ -80,15 +80,56 @@ function vector nearptpos( const vector pos)
  * 
  * Contributed by Matthew Hendershot
  */
-function vector nearptpos( const int input; const vector pos)
+function vector nearpointp( const int input; const vector pos)
 {
 	return vector(point(input, “P”, int(nearpoint(input, pos))));
+}
+
+/**
+ * Returns 1, if both input values are the same +- tolerance, otherwise 0
+ * 
+ * @param {float}	{input1}   float number to compare   
+ * @param {float}	{input2}   float number to compare   
+ * @param {float}	{tolerance}  amount of tolerance (+-) between input1 and input2 
+ *
+ * Example:
+ * i@equal1 = isequal(1.001,1.0, 0.0); //not equal
+ * i@equal2 = isequal(1.001,1.0, 0.0001); //not equal
+ * i@equal3 = isequal(1.001,1.0, 0.0011); //eqal
+ */
+function int isequal( const float input1, input2, tolerance)
+{
+	return abs(input1-input2)<tolerance;
+}
+
+/**
+ * Returns 1, if both input values are the same +- tolerance, otherwise 0
+ * 
+ * @param {vector}	{input1}   float number to compare   
+ * @param {vector}	{input2}   float number to compare   
+ * @param {float}	{tolerance}  amount of tolerance (+-) between length of input1 and input2 
+ *
+ * Example:
+ * vector tester1 = set(1.001, 1.0, 1.0);
+ * vector tester2 = set(1.0, 1.0, 1.0);
+ * i@equal1 = isequal(tester1,tester2, 0.0); //not equal
+ * i@equal2 = isequal(tester1,tester2, 0.0001); //not equal
+ * i@equal3 = isequal(tester1,tester2, 0.0006); //eqal
+ * 
+ * Keep in mind we look at total difference, not per vector component difference
+ */
+function int isequal( const vector input1, input2; const float tolerance)
+{
+	return abs(length(input1)-length(input2))<tolerance;
 }
 
 /**
  * Returns int array of unique values (no duplicates) sorted in ascending order.
  * 
  * @param {int array}	{numbers}   arbitrary integer array
+ *
+ * int testIntArray[] = {0,0,0,1};
+ * i[]@array1 = uniquearray(testIntArray); //only {0,1} remains
  */
 function int[] uniquearray(const int numbers[]) {
 	int localNumbers[] = {};
@@ -115,11 +156,126 @@ function int[] uniquearray(const int numbers[]) {
 }
 
 /**
- * Adds only new int values (no duplicates) to an int array and returns the modified array.
+ * Returns int array of unique values (no duplicates) sorted in ascending order.
+ * 
+ * @param {float array}	{numbers}   arbitrary float array
+ * @param {float}	{tolerance}   Tolerance value (+-) for comparison 
+ *
+ * Example:
+ * float testFloatArray[] = {0.0, 0.001, 0.0005, 1};
+ * f[]@array1 = uniquearray(testFloatArray, 0.001); //0.001 stays in
+ * f[]@array2 = uniquearray(testFloatArray, 0.0011); //0.001 gets removed
+ * f[]@array3 = testFloatArray; //The original stays the same!
+ */
+function float[] uniquearray(const float numbers[]; const float tolerance) {
+	float localNumbers[] = {};
+	float clean[] = {};
+	int temp = 0;
+
+	//fail safe
+	if (len(numbers) == 0) {
+		warning("Passed empty array into uniquearray function");
+		return clean;
+	}
+
+	localNumbers = sort(numbers); // sort ascending to simplify the elimination of duplicates
+
+	append(clean, localNumbers[0]); // the first element is always unique 
+
+	for (int i = 1; i<len(numbers); i++) {
+		if (!isequal( clean[temp], localNumbers[i], tolerance)) { //if the number is not the same, add it
+			append(clean, localNumbers[i]);
+			temp++; //temp is the last index in the clean array
+		}
+	}
+	return clean;
+}
+
+/**
+ * Returns vector array of unique values (no duplicates) sorted in ascending order.
+ * 
+ * @param {float array}	{numbers}   arbitrary vector array
+ * @param {float}	{tolerance}   Tolerance value (+-) for comparison 
+ *
+ * Example:
+ * vector testVectorArray[] = {{1.001, 1.0, 1.0},{1.0, 1.0, 1.0},{2.0, 1.0, 1.0}};
+ * v[]@array = uniquearray(testVectorArray,0.1); //Result: {1.001, 1.0, 1.0},{2.0, 1.0, 1.0}
+ * v[]@array2 = testVectorArray; //The original stays the same!
+ */
+function vector[] uniquearray(const vector numbers[]; const float tolerance) {
+	vector clean[] = {};
+	int inside = 0;
+
+	//fail safe
+	if (len(numbers) == 0) {
+		warning("Passed empty array into uniquearray function");
+		return clean;
+	}
+
+	foreach (vector vec; numbers) {
+		foreach (vector vec2; clean)
+		{
+		    inside+=isequal(vec,vec2,tolerance); //increase if the number is already there
+		}
+		if (inside<1) { //if the number is not already there, add it
+			append(clean, vec);
+		}
+		inside = 0;
+	}
+	return clean;
+}
+
+/**
+ * Adds only new int values (no duplicates) to an int array and returns the modified array. The original gets modified.
  * 
  * @param {int array}	{numbers}   arbitrary integer array
+ * @param {int}	{num}   number to add
+ *
+ * Example:
+ * int testIntArray[] = {0,0,0,1};
+ * i[]@array1 = appendunique(testIntArray,0); //does not append
+ * i[]@array2 = appendunique(testIntArray,2); //appends
+ * f[]@array3 = testIntArray; //The original gets modified!
  */
 function int[] appendunique(int numbers[]; const int num) {
+	if (find(numbers, num)<0) {
+		append(numbers, num);
+	}
+	return numbers;
+}
+
+/**
+ * Adds only new float values (no duplicates) to a float array and returns the modified array. The original gets modified.
+ * 
+ * @param {float array}	{numbers}   arbitrary float array
+ * @param {float}	{num}   number to add
+ *
+ * Example:
+ * float testFloatArray[] = {0.0, 0.001, 0.0005, 1};
+ * f[]@array4 = appendunique(testFloatArray,0.0); //does not append
+ * f[]@array5 = appendunique(testFloatArray,0.01); //appends
+ * f[]@array6 = testFloatArray; // the origibnal gets modified!
+ */
+function float[] appendunique(float numbers[]; const float num) {
+	if (find(numbers, num)<0) {
+		append(numbers, num);
+	}
+	return numbers;
+}
+
+/**
+ * Adds only new vector value (no duplicates) to a vector array and returns the modified array. The original gets modified.
+ * 
+ * @param {vector array}	{numbers}   arbitrary vector array
+ * @param {vector}	{num}   vector to add
+ *
+ * Example:
+ * vector testVectorArray[] = {{1.001, 1.0, 1.0},{1.0, 1.0, 1.0},{2.0, 1.0, 1.0}};
+ * v[]@array7 = appendunique(testVectorArray,{1.001, 1.0, 1.0});//does not append
+ * v[]@array8 = appendunique(testVectorArray,{1.002, 1.0, 1.0});//does append
+ * v[]@array9 = testVectorArray; // the origibnal gets modified!
+ */
+function vector[] appendunique(vector numbers[]; const vector num) {
 	if (find(numbers, num)<0) {
 		append(numbers, num);
 	}
@@ -149,47 +305,20 @@ function void removevalues(int numbers[]; const int remove) {
  * @param {int array}	{remove}   arbitrary integer array to be removed from the numbers array
  */
 function void removevalues(int numbers[]; const int remove[]) {
-	foreach(int i; remove){
-		while(1) {
-			int temp;
-			temp = removevalue(numbers, i);
-			if (temp == 0) {
-				break;
-			}
-		}
+	foreach(int num; remove){
+		removevalues(numbers, num);
 	}
 }
 
 /**
- * Returns int array of only unique values of an arbitrary attribute at input 0
+ * Returns int array of only unique values of an arbitrary attribute at input 0. 
+ * I think, "uniquevals" was implemented as a native function in houdini vex after it was implemented in easyVex.
  * 
  * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
  * @param {string}	{attribName}   Arbitrary attribute name
  */
 function int[] uniquevals(const string componentType; const string attribName){	
-	int clean[] = {};
-	int count = nuniqueval(0, componentType, attribName);
-	for (int i = 0; i < count; i++) {
-		int val = uniqueval(0, componentType, attribName, i);
-		append(clean,val);
-	}
-	return clean;
-}
-
-/**
- * Returns int array of only unique values of an arbitrary attribute at input
- * 
- * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
- * @param {string}	{attribName}   Arbitrary attribute name
- */
-function int[] uniquevals(const int input; const string componentType; const string attribName){	
-	int clean[] = {};
-	int count = nuniqueval(input, componentType, attribName);
-	for (int i = 0; i < count; i++) {
-		int val = uniqueval(input, componentType, attribName, i);
-		append(clean,val);
-	}
- 	return clean;
+	return uniquevals(0,componentType, attribName);
 }
 
 /**
@@ -210,7 +339,6 @@ function vector pointp(const int input; const int point){
 function vector pointp(const int point){
 	return point(0,"P",point);
 }
-
 
 /**
  * Returns the angle between two vectors in degrees
@@ -301,7 +429,7 @@ void n_distances(const string name; const vector target){
 ///////////TO DO: n_distances for an array of input locations, potentially with varying interpolation methods
 
 /**
- * Creates a polyline in a circle around "axis" with startpoint facing "up".
+ * Creates a circle around "axis" with startpoint facing "up".
  * Returns array of temporary point IDs.
  * 
  * @param {vector}	{origin}  Location of the center/origin of the circle
@@ -324,7 +452,7 @@ void n_distances(const string name; const vector target){
  * circle(set(0,0,0),divisions, up, axis, radius,0,0,1);
  * points = circle(set(1,0,0),divisions, up, axis, radius,1);
  * foreach(int pt; points){
- * 	setpointattrib(0,"test",pt,4,"set");
+ * setpointattrib(0,"test",pt,4,"set");
  * }
  */
 int[] circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset; const int closed){
@@ -395,46 +523,55 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
 	return circle(origin, divisions, up, axis, radius, uv_v_offset, 1);
 }
 
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
-//Edge struct and helper functions//
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////Edge struct and helper functions//////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct edgeStruct{
 	int input,a,b;
 	/*General info:
 	//To create a variable of type custom struct:
 	edgeStruct ed1 = edgeStruct(0,1,2);
+	edgeStruct ed1 = edgeStruct(1,2); //Also works, because of a helper function. The input then defaults to 0.
 	
 	//To use an internal variable of the struct:
 	printf("%i\n",ed1.a );
 	ed1.a = 6;
-	int a = geta(ed1) //if you need to use the component in functions
+	int a = geta(ed1) //If you need to use the component in functions
 
 	//To use a function defined in a custom struct:
 	printfverbose(ed1);
 	
 	//To make an array of custom struct:
-	edgeStruct ed2 = edgeStruct(0,3,2);
-	edgeStruct ed3 = edgeStruct(0,4,5);
+	edgeStruct ed1 = edgeStruct(3,2);
+	edgeStruct ed2 = edgeStruct(4,5);
 	edgeStruct edges[];
 	push(edges,ed1);
 	push(edges,ed2);
-	push(edges,ed3);
 
 	//To loop over a custom struct:
 	foreach(edgeStruct test; edges){
 		printfverbose(test);
 		printf("a is %i \n",geta(test));
 	}
+	//To loop over a custom struct with index:
+	foreach(int index; edgeStruct test; edges){
+		printf("At index %i ",index);
+		printf("a is %i \n",geta(test));
+	}
 
-	////////////////////////////////////////////
-	////////////////////////////////////////////
-	/////////////DESIGN CHOICE/////////////////
-	////////////////////////////////////////////
-	////////////////////////////////////////////
+	//To make visible in geometry spreadsheet/debug:
+	s@ed = getfullname(ed1);
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+							//////////////DESIGN CHOICES/////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
 	//Motivation
 	Usually an input parameter is the first input. 
 	(example: point(0,"P",@ptnum) //0 is the input)
@@ -443,9 +580,12 @@ struct edgeStruct{
 	To uphold convention, we put such functions outside the struct defintion.
 
 	-So what goes into the Struct defintion?
-	It should probably only contain the most basic getters and trivial operations.
+	It should probably only contain the most basic getters, setters and trivial operations.
 	But I am not sure where the line is, yet.
 	*/
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
 
 	/**
 	 * Returns the int of the input of the edge
@@ -478,6 +618,42 @@ struct edgeStruct{
 	 */
 	int getb(){
 		return this.b;
+	}
+
+	/**
+	 * Sets the input of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{input}   a point number
+	 * 
+	 * Example: seta(ed1,1);
+	 */
+	int seta(int input){
+		this.input = input;
+	}
+
+	/**
+	 * Sets the int for point a of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{a}   a point number
+	 * 
+	 * Example: seta(ed1,1);
+	 */
+	int seta(int a){
+		this.a = a;
+	}
+
+	/**
+	 * Sets the int for point b of the edge
+	 *
+	 * @param {edgeStruct}	{}   an edgeStruct
+	 * @param {int}	{b}   a point number
+	 * 
+	 * Example: setb(ed1,1);
+	 */
+	int setb(int b){
+		this.b = b;
 	}
 
 	/**
@@ -626,20 +802,37 @@ struct edgeStruct{
 		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
 	}
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////edgeStruct defintion end. Following are functions using edgeStructs///////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////edgeStruct defintion end. Following are functions using edgeStructs//////
 
 /**
  * Returns an edgeStruct at input 0
  *
  * @param {int}	{a}   a point number
- * @param {int}	{a}   a point number
+ * @param {int}	{b}   a point number
  *
  * This function will simplify working with edgeStructs. 
- * Basically if you want to work with just first input, there is no need to specify the input. 
+ * If you want to work with just first input, there is no need to specify the input. 
  */
-edgeStruct sort(const int a,b){
+edgeStruct edgeStruct(const int a,b){
 	return edgeStruct(0,a,b);
+}
+
+/**
+ * Print verbose edge description to log
+ *
+ * @param {edgeStruct[]}	{edges}   an edgeStruct array
+ * 
+ * Example: printfverbose(edges);
+ */
+void printfverbose(const edgeStruct edges[]){
+	foreach(edgeStruct edge; edges){
+		printf("edge between points %i and %i, at input %i\n", edge.a,edge.b,edge.input);
+	}
 }
 
 /**
@@ -832,9 +1025,9 @@ int[] getintb(const edgeStruct edges[]){
  * 
  * Example:
  * i[]@display1=getint(edges); 
- * i[]@display2=removeedge(@display1, ed1);
+ * i[]@display2=removevalue(@display1, ed1);
  */
-int[] removeedge(const int edges[]; const edgeStruct edge){
+int[] removevalue(const int edges[]; const edgeStruct edge){
 	int result[];
 	for(int i=0; i<len(edges); i = i+2) {
 		if(!( (edges[i]==geta(edge) && edges[i+1]==getb(edge) ) || (edges[i]==getb(edge) && edges[i+1]==geta(edge) ) )  ){
@@ -855,9 +1048,9 @@ int[] removeedge(const int edges[]; const edgeStruct edge){
  * 
  * Example:
  * i[]@display1=getint(edges); 
- * i[]@display2=removeedge(@display1, ed1);
+ * i[]@display2=removevalue(@display1, ed1);
  */
-int[] removeedge(const edgeStruct edges[]; const edgeStruct edge){
+int[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
 	/*int nums[] = getint(edges);
 	int result[];
 	for(int i=0; i<len(nums); i = i+2) {
@@ -868,7 +1061,28 @@ int[] removeedge(const edgeStruct edges[]; const edgeStruct edge){
 		}
 	}
 	return result;*/
-	return removeedge(getint(edges),edge);
+	return removevalue(getint(edges),edge);
+}
+
+/**
+ * Returns new array of edges
+ * that does not contain given edge or the swapped (reversed) version of that edge
+ *
+ * @param {edgeStruct array}	{edges}   an array of edgeStructs
+ * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
+ * 
+ * Example:
+ * i[]@display1=getint(edges); 
+ * i[]@display2=removevalue(@display1, ed1);
+ */
+edgeStruct[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
+	edgeStruct result[];
+	foreach(int i; edgeStruct ed; edges) {
+		if(!( (geta(ed)==geta(edge) && getb(ed)==getb(edge) ) || (geta(ed)==getb(edge) && getb(ed)==geta(edge) ) )  ){	
+			push(result,ed);
+		}
+	}
+	return result;
 }
 
 /**
@@ -877,9 +1091,9 @@ int[] removeedge(const edgeStruct edges[]; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {int}	{point}   an integer that describes a point number
  * 
- * Example: printf(getfullname( edgestruct_frompoint(0, 0) ));
+ * Example: printf(getfullname( edgestructs_frompoint(0, 0) ));
  */
-edgeStruct[] edgestruct_frompoint(const int input; const int point){
+edgeStruct[] edgestructs_frompoint(const int input; const int point){
 	int numbers[] = neighbours(input, point); 
 	edgeStruct result[];
 	foreach(int i; numbers ){
@@ -889,12 +1103,30 @@ edgeStruct[] edgestruct_frompoint(const int input; const int point){
 }
 
 /**
+ * Returns all edges of a polygon as edgeStructs
+ *
+ * @param {int}	{input}   an integer that describes an input
+ * @param {int}	{primnum}   primitive id (primitive number)
+ */
+edgeStruct[] edgestructs_fromprim(const int input; const int primnum){
+    
+    int skip_last = primintrinsic(input, "closed", primnum)==0 ?1 :0; //if open, don't create an edge between the end points
+
+    edgeStruct result[];
+    int vtxcount = primvertexcount(input, primnum);
+    for(int i = 0; i<vtxcount-skip_last; i++){
+            push( result, edgeStruct(input,vertexpoint(input, primvertex(input, primnum,i) ),vertexpoint(input, primvertex(input, primnum,(i+1)%vtxcount ) ) ) );
+    }
+    return result;
+}
+
+/**
  * Returns a edgeStruct array given an input and an array of point id pairs.
  *
  * @param {int}	{input}   an integer that describes an input
  * @param {int array}	{edges}   an array of integers where every two numbers describe an edge start and end point
  */
-edgeStruct[] edgestruct_fromarray(const int input; const int edges[]){
+edgeStruct[] edgestructs_fromarray(const int input; const int edges[]){
 	edgeStruct result[];
 	for(int i = 0; i<len(edges); i=i+2 ){
 		push( result, edgeStruct(input, edges[i], edges[i+1]) );
@@ -908,16 +1140,16 @@ edgeStruct[] edgestruct_fromarray(const int input; const int edges[]){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct 
  * 
- * Example: printf(getfullname( edgestruct_fromedge(0, 0) ));
+ * Example: printf(getfullname( edgestructs_fromedge(0, 0) ));
  */
-function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct edge){
+function edgeStruct[] edgestructs_fromedge(const int input; const edgeStruct edge){
 	//int numbers[];
 	edgeStruct result[];
-	//numbers = getint(edgestruct_frompoint(input,ed.a) ) ;
-	//append(numbers, getint(edgestruct_frompoint(input,ed.b) ) );
-	push(result, edgestruct_frompoint(input,geta(edge)) );
-	push(result, edgestruct_frompoint(input,getb(edge)) );
-	return edgestruct_fromarray(input,removeedge(result,edge) );
+	//numbers = getint(edgestructs_frompoint(input,ed.a) ) ;
+	//append(numbers, getint(edgestructs_frompoint(input,ed.b) ) );
+	push(result, edgestructs_frompoint(input,geta(edge)) );
+	push(result, edgestructs_frompoint(input,getb(edge)) );
+	return removevalue(result,edge);
 }
 
 /**
@@ -926,9 +1158,9 @@ function edgeStruct[] edgestruct_fromedge(const int input; const edgeStruct edge
  * @param {int}	{input}   an integer that describes an input
  * @param {string}	{name}   name of a Houdini edge group
  * 
- * Example: printf(getfullname( edgestruct_fromgroup(0, "test") ));
+ * Example: printf(getfullname( edgestructs_fromgroup(0, "test") ));
  */
-edgeStruct[] edgestruct_fromgroup(const int input; const string name){
+edgeStruct[] edgestructs_fromgroup(const int input; const string name){
 	/*
 	int numbers[] = expandedgegroup(input, name); 
 	edgeStruct result[];
@@ -937,25 +1169,7 @@ edgeStruct[] edgestruct_fromgroup(const int input; const string name){
 	}
 	return result;
 	*/
-	return edgestruct_fromarray(input,expandedgegroup(input, name));
-}
-
-/**
- * Returns all edges of a polygon as edgeStructs
- *
- * @param {int}	{input}   an integer that describes an input
- * @param {int}	{primnum}   primitive id (primitive number)
- */
-edgeStruct[] edgestruct_fromprim(const int input; const int primnum){
-    
-    int skip_last = primintrinsic(input, "closed", primnum)==0 ?1 :0; //if open, don't create an edge between the end points
-
-    edgeStruct result[];
-    int vtxcount = primvertexcount(input, primnum);
-    for(int i = 0; i<vtxcount-skip_last; i++){
-            push( result, edgeStruct(input,vertexpoint(input, primvertex(input, primnum,i) ),vertexpoint(input, primvertex(input, primnum,(i+1)%vtxcount ) ) ) );
-    }
-    return result;
+	return edgestructs_fromarray(input,expandedgegroup(input, name));
 }
 
 ////////////FIX THIS> IT DOES NOT SORT BY b///////////////////////////////////
