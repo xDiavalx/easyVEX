@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['edgestruct_5ffromarray',['edgestruct_fromarray',['../d5/dff/easy_vex_8h.html#ad658b98d73e4cc018f15b2f18459e8ff',1,'easyVex.h']]],
-  ['edgestruct_5ffromedge',['edgestruct_fromedge',['../d5/dff/easy_vex_8h.html#a4acc4ed02997491dc4ffbc247f7b22e9',1,'easyVex.h']]],
-  ['edgestruct_5ffromgroup',['edgestruct_fromgroup',['../d5/dff/easy_vex_8h.html#a7db5627aae849d363a0388d3899f2aab',1,'easyVex.h']]],
-  ['edgestruct_5ffrompoint',['edgestruct_frompoint',['../d5/dff/easy_vex_8h.html#a928468c8e1fe24e0a43e5defc97ddcae',1,'easyVex.h']]],
-  ['edgestruct_5ffromprim',['edgestruct_fromprim',['../d5/dff/easy_vex_8h.html#a256a2b8c01628e95f87319d9b038d517',1,'easyVex.h']]]
+  ['edgestruct',['edgeStruct',['../d5/dff/easy_vex_8h.html#afde80afcaa293791529e69e50a7f2df0',1,'easyVex.h']]],
+  ['edgestructs_5ffromarray',['edgestructs_fromarray',['../d5/dff/easy_vex_8h.html#ae179ba352d3bb981a6a7add5b876b53e',1,'easyVex.h']]],
+  ['edgestructs_5ffromedge',['edgestructs_fromedge',['../d5/dff/easy_vex_8h.html#aabaa93d421199349347d8268ae993249',1,'easyVex.h']]],
+  ['edgestructs_5ffromgroup',['edgestructs_fromgroup',['../d5/dff/easy_vex_8h.html#abeba053e7077510ff10e427c674d330d',1,'easyVex.h']]],
+  ['edgestructs_5ffrompoint',['edgestructs_frompoint',['../d5/dff/easy_vex_8h.html#a21c536cf756366a2a54a72a359a5a544',1,'easyVex.h']]],
+  ['edgestructs_5ffromprim',['edgestructs_fromprim',['../d5/dff/easy_vex_8h.html#aa4a63232b19e4abcf8bcabc9275f1b95',1,'easyVex.h']]]
 ];
