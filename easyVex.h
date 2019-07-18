@@ -69,7 +69,7 @@
  */
 function vector nearpointp( const vector pos)
 {
-	return vector(point(0, “P”, int(nearpoint(0, pos))));
+	return point(0, “P”, nearpoint(0, pos) );
 }
 
 /**
@@ -82,7 +82,7 @@ function vector nearpointp( const vector pos)
  */
 function vector nearpointp( const int input; const vector pos)
 {
-	return vector(point(input, “P”, int(nearpoint(input, pos))));
+	return point(input, “P”, nearpoint(input, pos) );
 }
 
 /**
@@ -398,6 +398,33 @@ float trianglearea(const vector A,B,C){
 	return .25*sqrt( 2*b*c+ 2*c*a+ 2*a*b+ - a*a - b*b - c*c ); //http://mathworld.wolfram.com/TriangleArea.html
 }
 
+/**
+ * Calculates the distance to target position for every point and normalizes it across the geometry. 
+ * Sets a point attribute Cd to have this value.
+ * Processes all points at first input when executed once. 
+ * 
+ * @param {vector}	{target}  target position that we calculate distance to
+ */
+void n_distances(const vector target){
+	float maxDistance,minDistance;
+	float distancesToTarget[];
+	//Store distances
+	for(int perPoint=0;perPoint<npoints(0);perPoint++){
+    	vector targetPos = point(0,"P",perPoint);
+    	float distanceToTarget = distance(targetPos,target);
+    	append(distancesToTarget,distanceToTarget);
+	}
+	//Calculate min and max distances
+	minDistance = min(distancesToTarget);
+	maxDistance = max(distancesToTarget);
+	maxDistance -= minDistance;
+	//Set normalized attribute
+	for(int i=0;i<npoints(0);i++ ){
+	    float normalizedDistanceToTarget = (distancesToTarget[i]-minDistance)/maxDistance;
+	    vector color =  set(normalizedDistanceToTarget,normalizedDistanceToTarget,normalizedDistanceToTarget);
+	    setpointattrib(0,"Cd",i,color,"set");
+	}
+}
 
 /**
  * Calculates the distance to target position for every point and normalizes it across the geometry. 
@@ -426,6 +453,7 @@ void n_distances(const string name; const vector target){
 	    setpointattrib(0,name,i,normalizedDistanceToTarget,"set");
 	}
 }
+
 ///////////TO DO: n_distances for an array of input locations, potentially with varying interpolation methods
 
 /**
@@ -520,7 +548,7 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
  * }
  */
 int[] circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset){
-	return circle(origin, divisions, up, axis, radius, uv_v_offset, 1);
+	return circle(origin, divisions, up, axis, radius, uv_v_offset, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
