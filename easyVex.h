@@ -3,14 +3,17 @@
 
 /*
 * This Software was originally developed by Dimtiri Shimanovskiy.
-* Feel free to use as you wish (http://unlicense.org/). Feedback is appreciated
-* Credit and dontations are appreciated. If you credit me in a project, 
-* send me a message to dimitri.shima.dev@gmail.com, so I can find out about it.
+* Feel free to use as you wish (http://unlicense.org/). 
+* Feedback is highly appreciated.
+* Giving credit is requested and appreciated.
+* If you credit me in a project, please tell me (via dimitri.shima.dev@gmail.com), so I can find out!
+* 
 * Contributers:
 * Matthew Hendershot
 * bhenriksson (https://github.com/bhenriksson031/easyVEX_beh)
 * Kyro from Think Procedural (Discord) - helped with a bug in circle
 *
+* 
 * License:
 * This is free and unencumbered software released into the public domain.
 *
@@ -38,7 +41,6 @@
 * For more information, please refer to <http://unlicense.org/>
 *
 *
-*
 * NAME:	easyVex.h (VEX)
 *
 * COMMENTS:	This include file contains functions to improve quality of life and geometry editing.
@@ -52,14 +54,30 @@
 * in the wrangle to be able to use the functions.
 * If the file is in a subfolder it will be something like:
 * #include "subfolder/easyVex.h"
+* 
+* 
+* 
+* DESIGN CHOICES
+* 
+* Structs and functions:
+* Usually an input parameter is the first input. 
+* (example: point(0,"P",@ptnum) //0 is the input)
+* If a function is defined inside the Struct definition the first paramater will be the Struct.
+* To uphold convention, we put such functions outside the struct defintion.
+* 
+* -So what goes into the Struct defintion?
+* It should probably only contain the most basic getters, setters and trivial operations.
+* But I am not sure where the line is, yet.
+*
+* Functionnames:
+* When possible override similar functions of existing name. 
+* Function-names are subject to change at the current stage of development.
 */
 
 //General utility functions
 
-// Function mappings
-
-//#define pointp(inp,pn) point(inp,"P",pn)
-
+//Function mappings //That doesn't work properly
+//#define pointp(inp,pn) point(inp,"P",pn) //That doesn't work properly
 
 
 /**
@@ -562,7 +580,7 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct edgeStruct{
 	int input,a,b;
-	/*General info:
+	/*An edgeStruct describes a geometry edge. It is defined by two points.  
 	//To create a variable of type custom struct:
 	edgeStruct ed1 = edgeStruct(0,1,2);
 	edgeStruct ed1 = edgeStruct(1,2); //Also works, because of a helper function. The input then defaults to 0.
@@ -570,11 +588,13 @@ struct edgeStruct{
 	//To use an internal variable of the struct:
 	printf("%i\n",ed1.a );
 	ed1.a = 6;
-	int a = geta(ed1) //If you need to use the component in functions
+	int a = geta(ed1) //Is kind of cleaner than just ed1.a
 
-	//To use a function defined in a custom struct:
+	//To debug you can:
 	printfverbose(ed1);
-	
+	//To make visible in geometry spreadsheet/debug:
+	s@ed = getfullname(ed1);
+
 	//To make an array of custom struct:
 	edgeStruct ed1 = edgeStruct(3,2);
 	edgeStruct ed2 = edgeStruct(4,5);
@@ -592,28 +612,8 @@ struct edgeStruct{
 		printf("At index %i ",index);
 		printf("a is %i \n",geta(test));
 	}
-
-	//To make visible in geometry spreadsheet/debug:
-	s@ed = getfullname(ed1);
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////
-							//////////////DESIGN CHOICES/////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//Motivation
-	Usually an input parameter is the first input. 
-	(example: point(0,"P",@ptnum) //0 is the input)
-	If a function is defined inside the Struct definition the first paramater will be the Struct.
-
-	To uphold convention, we put such functions outside the struct defintion.
-
-	-So what goes into the Struct defintion?
-	It should probably only contain the most basic getters, setters and trivial operations.
-	But I am not sure where the line is, yet.
 	*/
-
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	
 
 	/**
 	 * Returns the int of the input of the edge
@@ -848,6 +848,28 @@ struct edgeStruct{
  */
 edgeStruct edgeStruct(const int a,b){
 	return edgeStruct(0,a,b);
+}
+
+/**
+ * Returns a half-edge when given an edgeStruct. Returns -1 if no such half-edge can be found. 
+ * Cares about edge direction.
+ * Wrapper around pointhedge().
+ * 
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ */
+int pointhedge(const edgeStruct edge){
+	return pointhedge(getinput(edge),geta(edge),getb(edge));
+}
+
+/**
+ * Returns a half-edge when given an edgeStruct. Returns -1 if no such half-edge can be found.
+ * Does not care about edge direction.
+ * Wrapper around pointedge()
+ * 
+ * @param {edgeStruct}	{edge}   an edgeStruct
+ */
+int pointedge(const edgeStruct edge){
+	return pointedge(getinput(edge),geta(edge),getb(edge));
 }
 
 /**
@@ -1478,9 +1500,9 @@ float angle_around_d(const edgeStruct ed1,ed2; vector axis){
 #define openB 3
 */
 
+
 struct lineStruct{
 	vector A,B; //point A and B on a line 
-
 	/*The type determines whether it is
 	(0) a line-segment, 
 	(1) an infinite line, 
@@ -1499,7 +1521,6 @@ struct lineStruct{
 	vector posa(){
 		return this.A;
 	}
-
 	/**
  	 * Returns point B position on line
  	 *
