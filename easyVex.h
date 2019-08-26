@@ -573,52 +573,58 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////Edge struct and helper functions//////////////////////////////////////
+////////////////////////////////////////////////Edge struct/////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * \verbatim
+ * An edgeStruct describes a geometry edge. It is defined by two points.
+ *
+ * To create a variable of type custom struct:
+ * 	edgeStruct ed1 = edgeStruct(0,1,2);
+ * 	edgeStruct ed1 = edgeStruct(1,2); //Also works, because of a helper function. The input then defaults to 0.
+ *
+ * To create a variable of type custom struct:
+ * 	edgeStruct ed1 = edgeStruct(0,1,2);
+ * 	edgeStruct ed1 = edgeStruct(1,2); //Also works, because of a helper function. The input then defaults to 0.
+ *
+ * To use an internal variable of the struct:
+ * 	printf("%i\n",ed1.a );
+ * 	ed1.a = 6;
+ * 	int a = geta(ed1) //Is kind of cleaner than just ed1.a
+ *
+ * To debug you can:
+ * printfverbose(ed1);
+ * To make visible in geometry spreadsheet/debug:
+ * 	s@ed = getfullname(ed1);
+ *
+ * To make an array of custom struct:
+ * 	edgeStruct ed1 = edgeStruct(3,2);
+ *  edgeStruct ed2 = edgeStruct(4,5);
+ *  edgeStruct edges[];
+ *  push(edges,ed1);
+ *  push(edges,ed2);
+ *
+ * To loop over a custom struct:
+ * 	foreach(edgeStruct test; edges){
+ * 		printfverbose(test);
+ *	  	printf("a is %i \n",geta(test));
+ *  }
+ *
+ * To loop over a custom struct with index:
+ * 	foreach(int index; edgeStruct test; edges){
+ *	 	printf("At index %i ",index);
+ * 	 	printf("a is %i \n",geta(test));
+ * 	}
+ * \endverbatim
+ */
 struct edgeStruct{
 	int input,a,b;
-	/*An edgeStruct describes a geometry edge. It is defined by two points.  
-	//To create a variable of type custom struct:
-	edgeStruct ed1 = edgeStruct(0,1,2);
-	edgeStruct ed1 = edgeStruct(1,2); //Also works, because of a helper function. The input then defaults to 0.
-	
-	//To use an internal variable of the struct:
-	printf("%i\n",ed1.a );
-	ed1.a = 6;
-	int a = geta(ed1) //Is kind of cleaner than just ed1.a
-
-	//To debug you can:
-	printfverbose(ed1);
-	//To make visible in geometry spreadsheet/debug:
-	s@ed = getfullname(ed1);
-
-	//To make an array of custom struct:
-	edgeStruct ed1 = edgeStruct(3,2);
-	edgeStruct ed2 = edgeStruct(4,5);
-	edgeStruct edges[];
-	push(edges,ed1);
-	push(edges,ed2);
-
-	//To loop over a custom struct:
-	foreach(edgeStruct test; edges){
-		printfverbose(test);
-		printf("a is %i \n",geta(test));
-	}
-	//To loop over a custom struct with index:
-	foreach(int index; edgeStruct test; edges){
-		printf("At index %i ",index);
-		printf("a is %i \n",geta(test));
-	}
-	
-	*/
 
 	/**
 	 * Returns the int of the input of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: int input = getinput(ed1);
 	 */
@@ -628,8 +634,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the int for point a of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: int pt_a = geta(ed1);
 	 */
@@ -639,8 +643,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the int for point b of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: int pt_b = getb(ed1);
 	 */
@@ -650,44 +652,39 @@ struct edgeStruct{
 
 	/**
 	 * Sets the input of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
 	 * @param {int}	{input}   a point number
 	 * 
 	 * Example: seta(ed1,1);
 	 */
-	int seta(int input){
+	int seta(const int input){
 		this.input = input;
 	}
 
 	/**
 	 * Sets the int for point a of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
 	 * @param {int}	{a}   a point number
 	 * 
 	 * Example: seta(ed1,1);
 	 */
-	int seta(int a){
+	int seta(const int a){
 		this.a = a;
 	}
 
 	/**
 	 * Sets the int for point b of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
 	 * @param {int}	{b}   a point number
 	 * 
 	 * Example: setb(ed1,1);
 	 */
-	int setb(int b){
+	int setb(const int b){
 		this.b = b;
 	}
 
 	/**
 	 * Print verbose edge description to log
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: printfverbose(ed1);
 	 */
@@ -697,8 +694,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns a string in standard Houdini edge format
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: printf(getfullname(ed1));
 	 */
@@ -707,13 +702,11 @@ struct edgeStruct{
 	}
 
 	/**
-	 * Swaps edge direction (a will b, and b will be a)
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
+	 * Reverse edge direction (a will b, and b will be a)
 	 * 
-	 * Example: swap(ed1);
+	 * Example: reverse(ed1);
 	 */
-	void swap(){
+	void reverse(){
 		int c;
 		c = this.a;
 		this.a=this.b;
@@ -722,8 +715,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns 1 if a>b and 0 if b>a
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: compare(ed1);
 	 */
@@ -733,8 +724,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the position of the edgepoint a
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: v@pos = posa(ed1);
 	 */
@@ -745,8 +734,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the position of the edgepoint b
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: v@pos = posb(ed1);
 	 */
@@ -756,8 +743,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the length of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: f@len = length(ed1);
 	 */
@@ -776,10 +761,8 @@ struct edgeStruct{
 
 	/**
 	 * Returns the non-normalized vector AB == posB - posA
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
-	 * Example: v@vectorAB = vectorab(ed1);
+	 * Example: v@vectorAB = vectorab(ed1); 
 	 */
 	vector vectorab(){
 		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
@@ -787,10 +770,8 @@ struct edgeStruct{
 
 	/**
 	 * Returns the non-normalized vector BA == posA - posB
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
-	 * Example: v@vectorBA = vectorba(ed1);
+	 * Example: v@vectorBA = vectorba(ed1); 
 	 */
 	vector vectorba(){
 		return point(this.input,"P",this.a) - point(this.input,"P",this.b);
@@ -798,10 +779,8 @@ struct edgeStruct{
 
 	/**
 	 * Returns the normalized vector AB == posB - posA
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
-	 * Example: v@vectorAB = vectorab_n(ed1);
+	 * Example: v@vectorAB = vectorab_n(ed1); 
 	 */
 	vector vectorab_n(){
 		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
@@ -809,8 +788,6 @@ struct edgeStruct{
 
 	/**
 	 * Returns the normalized vector BA == posA - posB
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
 	 * 
 	 * Example: v@vectorBA = vectorba_n(ed1);
 	 */
@@ -820,8 +797,7 @@ struct edgeStruct{
 
 	/**
 	 * Returns the center position of the edge
-	 *
-	 * @param {edgeStruct}	{}   an edgeStruct
+	 * 
 	 * @param {int}	{input}   an integer that describes an input
 	 * 
 	 * Example: v@halfpos = halfpoint(ed1);
@@ -848,6 +824,20 @@ struct edgeStruct{
  */
 edgeStruct edgeStruct(const int a,b){
 	return edgeStruct(0,a,b);
+}
+
+/**
+ * Returns an edgeStruct at input 0, given a half-edge
+ *
+ * @param {int}	{hedge}   a half-edge id 
+ */
+edgeStruct edgeStruct(const int hedge){
+	int a = hedge_srcpoint(0,hedge);
+	int b = hedge_dstpoint(0,hedge);
+	if(a<0 || b<0){
+		printf("Warning: Half-edge: %i in edgeStuct(hedge) is not valid.", hedge);
+	}
+	return edgeStruct(0,hedge_srcpoint(0,hedge),hedge_dstpoint(0,hedge));
 }
 
 /**
@@ -1068,7 +1058,7 @@ int[] getintb(const edgeStruct edges[]){
 
 /**
  * Returns new array of point id pairs representing edges
- * that does not contain given edge or the swapped (reversed) version of that edge
+ * that does not contain given edge or the reversed version of that edge
  *
  * @param {int array}	{edges}   an array of integers where every two numbers describe an edge start and end point
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
@@ -1091,7 +1081,7 @@ int[] removevalue(const int edges[]; const edgeStruct edge){
 
 /**
  * Returns new array of point id pairs representing edges
- * that does not contain given edge or the swapped (reversed) version of that edge
+ * that does not contain given edge or the reversed version of that edge
  *
  * @param {edgeStruct array}	{edges}   an array of edgeStructs
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
@@ -1116,7 +1106,7 @@ int[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
 
 /**
  * Returns new array of edges
- * that does not contain given edge or the swapped (reversed) version of that edge
+ * that does not contain given edge or the reversed version of that edge
  *
  * @param {edgeStruct array}	{edges}   an array of edgeStructs
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
@@ -1500,7 +1490,18 @@ float angle_around_d(const edgeStruct ed1,ed2; vector axis){
 #define openB 3
 */
 
-
+/**
+ * The lineStruct represents a mathematical line. 
+ * It has two points (A,B) and a type (type). 
+ * The type is used like an enum. It determines whether the line ends at each point, 
+ * or whether the line extends to mathematical infinity. 
+ *
+ *	type:
+ *	(0) a line-segment
+ *	(1) an infinite line
+ *	(2) a line starting at B and extending (infinitely) in direction A
+ *	(3) a line starting at A and extending (infinitely) in direction B
+ */
 struct lineStruct{
 	vector A,B; //point A and B on a line 
 	/*The type determines whether it is
@@ -1511,20 +1512,21 @@ struct lineStruct{
 	*/
 	int type; //closed==0, open==1, openA==2, openB==3; See comment above 
 
-	//Functions:
+	//lineStruct Functions:
 	
 	/**
  	 * Returns point A position on line
  	 *
- 	 *  @param {lineStruct}	{}   a lineStruct
+ 	 * Example: vector positiona = posa(line1);
  	 */
 	vector posa(){
 		return this.A;
 	}
+
 	/**
  	 * Returns point B position on line
  	 *
- 	 *  @param {lineStruct}	{}   a lineStruct
+  	 * Example: vector positionb = posb(line1);
  	 */
 	vector posb(){
 		return this.B;
@@ -1539,7 +1541,7 @@ struct lineStruct{
 	 * (2) a line starting at B and extending (infinitely) in direction A
 	 * (3) a line starting at A and extending (infinitely) in direction B
 	 *
-	 * @param {lineStruct}	{}   a lineStruct
+ 	 * Example: int lineType = type(line1);
 	 */
 	int type(){
 		return this.type;
@@ -1548,7 +1550,7 @@ struct lineStruct{
 	/**
  	 * Returns vector AB normalized
  	 *
- 	 * @param {lineStruct}	{}   a lineStruct
+ 	 * Example: vector dir_n = direction_n(line1);
  	 */
 	vector direction_n(){
 		return normalize(this.B-this.A);
@@ -1557,7 +1559,7 @@ struct lineStruct{
 	/**
  	 * Returns vector AB
  	 *
- 	 * @param {lineStruct}	{}   a lineStruct
+ 	 * Example: vector dir = direction(line1);
  	 */
 	vector direction(){
 		return this.B-this.A;
@@ -1568,7 +1570,7 @@ struct lineStruct{
  	 * Returns 1 if A and B are NOT the same and otherwise returns 0. 
  	 * If A and B were equal (return 0) the struct would be invalid.
  	 *
- 	 * @param {lineStruct}	{}   a lineStruct
+ 	 * Example: int verification = verify(line1);
  	 */
 	int verify(){
 		return this.A==this.B ? 0 : 1; 
@@ -1707,7 +1709,7 @@ int sameline(const lineStruct l1,l2){
  * Returns 1 or 2 if both lines share the same points (otherwise 0)
  *
  * Returns == 2 -> locations a and b are exactly the same
- * Returns == 1 -> locations a and b are exactly the same, but swapped
+ * Returns == 1 -> locations a and b are exactly the same, but reversed
  * Returns == 0 -> one or more locations are different
  * 
  * @param {lineStruct}	{l1}	a lineStruct
@@ -1731,7 +1733,7 @@ int samepoints(const lineStruct l1,l2){
  * Returns 1 or 2 if both lines share the same direction (otherwise 0)
  *
  * Returns == 2 -> directions for l1 and l2 are exactly the same
- * Returns == 1 -> directions for l1 and l2 are exactly the same, but swapped
+ * Returns == 1 -> directions for l1 and l2 are exactly the same, but reversed
  * Returns == 0 -> one or more directions are different
  * 
  * @param {lineStruct}	{l1}	a lineStruct
@@ -1754,7 +1756,7 @@ int samedirections(const lineStruct l1,l2){
  * Returns an integer array that describes the relationships between two lineStructs
  *
  * result[0] == 2 -> locations a and b are exactly the same
- * result[0] == 1 -> locations a and b are exactly the same, but swapped
+ * result[0] == 1 -> locations a and b are exactly the same, reversed
  * result[0] == 0 -> one or more locations are different
  *
  * result[1] == 2 -> normalized directions are exactly the same
@@ -1889,14 +1891,26 @@ function float angle_d(const lineStruct l1,l2){
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 /**
- * The planeStruct represents an infinite plane in 3D space. It has a normal direction.
+ * The planeStruct represents an infinite plane in 3D space. 
+ * It has a normal direction and goes through position pos.
  */
 struct planeStruct{
 	vector normal, pos; //normal = direction and normal of the plane. pos = a point on the plane
 
+	/**
+	 * Returns the normal of the plane
+	 * 
+	 * Example: vector norm = normal(plane1);
+	 */
 	vector normal(){
 		return normalize(this.normal);//this normalization should be moved to a constructor
 	}
+
+	/**
+	 * Returns a position on the plane
+	 * 
+	 * Example: vector position = pos(plane1);
+	 */
 	vector pos(){
 		return this.pos;
 	} 
