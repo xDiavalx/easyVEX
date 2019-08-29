@@ -1,6 +1,10 @@
 #ifndef __easyVex_h__
 #define __easyVex_h__
 
+//#include "tester.h"
+#include "easyVexGeneral.h"
+#include "easyVexGeo.h"
+
 /*
 * This Software was originally developed by Dimtiri Shimanovskiy.
 * Feel free to use as you wish (http://unlicense.org/). 
@@ -71,6 +75,10 @@
 *
 * Functionnames:
 * When possible override similar functions of existing name. 
+* But instead of srcpoint and dstpoint we use pointa and pointb.
+* When returning an array the name should include a plural "s". Example: getints() 
+* Suffix _n stands for normalized output
+* Suffix _d stands for degrees (as opposed to radians)
 * Function-names are subject to change at the current stage of development.
 */
 
@@ -80,494 +88,7 @@
 //#define pointp(inp,pn) point(inp,"P",pn) //That doesn't work properly
 
 
-/**
- * Returns position of the point closest to given position at input 0
- * 
- * @param	{vector}	{pos}	position that we examine 
- */
-function vector nearpointp( const vector pos)
-{
-	return point(0, “P”, nearpoint(0, pos) );
-}
 
-/**
- * Returns position of the point closest to given position at input
- * 
- * @param {int}	{input}   number of the input that we look at to find the geometry   
- * @param {vector}	{pos}	position that we examine 
- * 
- * Contributed by Matthew Hendershot
- */
-function vector nearpointp( const int input; const vector pos)
-{
-	return point(input, “P”, nearpoint(input, pos) );
-}
-
-/**
- * Returns 1, if both input values are the same +- tolerance, otherwise 0
- * 
- * @param {float}	{input1}   float number to compare   
- * @param {float}	{input2}   float number to compare   
- * @param {float}	{tolerance}  amount of tolerance (+-) between input1 and input2 
- *
- * Example:
- * i@equal1 = isequal(1.001,1.0, 0.0); //not equal
- * i@equal2 = isequal(1.001,1.0, 0.0001); //not equal
- * i@equal3 = isequal(1.001,1.0, 0.0011); //eqal
- */
-function int isequal( const float input1, input2, tolerance)
-{
-	return abs(input1-input2)<tolerance;
-}
-
-/**
- * Returns 1, if both input values are the same +- tolerance, otherwise 0
- * 
- * @param {vector}	{input1}   float number to compare   
- * @param {vector}	{input2}   float number to compare   
- * @param {float}	{tolerance}  amount of tolerance (+-) between length of input1 and input2 
- *
- * Example:
- * vector tester1 = set(1.001, 1.0, 1.0);
- * vector tester2 = set(1.0, 1.0, 1.0);
- * i@equal1 = isequal(tester1,tester2, 0.0); //not equal
- * i@equal2 = isequal(tester1,tester2, 0.0001); //not equal
- * i@equal3 = isequal(tester1,tester2, 0.0006); //eqal
- * 
- * Keep in mind we look at total difference, not per vector component difference
- */
-function int isequal( const vector input1, input2; const float tolerance)
-{
-	return abs(length(input1)-length(input2))<tolerance;
-}
-
-/**
- * Returns int array of unique values (no duplicates) sorted in ascending order.
- * 
- * @param {int array}	{numbers}   arbitrary integer array
- *
- * int testIntArray[] = {0,0,0,1};
- * i[]@array1 = uniquearray(testIntArray); //only {0,1} remains
- */
-function int[] uniquearray(const int numbers[]) {
-	int localNumbers[] = {};
-	int clean[] = {};
-	int temp = 0;
-
-	//fail safe
-	if (len(numbers) == 0) {
-		warning("Passed empty array into uniquearray function");
-		return clean;
-	}
-
-	localNumbers = sort(numbers); // sort ascending to simplify the elimination of duplicates
-
-	append(clean, localNumbers[0]); // the first element is always unique 
-
-	for (int i = 1; i<len(numbers); i++) {
-		if (clean[temp]<localNumbers[i]) { //if the number is bigger than the previously added, add it
-			append(clean, localNumbers[i]);
-			temp++; //temp is the last index in the clean array
-		}
-	}
-	return clean;
-}
-
-/**
- * Returns int array of unique values (no duplicates) sorted in ascending order.
- * 
- * @param {float array}	{numbers}   arbitrary float array
- * @param {float}	{tolerance}   Tolerance value (+-) for comparison 
- *
- * Example:
- * float testFloatArray[] = {0.0, 0.001, 0.0005, 1};
- * f[]@array1 = uniquearray(testFloatArray, 0.001); //0.001 stays in
- * f[]@array2 = uniquearray(testFloatArray, 0.0011); //0.001 gets removed
- * f[]@array3 = testFloatArray; //The original stays the same!
- */
-function float[] uniquearray(const float numbers[]; const float tolerance) {
-	float localNumbers[] = {};
-	float clean[] = {};
-	int temp = 0;
-
-	//fail safe
-	if (len(numbers) == 0) {
-		warning("Passed empty array into uniquearray function");
-		return clean;
-	}
-
-	localNumbers = sort(numbers); // sort ascending to simplify the elimination of duplicates
-
-	append(clean, localNumbers[0]); // the first element is always unique 
-
-	for (int i = 1; i<len(numbers); i++) {
-		if (!isequal( clean[temp], localNumbers[i], tolerance)) { //if the number is not the same, add it
-			append(clean, localNumbers[i]);
-			temp++; //temp is the last index in the clean array
-		}
-	}
-	return clean;
-}
-
-/**
- * Returns vector array of unique values (no duplicates) sorted in ascending order.
- * 
- * @param {float array}	{numbers}   arbitrary vector array
- * @param {float}	{tolerance}   Tolerance value (+-) for comparison 
- *
- * Example:
- * vector testVectorArray[] = {{1.001, 1.0, 1.0},{1.0, 1.0, 1.0},{2.0, 1.0, 1.0}};
- * v[]@array = uniquearray(testVectorArray,0.1); //Result: {1.001, 1.0, 1.0},{2.0, 1.0, 1.0}
- * v[]@array2 = testVectorArray; //The original stays the same!
- */
-function vector[] uniquearray(const vector numbers[]; const float tolerance) {
-	vector clean[] = {};
-	int inside = 0;
-
-	//fail safe
-	if (len(numbers) == 0) {
-		warning("Passed empty array into uniquearray function");
-		return clean;
-	}
-
-	foreach (vector vec; numbers) {
-		foreach (vector vec2; clean)
-		{
-		    inside+=isequal(vec,vec2,tolerance); //increase if the number is already there
-		}
-		if (inside<1) { //if the number is not already there, add it
-			append(clean, vec);
-		}
-		inside = 0;
-	}
-	return clean;
-}
-
-/**
- * Adds only new int values (no duplicates) to an int array and returns the modified array. The original gets modified.
- * 
- * @param {int array}	{numbers}   arbitrary integer array
- * @param {int}	{num}   number to add
- *
- * Example:
- * int testIntArray[] = {0,0,0,1};
- * i[]@array1 = appendunique(testIntArray,0); //does not append
- * i[]@array2 = appendunique(testIntArray,2); //appends
- * f[]@array3 = testIntArray; //The original gets modified!
- */
-function int[] appendunique(int numbers[]; const int num) {
-	if (find(numbers, num)<0) {
-		append(numbers, num);
-	}
-	return numbers;
-}
-
-/**
- * Adds only new float values (no duplicates) to a float array and returns the modified array. The original gets modified.
- * 
- * @param {float array}	{numbers}   arbitrary float array
- * @param {float}	{num}   number to add
- *
- * Example:
- * float testFloatArray[] = {0.0, 0.001, 0.0005, 1};
- * f[]@array4 = appendunique(testFloatArray,0.0); //does not append
- * f[]@array5 = appendunique(testFloatArray,0.01); //appends
- * f[]@array6 = testFloatArray; // the origibnal gets modified!
- */
-function float[] appendunique(float numbers[]; const float num) {
-	if (find(numbers, num)<0) {
-		append(numbers, num);
-	}
-	return numbers;
-}
-
-/**
- * Adds only new vector value (no duplicates) to a vector array and returns the modified array. The original gets modified.
- * 
- * @param {vector array}	{numbers}   arbitrary vector array
- * @param {vector}	{num}   vector to add
- *
- * Example:
- * vector testVectorArray[] = {{1.001, 1.0, 1.0},{1.0, 1.0, 1.0},{2.0, 1.0, 1.0}};
- * v[]@array7 = appendunique(testVectorArray,{1.001, 1.0, 1.0});//does not append
- * v[]@array8 = appendunique(testVectorArray,{1.002, 1.0, 1.0});//does append
- * v[]@array9 = testVectorArray; // the origibnal gets modified!
- */
-function vector[] appendunique(vector numbers[]; const vector num) {
-	if (find(numbers, num)<0) {
-		append(numbers, num);
-	}
-	return numbers;
-}
-
-/**
- * Removes all instances of int value from int array
- * 
- * @param {int array}	{numbers}   arbitrary integer array
- * @param {int}	{remove}   integer value to be removed from the array
- */
-function void removevalues(int numbers[]; const int remove) {
-	while (1) {
-		int temp;
-		temp = removevalue(numbers, remove);
-		if (temp == 0) {
-			break;
-		}
-	}
-}
-
-/**
- * Removes all instances of all int values in seccond array from first int array
- * 
- * @param {int array}	{numbers}   arbitrary integer array
- * @param {int array}	{remove}   arbitrary integer array to be removed from the numbers array
- */
-function void removevalues(int numbers[]; const int remove[]) {
-	foreach(int num; remove){
-		removevalues(numbers, num);
-	}
-}
-
-/**
- * Returns int array of only unique values of an arbitrary attribute at input 0. 
- * I think, "uniquevals" was implemented as a native function in houdini vex after it was implemented in easyVex.
- * 
- * @param {string}	{componentType}	 Types: "detail" (or "global"), "point", "prim", or "vertex"
- * @param {string}	{attribName}   Arbitrary attribute name
- */
-function int[] uniquevals(const string componentType; const string attribName){	
-	return uniquevals(0,componentType, attribName);
-}
-
-/**
- * Returns point position at input
- * 
- * @param {int}	{input}	 number of the input that we look at to find the geometry
- * @param {int}	{point}  point index
- */
-function vector pointp(const int input; const int point){
-	return point(input,"P",point);
-}
-
-/**
- * Returns point position at input 0
- * 
- * @param {int}	{point}  point index
- */
-function vector pointp(const int point){
-	return point(0,"P",point);
-}
-
-/**
- * Returns the angle between two vectors in degrees
- * 
- * @param {vector}	{u}  arbitrary vector
- * @param {vector}	{v}  arbitrary vector
- * 
- * Example: f@angle = angle({0,1,0},{1,0,0}); //f@angle == 90
- */
-function float angle_d(const vector u,v){
-	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
-}
-
-/**
- * Returns the angle between two 2d vectors in degrees
- * 
- * @param {vector2}	{u}  arbitrary 2d vector
- * @param {vector2}	{v}  arbitrary 2d vector
- * 
- * Example: f@angle = angle({0,1},{1,0}); //f@angle == 90
- */
-function float angle_d(const vector2 u,v){
-	return degrees( acos( dot(u,v)/( length(v)*length(u) )  ) );
-}
-
-/**
- * Returns dot product of two vectors, but normalizes the vectors beforehand
- * 
- * @param {vector}	{u}  arbitrary vector
- * @param {vector}	{v}  arbitrary vector
- */
-float dot_n(const vector u,v ){
-	return dot(normalize(u),normalize(v));
-}
-
-/**
- * Returns dot product of two vector2s, but normalizes the vectors beforehand
- * 
- * @param {vector2}	{u}  arbitrary 2d vector
- * @param {vector2}	{v}  arbitrary 2d vector
- */
-float dot_n(const vector2 u,v ){
-	return dot(normalize(u),normalize(v));
-}
-
-/**
- * Returns the area of a triangle described by point positions A B C
- * 
- * @param {vector}	{A}  arbitrary vector describing a position
- * @param {vector}	{B}  arbitrary vector describing a position
- * @param {vector}	{C}  arbitrary vector describing a position
- */
-float trianglearea(const vector A,B,C){
-	float a = distance2(A,B); //squared distance A to B
-	float b = distance2(B,C); //squared distance B to C
-	float c = distance2(C,A); //squared distance C to A
-	return .25*sqrt( 2*b*c+ 2*c*a+ 2*a*b+ - a*a - b*b - c*c ); //http://mathworld.wolfram.com/TriangleArea.html
-}
-
-/**
- * Calculates the distance to target position for every point and normalizes it across the geometry. 
- * Sets a point attribute Cd to have this value.
- * Processes all points at first input when executed once. 
- * 
- * @param {vector}	{target}  target position that we calculate distance to
- */
-void n_distances(const vector target){
-	float maxDistance,minDistance;
-	float distancesToTarget[];
-	//Store distances
-	for(int perPoint=0;perPoint<npoints(0);perPoint++){
-    	vector targetPos = point(0,"P",perPoint);
-    	float distanceToTarget = distance(targetPos,target);
-    	append(distancesToTarget,distanceToTarget);
-	}
-	//Calculate min and max distances
-	minDistance = min(distancesToTarget);
-	maxDistance = max(distancesToTarget);
-	maxDistance -= minDistance;
-	//Set normalized attribute
-	for(int i=0;i<npoints(0);i++ ){
-	    float normalizedDistanceToTarget = (distancesToTarget[i]-minDistance)/maxDistance;
-	    vector color =  set(normalizedDistanceToTarget,normalizedDistanceToTarget,normalizedDistanceToTarget);
-	    setpointattrib(0,"Cd",i,color,"set");
-	}
-}
-
-/**
- * Calculates the distance to target position for every point and normalizes it across the geometry. 
- * Sets a point attribute "name" to have this value.
- * Processes all points at first input when executed once. 
- * 
- * @param {string}	{name}  point attribute to write to
- * @param {vector}	{target}  target position that we calculate distance to
- */
-void n_distances(const string name; const vector target){
-	float maxDistance,minDistance;
-	float distancesToTarget[];
-	//Store distances
-	for(int perPoint=0;perPoint<npoints(0);perPoint++){
-    	vector targetPos = point(0,"P",perPoint);
-    	float distanceToTarget = distance(targetPos,target);
-    	append(distancesToTarget,distanceToTarget);
-	}
-	//Calculate min and max distances
-	minDistance = min(distancesToTarget);
-	maxDistance = max(distancesToTarget);
-	maxDistance -= minDistance;
-	//Set normalized attribute
-	for(int i=0;i<npoints(0);i++ ){
-	    float normalizedDistanceToTarget = (distancesToTarget[i]-minDistance)/maxDistance; 
-	    setpointattrib(0,name,i,normalizedDistanceToTarget,"set");
-	}
-}
-
-///////////TO DO: n_distances for an array of input locations, potentially with varying interpolation methods
-
-/**
- * Creates a circle around "axis" with startpoint facing "up".
- * Returns array of temporary point IDs.
- * 
- * @param {vector}	{origin}  Location of the center/origin of the circle
- * @param {int}	{divisions}  Number of segments on the circle
- * @param {vector}	{up}  Direction in which the first and last points face. Should be different from axis. 
- * @param {vector}	{axis}  Center axis of the circle. Should be different from up.
- * @param {float}	{radius}  Radius of circle
- * @param {float}	{uv_v_offset}  The circle UVs are laid out left to right in UV space. This parameter shifts the UVs in height in UV space. 
- *                               	If you make two circles, one with uv_v_offset=0, the other with uv_v_offset=1 and use the skin sop to connect them, you get a cylinder with proper UVs.
- * @param {int}	{closed}	Polygon is closed if 1, polygon open if 0
- * 
- * Example:
- * //Make two circles and set point attribute "test" on the second one to 4
- * int divisions=8;
- * vector up = set(0,1,0);
- * vector axis = set(1,0,0);
- * float radius = 1;
- * int points[];
- * 
- * circle(set(0,0,0),divisions, up, axis, radius,0,0,1);
- * points = circle(set(1,0,0),divisions, up, axis, radius,1);
- * foreach(int pt; points){
- * setpointattrib(0,"test",pt,4,"set");
- * }
- */
-int[] circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset; const int closed){
-	//init variables
-	int points[];
-	int verts[];
-	vector up_n = normalize(up);
-	vector axis_n = normalize(axis);
-	int divisions_n = max(divisions,2); //make sure we get at least two divisions.
-	matrix3 adjustmentMatrix = maketransform(axis_n,up_n);
-	int pointid = 0;
-	vector z = cross(up_n,axis_n); //Use z to ensure that the vectors are orthogonal to each other.
-
-	for(int div=0; div<(closed?divisions_n:1+divisions_n); div++){
-	    float angle = 2*PI*(div)/divisions_n; //angle of segment in radians
-	    vector dir = set(sin(angle), cos(angle), 0); //Direction of segment point
-	    dir *= adjustmentMatrix; //Adjust for axis and up
-	    vector pos = dir * radius + origin; //And set radius
-	    //Create point and set attributes
-	    pointid = addpoint(0,pos);
-	    float uv_u = float(div)/float(divisions_n);
-	    append(points,pointid);
-	    setpointattrib(0, "N", pointid, dir, "set");
-	    setpointattrib(0, "up", pointid, axis_n, "set");
-	    //setpointattrib(0, "uv", pointid, set(uv_u,uv_v_offset,0), "set");
-	}
-	string polyType = "polyline";
-	if(closed){
-		polyType = "poly";
-		append(points,points[0]);
-	}
-	addprim(pointid,0,polyType,points,verts);
-	foreach(int i; int div; verts){
-		float uv_u = float(i)/float(divisions_n);
-		vector uvs = set(uv_u,uv_v_offset,0);
-		setvertexattrib(0, "uv", div, -1, uvs, "set");
-	}
-	return(points);
-}
-
-/**
- * Creates a polyline in a circle around "axis" with startpoint facing "up".
- * Returns array of temporary point IDs.
- * 
- * @param {vector}	{origin}  Location of the center/origin of the circle
- * @param {int}	{divisions}  Number of segments on the circle
- * @param {vector}	{up}  Direction in which the first and last points face. Should be different from axis. 
- * @param {vector}	{axis}  Center axis of the circle. Should be different from up.
- * @param {float}	{radius}  Radius of circle
- * @param {float}	{uv_v_offset}  The circle UVs are laid out left to right in UV space. This parameter shifts the UVs in height in UV space. 
- *                               	If you make two circles, one with uv_v_offset=0, the other with uv_v_offset=1 and use the skin sop to connect them, you get a cylinder with proper UVs.
- * 
- * Example:
- * //Make two circles and set point attribute "test" on the second one to 4
- * int divisions=8;
- * vector up = set(0,1,0);
- * vector axis = set(1,0,0);
- * float radius = 1;
- * int points[];
- * 
- * circle(set(0,0,0),divisions, up, axis, radius,0);
- * points = circle(set(1,0,0),divisions, up, axis, radius,1);
- * foreach(int pt; points){
- * 	setpointattrib(0,"test",pt,4,"set");
- * }
- */
-int[] circle(const vector origin; const int divisions; const vector up; const vector axis; const float radius; const float uv_v_offset){
-	return circle(origin, divisions, up, axis, radius, uv_v_offset, 0);
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -593,7 +114,7 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
  * To use an internal variable of the struct:
  * 	printf("%i\n",ed1.a );
  * 	ed1.a = 6;
- * 	int a = geta(ed1) //Is kind of cleaner than just ed1.a
+ * 	int a = pointa(ed1) //Is kind of cleaner than just ed1.a
  *
  * To debug you can:
  * printfverbose(ed1);
@@ -610,13 +131,13 @@ int[] circle(const vector origin; const int divisions; const vector up; const ve
  * To loop over a custom struct:
  * 	foreach(edgeStruct test; edges){
  * 		printfverbose(test);
- *	  	printf("a is %i \n",geta(test));
+ *	  	printf("a is %i \n",pointa(test));
  *  }
  *
  * To loop over a custom struct with index:
  * 	foreach(int index; edgeStruct test; edges){
  *	 	printf("At index %i ",index);
- * 	 	printf("a is %i \n",geta(test));
+ * 	 	printf("a is %i \n",pointa(test));
  * 	}
  * \endverbatim
  */
@@ -626,27 +147,27 @@ struct edgeStruct{
 	/**
 	 * Returns the int of the input of the edge
 	 * 
-	 * Example: int input = getinput(ed1);
+	 * Example: int input = input(ed1);
 	 */
-	int getinput(){
+	int input(){
 		return this.input;
 	}
 
 	/**
 	 * Returns the int for point a of the edge
 	 * 
-	 * Example: int pt_a = geta(ed1);
+	 * Example: int pt_a = pointa(ed1);
 	 */
-	int geta(){
+	int pointa(){
 		return this.a;
 	}
 
 	/**
 	 * Returns the int for point b of the edge
 	 * 
-	 * Example: int pt_b = getb(ed1);
+	 * Example: int pt_b = pointb(ed1);
 	 */
-	int getb(){
+	int pointb(){
 		return this.b;
 	}
 
@@ -655,9 +176,9 @@ struct edgeStruct{
 	 * 
 	 * @param {int}	{input}   a point number
 	 * 
-	 * Example: seta(ed1,1);
+	 * Example: setinput(ed1,1);
 	 */
-	int seta(const int input){
+	int setinput(const int input){
 		this.input = input;
 	}
 
@@ -666,9 +187,9 @@ struct edgeStruct{
 	 * 
 	 * @param {int}	{a}   a point number
 	 * 
-	 * Example: seta(ed1,1);
+	 * Example: setpointa(ed1,1);
 	 */
-	int seta(const int a){
+	int setpointa(const int a){
 		this.a = a;
 	}
 
@@ -677,9 +198,9 @@ struct edgeStruct{
 	 * 
 	 * @param {int}	{b}   a point number
 	 * 
-	 * Example: setb(ed1,1);
+	 * Example: setpointb(ed1,1);
 	 */
-	int setb(const int b){
+	int setpointb(const int b){
 		this.b = b;
 	}
 
@@ -762,7 +283,7 @@ struct edgeStruct{
 	/**
 	 * Returns the non-normalized vector AB == posB - posA
 	 * 
-	 * Example: v@vectorAB = vectorab(ed1); 
+	 * Example: v@vectorab = vectorab(ed1); 
 	 */
 	vector vectorab(){
 		return point(this.input,"P",this.b) - point(this.input,"P",this.a);
@@ -771,7 +292,7 @@ struct edgeStruct{
 	/**
 	 * Returns the non-normalized vector BA == posA - posB
 	 * 
-	 * Example: v@vectorBA = vectorba(ed1); 
+	 * Example: v@vectorba = vectorba(ed1); 
 	 */
 	vector vectorba(){
 		return point(this.input,"P",this.a) - point(this.input,"P",this.b);
@@ -780,7 +301,7 @@ struct edgeStruct{
 	/**
 	 * Returns the normalized vector AB == posB - posA
 	 * 
-	 * Example: v@vectorAB = vectorab_n(ed1); 
+	 * Example: v@vectorab = vectorab_n(ed1); 
 	 */
 	vector vectorab_n(){
 		return normalize( point(this.input,"P",this.b) - point(this.input,"P",this.a) );
@@ -789,7 +310,7 @@ struct edgeStruct{
 	/**
 	 * Returns the normalized vector BA == posA - posB
 	 * 
-	 * Example: v@vectorBA = vectorba_n(ed1);
+	 * Example: v@vectorba = vectorba_n(ed1);
 	 */
 	vector vectorba_n(){
 		return normalize( point(this.input,"P",this.a) - point(this.input,"P",this.b) );
@@ -802,7 +323,7 @@ struct edgeStruct{
 	 * 
 	 * Example: v@halfpos = halfpoint(ed1);
 	 */
-	vector midpoint(){
+	vector posmid(){
 		return ( point(this.input,"P",this.a) + point(this.input,"P",this.b) )*.5;
 	}
 }
@@ -835,9 +356,9 @@ edgeStruct edgeStruct(const int hedge){
 	int a = hedge_srcpoint(0,hedge);
 	int b = hedge_dstpoint(0,hedge);
 	if(a<0 || b<0){
-		printf("Warning: Half-edge: %i in edgeStuct(hedge) is not valid.", hedge);
+		warning("Half-edge: %i in edgeStuct(hedge) is not valid.", hedge);
 	}
-	return edgeStruct(0,hedge_srcpoint(0,hedge),hedge_dstpoint(0,hedge));
+	return edgeStruct(0,a,b);
 }
 
 /**
@@ -848,7 +369,7 @@ edgeStruct edgeStruct(const int hedge){
  * @param {edgeStruct}	{edge}   an edgeStruct
  */
 int pointhedge(const edgeStruct edge){
-	return pointhedge(getinput(edge),geta(edge),getb(edge));
+	return pointhedge(input(edge),pointa(edge),pointb(edge));
 }
 
 /**
@@ -859,7 +380,7 @@ int pointhedge(const edgeStruct edge){
  * @param {edgeStruct}	{edge}   an edgeStruct
  */
 int pointedge(const edgeStruct edge){
-	return pointedge(getinput(edge),geta(edge),getb(edge));
+	return pointedge(input(edge),pointa(edge),pointb(edge));
 }
 
 /**
@@ -882,7 +403,7 @@ void printfverbose(const edgeStruct edges[]){
  */
 edgeStruct sort(const edgeStruct edge){
 	if( compare(edge) ){
-		return edgeStruct(getinput(edge), getb(edge),geta(edge));
+		return edgeStruct(input(edge), pointb(edge),pointa(edge));
 		}
 	return edge;
 }
@@ -896,7 +417,7 @@ edgeStruct sort(const edgeStruct edge){
  * Example: v@pos = posa(2,ed1);
  */
 vector posa(const int input; const edgeStruct edge){
-	return point(input,"P",geta(edge));
+	return point(input,"P",pointa(edge));
 }
 
 /**
@@ -908,7 +429,7 @@ vector posa(const int input; const edgeStruct edge){
  * Example: v@pos = posb(2,ed1);
  */
 vector posb(const int input; const edgeStruct edge){
-	return point(input,"P",getb(edge));
+	return point(input,"P",pointb(edge));
 }
 
 /**
@@ -920,8 +441,8 @@ vector posb(const int input; const edgeStruct edge){
  * Example: f@len = length(2,ed1);
  */
 float length(const int input; const edgeStruct edge){
-	vector A = point(input,"P",geta(edge));
-	vector B = point(input,"P",getb(edge));
+	vector A = point(input,"P",pointa(edge));
+	vector B = point(input,"P",pointb(edge));
 	return distance(A,B);
 }
 
@@ -935,10 +456,10 @@ float length(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorAB = vectorab(2,ed1);
+ * Example: v@vectorab = vectorab(2,ed1);
  */
 vector vectorab(const int input; const edgeStruct edge){
-	return point(input,"P",getb(edge)) - point(input,"P",geta(edge));
+	return point(input,"P",pointb(edge)) - point(input,"P",pointa(edge));
 }
 
 /**
@@ -947,10 +468,10 @@ vector vectorab(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorAB = vectorab(2,ed1);
+ * Example: v@vectorab = vectorab(2,ed1);
  */
 vector vectorba(const int input; const edgeStruct edge){
-	return point(input,"P",geta(edge)) - point(input,"P",getb(edge));
+	return point(input,"P",pointa(edge)) - point(input,"P",pointb(edge));
 }
 
 /**
@@ -959,10 +480,10 @@ vector vectorba(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  * 
- * Example: v@vectorABn = vectorab_n(2,ed1);
+ * Example: v@vectorabn = vectorab_n(2,ed1);
  */
 vector vectorab_n(const int input; const edgeStruct edge){
-	return normalize( point(input,"P",getb(edge)) - point(input,"P",geta(edge)) );
+	return normalize( point(input,"P",pointb(edge)) - point(input,"P",pointa(edge)) );
 }
 
 /**
@@ -971,10 +492,10 @@ vector vectorab_n(const int input; const edgeStruct edge){
  * @param {int}	{input}   an integer that describes an input
  * @param {edgeStruct}	{edge}   an edgeStruct
  *
- * Example: v@vectorBAn = vectorba_n(2,ed1);
+ * Example: v@vectorban = vectorba_n(2,ed1);
  */
 vector vectorba_n(const int input; const edgeStruct edge){
-	return normalize( point(input,"P",geta(edge)) - point(input,"P",getb(edge)) );
+	return normalize( point(input,"P",pointa(edge)) - point(input,"P",pointb(edge)) );
 }
 
 /**
@@ -985,8 +506,8 @@ vector vectorba_n(const int input; const edgeStruct edge){
  * 
  * Example: v@halfpos = halfpoint(2,ed1);
  */
-vector midpoint(const int input; const edgeStruct edge){
-	return ( point(input,"P",geta(edge)) + point(input,"P",getb(edge)) )*.5;
+vector posmid(const int input; const edgeStruct edge){
+	return ( point(input,"P",pointa(edge)) + point(input,"P",pointb(edge)) )*.5;
 }
 
 //////////////////////////////////////////////////////
@@ -1005,7 +526,7 @@ vector midpoint(const int input; const edgeStruct edge){
 string getfullname(const edgeStruct edges[]){
 	string result;
 	foreach(edgeStruct ed; edges){
-		append( result, sprintf("a%i_b%i ", geta(ed), getb(ed) ) );
+		append( result, sprintf("a%i_b%i ", pointa(ed), pointb(ed) ) );
 	}
 	return result;
 }
@@ -1015,13 +536,13 @@ string getfullname(const edgeStruct edges[]){
  *
  * @param {edgeStruct array}	{edges}   an array of edgeStructs
  * 
- * Example: i[]@display1=getint(edges); 
+ * Example: i[]@display1=getints(edges); 
  */
-int[] getint(const edgeStruct edges[]){
+int[] getints(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, geta(ed) );
-		append( result, getb(ed) );
+		append( result, pointa(ed) );
+		append( result, pointb(ed) );
 	}
 	return result;
 }
@@ -1031,12 +552,12 @@ int[] getint(const edgeStruct edges[]){
  *
  * @param {edgeStruct array}	{edges}   an array of edgeStructs
  * 
- * Example: i[]@display1=getinta(edges); 
+ * Example: i[]@display1=getintsa(edges); 
  */
-int[] getinta(const edgeStruct edges[]){
+int[] getintsa(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, geta(ed) );
+		append( result, pointa(ed) );
 	}
 	return result;
 }
@@ -1046,12 +567,12 @@ int[] getinta(const edgeStruct edges[]){
  *
  * @param {edgeStruct array}	{edges}   an array of edgeStructs
  * 
- * Example: i[]@display1=getintb(edges);  
+ * Example: i[]@display1=getintsb(edges);  
  */
-int[] getintb(const edgeStruct edges[]){
+int[] getintsb(const edgeStruct edges[]){
 	int result[];
 	foreach(edgeStruct ed; edges){
-		append( result, getb(ed) );
+		append( result, pointb(ed) );
 	}
 	return result;
 }
@@ -1064,13 +585,13 @@ int[] getintb(const edgeStruct edges[]){
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
  * 
  * Example:
- * i[]@display1=getint(edges); 
+ * i[]@display1=getints(edges); 
  * i[]@display2=removevalue(@display1, ed1);
  */
 int[] removevalue(const int edges[]; const edgeStruct edge){
 	int result[];
 	for(int i=0; i<len(edges); i = i+2) {
-		if(!( (edges[i]==geta(edge) && edges[i+1]==getb(edge) ) || (edges[i]==getb(edge) && edges[i+1]==geta(edge) ) )  ){
+		if(!( (edges[i]==pointa(edge) && edges[i+1]==pointb(edge) ) || (edges[i]==pointb(edge) && edges[i+1]==pointa(edge) ) )  ){
 			//append(result,edgeStruct(numbers[i],numbers[i+1]) );
 			append(result,edges[i]);
 			append(result,edges[i+1]);
@@ -1087,11 +608,11 @@ int[] removevalue(const int edges[]; const edgeStruct edge){
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
  * 
  * Example:
- * i[]@display1=getint(edges); 
+ * i[]@display1=getints(edges); 
  * i[]@display2=removevalue(@display1, ed1);
  */
 int[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
-	/*int nums[] = getint(edges);
+	/*int nums[] = getints(edges);
 	int result[];
 	for(int i=0; i<len(nums); i = i+2) {
 		if(!( (nums[i]==edge.a && nums[i+1]==edge.b) || (nums[i]==edge.b && nums[i+1]==edge.a) )  ){
@@ -1101,7 +622,7 @@ int[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
 		}
 	}
 	return result;*/
-	return removevalue(getint(edges),edge);
+	return removevalue(getints(edges),edge);
 }
 
 /**
@@ -1112,13 +633,13 @@ int[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
  * @param {edgeStruct}	{edge}   an edgeStruct that should be removed from edges
  * 
  * Example:
- * i[]@display1=getint(edges); 
+ * i[]@display1=getints(edges); 
  * i[]@display2=removevalue(@display1, ed1);
  */
 edgeStruct[] removevalue(const edgeStruct edges[]; const edgeStruct edge){
 	edgeStruct result[];
 	foreach(int i; edgeStruct ed; edges) {
-		if(!( (geta(ed)==geta(edge) && getb(ed)==getb(edge) ) || (geta(ed)==getb(edge) && getb(ed)==geta(edge) ) )  ){	
+		if(!( (pointa(ed)==pointa(edge) && pointb(ed)==pointb(edge) ) || (pointa(ed)==pointb(edge) && pointb(ed)==pointa(edge) ) )  ){	
 			push(result,ed);
 		}
 	}
@@ -1185,10 +706,10 @@ edgeStruct[] edgestructs_fromarray(const int input; const int edges[]){
 function edgeStruct[] edgestructs_fromedge(const int input; const edgeStruct edge){
 	//int numbers[];
 	edgeStruct result[];
-	//numbers = getint(edgestructs_frompoint(input,ed.a) ) ;
-	//append(numbers, getint(edgestructs_frompoint(input,ed.b) ) );
-	push(result, edgestructs_frompoint(input,geta(edge)) );
-	push(result, edgestructs_frompoint(input,getb(edge)) );
+	//numbers = getints(edgestructs_frompoint(input,ed.a) ) ;
+	//append(numbers, getints(edgestructs_frompoint(input,ed.b) ) );
+	push(result, edgestructs_frompoint(input,pointa(edge)) );
+	push(result, edgestructs_frompoint(input,pointb(edge)) );
 	return removevalue(result,edge);
 }
 
@@ -1226,13 +747,13 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	int alla[], allb[], ordera[], orderb[];
 	//split the edges into front points and rear points
 	foreach(edgeStruct ed; edges){
-		if(geta(ed)<getb(ed)){
-			append( alla, geta(ed) );
-			append( allb, getb(ed) );
+		if(pointa(ed)<pointb(ed)){
+			append( alla, pointa(ed) );
+			append( allb, pointb(ed) );
 		}
 		else{
-			append( alla, getb(ed) );
-			append( allb, geta(ed) );
+			append( alla, pointb(ed) );
+			append( allb, pointa(ed) );
 		}
 	}
 	//Determine order
@@ -1249,7 +770,7 @@ edgeStruct[] sort(const edgeStruct edges[]){
 	amount = len(alla);
 	edgeStruct temp;
 	for(int i=0; i<amount; i++){
-		temp = edgeStruct(getinput(edges[0]),alla[i],allb[i]); //!!!!INPUT NEEDS TO BE FIXED
+		temp = edgeStruct(input(edges[0]),alla[i],allb[i]); //!!!!INPUT NEEDS TO BE FIXED
 		push(result, temp);
 	}
 	return result;
@@ -1265,9 +786,9 @@ edgeStruct[] sort(const edgeStruct edges[]){
 edgeStruct[] neighbours_a(const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int input = getinput(edge);
-	int a = geta(edge);
-	int b = getb(edge);
+	int input = input(edge);
+	int a = pointa(edge);
+	int b = pointb(edge);
 	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
@@ -1287,8 +808,8 @@ edgeStruct[] neighbours_a(const edgeStruct edge){
 edgeStruct[] neighbours_a(const int input; const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int a = geta(edge);
-	int b = getb(edge);
+	int a = pointa(edge);
+	int b = pointb(edge);
 	points = neighbours(input,a);
 	removevalue(points,b);
 	foreach(int i ; points){
@@ -1307,9 +828,9 @@ edgeStruct[] neighbours_a(const int input; const edgeStruct edge){
 edgeStruct[] neighbours_b(const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int input = getinput(edge);
-	int a = geta(edge);
-	int b = getb(edge);
+	int input = input(edge);
+	int a = pointa(edge);
+	int b = pointb(edge);
 	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
@@ -1329,8 +850,8 @@ edgeStruct[] neighbours_b(const edgeStruct edge){
 edgeStruct[] neighbours_b(const int input; const edgeStruct edge){
 	edgeStruct result[];
 	int points[];
-	int a = geta(edge);
-	int b = getb(edge);
+	int a = pointa(edge);
+	int b = pointb(edge);
 	points = neighbours(input,b);
 	removevalue(points,a);
 	foreach(int i ; points){
@@ -1351,7 +872,7 @@ edgeStruct[] neighbours_b(const int input; const edgeStruct edge){
  * @param {edgeStruct}	{ed2}   an edgeStruct 
  */
 int isequal(const edgeStruct ed1,ed2){
-	return (geta(ed1)==geta(ed2) && getb(ed1)==getb(ed2) ) || (geta(ed1)==getb(ed2) && getb(ed1)==geta(ed2) );
+	return (pointa(ed1)==pointa(ed2) && pointb(ed1)==pointb(ed2) ) || (pointa(ed1)==pointb(ed2) && pointb(ed1)==pointa(ed2) );
 }
 
 /**
@@ -1550,18 +1071,18 @@ struct lineStruct{
 	/**
  	 * Returns vector AB normalized
  	 *
- 	 * Example: vector dir_n = direction_n(line1);
+ 	 * Example: vector dir_n = vectorab_n(line1);
  	 */
-	vector direction_n(){
+	vector vectorab_n(){
 		return normalize(this.B-this.A);
 	}
 
 	/**
  	 * Returns vector AB
  	 *
- 	 * Example: vector dir = direction(line1);
+ 	 * Example: vector dir = vectorab(line1);
  	 */
-	vector direction(){
+	vector vectorab(){
 		return this.B-this.A;
 	}
 
@@ -1694,8 +1215,8 @@ float distance(const lineStruct line; const vector X){
  */
 int sameline(const lineStruct l1,l2){
 	lineStruct line = lineStruct(posa(l1),posb(l1),1);
-	vector normal1 = direction_n(l1);
-	vector normal2 = direction_n(l2);
+	vector normal1 = vectorab_n(l1);
+	vector normal2 = vectorab_n(l2);
 	float threshold = 0.0001;
 	if( (length( normal1 - normal2)<threshold)||(length(-normal1 - normal2)<threshold) ){
 		if( distance(line,posa(l2))<threshold ){
@@ -1740,8 +1261,8 @@ int samepoints(const lineStruct l1,l2){
  * @param {lineStruct}	{l2}	a lineStruct
  */
 int samedirections(const lineStruct l1,l2){
-	vector normal1 = direction_n(l1);
-	vector normal2 = direction_n(l2);
+	vector normal1 = vectorab_n(l1);
+	vector normal2 = vectorab_n(l2);
 	float threshold = 0.0001;
 	if( length( normal1 - normal2)<threshold ){
 		return 2;
@@ -1788,8 +1309,8 @@ int samedirections(const lineStruct l1,l2){
  */
 int[] same(const lineStruct l1,l2){
 	int result[] = {0,0,0,0,0}; 
-	vector normal1 = direction_n(l1);
-	vector normal2 = direction_n(l2);
+	vector normal1 = vectorab_n(l1);
+	vector normal2 = vectorab_n(l2);
 	vector pa1 = posa(l1);
 	vector pb1 = posb(l1);
 	vector pa2 = posa(l2);
@@ -1871,8 +1392,8 @@ int[] same(const lineStruct l1,l2){
  * Example: f@angle = angle(l1,l2);
  */
 function float angle_d(const lineStruct l1,l2){
-	vector u = direction_n(l1);
-	vector v = direction_n(l2);
+	vector u = vectorab_n(l1);
+	vector v = vectorab_n(l2);
 	return degrees( acos( dot(u,v)  ) );
 }
 
@@ -2096,9 +1617,10 @@ lineStruct lineStruct(const planeStruct p1,p2){
 		warning("linestruct_fromplanes(%e,%e): planes are parallel, therefore no line makes sense",p1, p2);
 		return lineStruct({0,0,0},{0,1,0},1);
 	}
-    vector p2p1 = pos(p1) - pos(p2); //vector p2 to p1
+	vector p2_pos = pos(p2);
+    vector p2p1 = pos(p1) - p2_pos; //vector p2 to p1
 	float t = dot( normal(p1), p2p1) / numerator; //p2p1 projected onto p1 normalized for orthogonalp1
-	vector pos = pos(p2) + t * orthogonalp1; //go from p2 via orthogonalp1 to p1
+	vector pos = p2_pos + t * orthogonalp1; //go from p2 via orthogonalp1 to p1
 
 	return lineStruct(pos,dir+pos,1); 
 }
@@ -2117,7 +1639,7 @@ lineStruct lineStruct(const planeStruct p1,p2){
  * Example: f@angle = angle(line,plane);
  */
 function float angle_d(const lineStruct l1; const planeStruct plane){
-	vector u = direction_n(l1);
+	vector u = vectorab_n(l1);
 	vector v = normal(plane);
 	return degrees( acos( dot(u,v)  ) );
 }
