@@ -1,9 +1,9 @@
 #ifndef __easyVexGeneral_h__
 #define __easyVexGeneral_h__
+
 /**
  * Functions that simplify general tasks. 
  */
- 
 
 /**
  * Returns position of the point closest to given position at input 0

@@ -133,9 +133,9 @@ $(document).ready(function(){initNavTree('d6/dce/easy_vex_geo_8h_source.html','.
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">float</span> angle = 2*PI*(div)/divisions_n; <span class="comment">//angle of segment in radians</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        vector dir = set(sin(angle), cos(angle), 0); <span class="comment">//Direction of segment point</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        dir *= adjustmentMatrix; <span class="comment">//Adjust for axis and up</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        vector pos = dir * radius + origin; <span class="comment">//And set radius</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        vector <a class="code" href="../../d7/deb/easy_vex_planes_8h.html#a2d152fcf6a0392a3904f515fc3368f1b">pos</a> = dir * radius + origin; <span class="comment">//And set radius</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="comment">//Create point and set attributes</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        pointid = addpoint(0,pos);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        pointid = addpoint(0,<a class="code" href="../../d7/deb/easy_vex_planes_8h.html#a2d152fcf6a0392a3904f515fc3368f1b">pos</a>);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">float</span> uv_u = float(div)/float(divisions_n);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        append(points,pointid);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        setpointattrib(0, <span class="stringliteral">&quot;N&quot;</span>, pointid, dir, <span class="stringliteral">&quot;set&quot;</span>);</div>
@@ -165,6 +165,7 @@ $(document).ready(function(){initNavTree('d6/dce/easy_vex_geo_8h_source.html','.
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aeasy_vex_geo_8h_html_a7911ead1fcf7b6a10f54eeda48910a32"><div class="ttname"><a href="../../d6/dce/easy_vex_geo_8h.html#a7911ead1fcf7b6a10f54eeda48910a32">circle</a></div><div class="ttdeci">int[] circle(const vector origin;const int divisions;const vector up;const vector axis;const float radius;const float uv_v_offset;const int closed)</div><div class="ttdef"><b>Definition:</b> <a href="../../d6/dce/easy_vex_geo_8h_source.html#l00035">easyVexGeo.h:35</a></div></div>
+<div class="ttc" id="aeasy_vex_planes_8h_html_a2d152fcf6a0392a3904f515fc3368f1b"><div class="ttname"><a href="../../d7/deb/easy_vex_planes_8h.html#a2d152fcf6a0392a3904f515fc3368f1b">pos</a></div><div class="ttdeci">vector pos</div><div class="ttdef"><b>Definition:</b> <a href="../../d7/deb/easy_vex_planes_8h_source.html#l00170">easyVexPlanes.h:170</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
