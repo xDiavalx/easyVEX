@@ -5,6 +5,33 @@
  * Functions that simplify general tasks. 
  */
 
+
+/**
+ * Returns float rounded to X decimals after the comma
+ * 
+ * @param	{float}	{value}		value to round
+ * @param	{int}	{decimal}	amount of decimals after the coma to round to. This should be 0 or greater to work.
+ */
+function float round( const float value; const int decimal)
+{
+	int decimals = max(0, decimal);
+	float mult = pow(10.0, decimals);
+	return rint(value * mult) / mult;
+}
+
+/**
+ * Returns vector rounded to X decimals after the comma
+ * 
+ * @param	{vector}	{value}		value to round
+ * @param	{int}	{decimal}	amount of decimals after the coma to round to. This should be 0 or greater to work.
+ */
+function float round( const vector value; const int decimal)
+{
+	int decimals = max(0, decimal);
+	float mult = pow(10.0, decimals);
+	return rint(value * mult) / mult;
+}
+
 /**
  * Returns position of the point closest to given position at input 0
  * 
