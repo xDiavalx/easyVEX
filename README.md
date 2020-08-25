@@ -32,11 +32,16 @@ Generally I try to credit contributers. I will probably change the way I do that
 
 You don't have to mention me when you use this stuff, but I appreciate it if you do. Please send me a message to dimitri.shima.dev@gmail.com or on Github, if you mention me somewhere, want to thank me, want to collaborate, or anything like that.
 
-Please contribute to this project! 
+Please contribute to this project!
+
 Tell me what I am doing wrong.
+
 Tell me how I can improve the code.
-Tell me how I can improve performance. 
-Add and suggest new functions. 
+
+Tell me how I can improve performance.
+
+Add and suggest new functions.
+
 I want to learn from you!
 
 ### Installation:
@@ -52,7 +57,7 @@ For beginners I recommended the following process. This has been tested under Wi
 
 ** Step 4: Log into your GitHub Desktop application with your github.com account.
 
-** Step 5: use your browser to navigate to the desired package on github.com. In our example: 
+** Step 5: Use your browser to navigate to the desired package on github.com. In our example: 
 https://github.com/xDiavalx/easyVEX
 
 ** Step 6: Press on the green button and click "Open with GitHub Desktop".
@@ -76,8 +81,11 @@ Then paste $HOUDINI_USER_PREF_DIR into the search bar, rightclick on "Look in" a
 ![tutorial expand path](https://github.com/xDiavalx/easyVEX/blob/master/Tutorial/Install/expand_path.png)
 
 In windows this should resolve to:
+
 [USER] - Your windows user name
+
 [VERSION] - Your major Houdini release version. For example: 17.0, 17.5, or 18.0
+
 `C:\Users\[USER]\Documents\houdini[VERSION]\packages`
 
 Create the "packages" subfolder if it does not exist, yet.
@@ -85,7 +93,9 @@ Create the "packages" subfolder if it does not exist, yet.
 Paste the easyVEX.json file into that folder. 
 
 Open the easyVEX.json with a text editor.
+
 Replace C:/[MY_PATH]/ with the path to your easyVEX download.
+
 In my case that would make it look like this:
 
 ` {
