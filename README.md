@@ -69,7 +69,7 @@ https://github.com/xDiavalx/easyVEX
 
 ** Step 9: In GitHub desktop you can press "Fetch origin" or "Pull" to update to the latest version of the repository.
 
-## Download and or install package:
+## Download and install:
 Download the library to anywhere on your harddisk.
 Save the path and copy the easyVEX.json file from inside the easyVEX library. 
 
