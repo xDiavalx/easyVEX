@@ -98,21 +98,14 @@ In windows this should resolve to:
 
 In my case that would make it look like this:
 
-{
-
-	"env": [
-	
-		{
-		
-			"EASYVEX": "C:/Projects/easyVEX/"
-			
-		},
-		
-	],
-	
-	"path": "$EASYVEX"
-	
-}
+	{
+		"env": [
+			{
+				"EASYVEX": "C:/Projects/easyVEX/"
+			},
+		],
+		"path": "$EASYVEX"
+	}
 
 * Step 9: You need to close and open Houdini so Houdini registers the package.
 
