@@ -49,30 +49,30 @@ I want to learn from you!
 ## A short introduction to Git:
 For beginners I recommended the following process. This has been tested under Windows with a Firefox browser. Please consult other guides for more in-depth instructions.
 
-** Step 1: Make a github account at github.com.
+** Step A: Make a github account at github.com.
 
-** Step 2: Make sure you are logged in at github.com with your internet browser of choice.
+** Step B: Make sure you are logged in at github.com with your internet browser of choice.
 
-** Step 3: Download and install GitHub Desktop.
+** Step C: Download and install GitHub Desktop.
 
-** Step 4: Log into your GitHub Desktop application with your github.com account.
+** Step D: Log into your GitHub Desktop application with your github.com account.
 
-** Step 5: Use your browser to navigate to the desired package on github.com. In our example: 
+** Step E: Use your browser to navigate to the desired package on github.com. In our example: 
 https://github.com/xDiavalx/easyVEX
 
-** Step 6: Press on the green button and click "Open with GitHub Desktop".
+** Step F: Press on the green button and click "Open with GitHub Desktop".
 ![tutorial github button](https://github.com/xDiavalx/easyVEX/blob/master/Tutorial/Install/Github_green_button.png)
 
-** Step 7: Your browser will prompt you to allow github.com to open links of this type with the associated app (GitHub Desktop). Allow this to happen and open the link in GitHub Desktop.
+** Step G: Your browser will prompt you to allow github.com to open links of this type with the associated app (GitHub Desktop). Allow this to happen and open the link in GitHub Desktop.
 
-** Step 8: Github Desktop will prompt you to clone (that means download) the repository. At that point you will be able to choose where on your hard-drive it should be stored. See the instructions below for more information on that.
+** Step H: Github Desktop will prompt you to clone (that means download) the repository. At that point you will be able to choose where on your hard-drive it should be stored. See the instructions below for more information on that.
 
-** Step 9: In GitHub desktop you can press "Fetch origin" or "Pull" to update to the latest version of the repository.
+** Step I: In GitHub desktop you can press "Fetch origin" or "Pull" to update to the latest version of the repository.
 
 ## Download and install:
-Download the library to anywhere on your harddisk.
-Save the path and copy the easyVEX.json file from inside the easyVEX library. 
+** Step 1: Download the library to anywhere on your harddisk.
 
+** Step 2:
 Go to:
 `$HOUDINI_USER_PREF_DIR\packages` 
 
@@ -88,24 +88,24 @@ In windows this should resolve to:
 
 `C:\Users\[USER]\Documents\houdini[VERSION]\packages`
 
-Create the "packages" subfolder if it does not exist, yet.
+** Step 3: Create the "packages" subfolder if it does not exist, yet.
 
-Paste the easyVEX.json file into that folder. 
+** Step 4: Copy paste the easyVEX.json file from the easyVex download directory into the packages folder. 
 
-Open the easyVEX.json with a text editor.
+** Step 5: Open the easyVEX.json with a text editor.
 
-Replace C:/[MY_PATH]/ with the path to your easyVEX download.
+** Step 8: Replace C:/[MY_PATH]/ with the path to your easyVEX download directory.
 
 In my case that would make it look like this:
 
-` {
+""" {
 	"env": [
 		{
 			"EASYVEX": "C:/Projects/easyVEX/"
 		},
 	],
 	"path": "$EASYVEX"
-} `
+} """
 
 You need to close and open Houdini so Houdini registers the package.
 
