@@ -124,5 +124,7 @@ in a browser of choice.
 
 Then go to Files/File List/easyVex.h and you will get a full overview of all functions, structs and the sturct's functions!
 
+### Legal notice:
+This software is provided AS-IS, with absolutely no warranty of any kind, express or otherwise. We disclaim any liability for damages resulting from using this software.
 
 Enjoy! XD
