@@ -45,15 +45,23 @@ I want to learn from you!
 For beginners I recommended the following process. This has been tested under Windows with a Firefox browser. Please consult other guides for more in-depth instructions.
 
 ** Step 1: Make a github account at github.com.
+
 ** Step 2: Make sure you are logged in at github.com with your internet browser of choice.
+
 ** Step 3: Download and install GitHub Desktop.
+
 ** Step 4: Log into your GitHub Desktop application with your github.com account.
+
 ** Step 5: use your browser to navigate to the desired package on github.com. In our example: 
 https://github.com/xDiavalx/easyVEX
+
 ** Step 6: Press on the green button and click "Open with GitHub Desktop".
 ![tutorial github button](https://github.com/xDiavalx/easyVEX/blob/master/Tutorial/Install/Github_green_button.png)
+
 ** Step 7: Your browser will prompt you to allow github.com to open links of this type with the associated app (GitHub Desktop). Allow this to happen and open the link in GitHub Desktop.
+
 ** Step 8: Github Desktop will prompt you to clone (that means download) the repository. At that point you will be able to choose where on your hard-drive it should be stored. See the instructions below for more information on that.
+
 ** Step 9: In GitHub desktop you can press "Fetch origin" or "Pull" to update to the latest version of the repository.
 
 ## Download and or install package:
@@ -65,7 +73,7 @@ Go to:
 
 You can find out what that means by opening Houdini, click File -> Open...
 Then paste $HOUDINI_USER_PREF_DIR into the search bar, rightclick on "Look in" and click "Expand Path"
-![tutorial expand path](https://github.com/xDiavalx/easyVEX/blob/master/Tutorial/Install/expand_path.PNG)
+![tutorial expand path](https://github.com/xDiavalx/easyVEX/blob/master/Tutorial/Install/expand_path.png)
 
 In windows this should resolve to:
 [USER] - Your windows user name
