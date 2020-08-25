@@ -19,7 +19,7 @@ Contains a class "lineStruct" that describes a mathematical line and various fun
 ## easyVexPlanes.h:
 Contains a class "planeStruct" that describes a mathematical plane and various functions for it. Helper functions allow you to mathematicaly analyse the plane in combination with the lineStruct and others. For example, you can get the intersection position and or shortest distance between a plane and a position.
 
-### WARNING: This project is still under development. Major changes to naming and parameter conventions are still impossible.
+### WARNING: This project is still under development. Major changes to naming and parameter conventions are still possible.
 
 ### License and ownership:
 ## License:
