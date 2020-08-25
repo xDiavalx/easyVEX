@@ -1,0 +1,8 @@
+{
+	"env": [
+		{
+			"EASYVEX": "C:/[MY_PATH]/"
+		},
+	],
+	"path": "$EASYVEX"
+}

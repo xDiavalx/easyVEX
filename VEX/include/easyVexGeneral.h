@@ -63,17 +63,17 @@ function vector nearpointp( const int input; const vector pos)
  * @param {float}	{tolerance}  amount of tolerance (+-) between input1 and input2 
  *
  * Example:
- * i@equal1 = isequal(1.001,1.0, 0.0); //not equal
- * i@equal2 = isequal(1.001,1.0, 0.0001); //not equal
- * i@equal3 = isequal(1.001,1.0, 0.0011); //eqal
+ * i@equal1 = isequal(1.001, 1.0, 0.0); //not equal
+ * i@equal2 = isequal(1.001, 1.0, 0.0001); //not equal
+ * i@equal3 = isequal(1.001, 1.0, 0.0011); //eqal
  */
 function int isequal( const float input1, input2, tolerance)
 {
-	return abs(input1-input2)<tolerance;
+	return abs(input1-input2)<=tolerance;
 }
 
 /**
- * Returns 1, if both input values are the same +- tolerance, otherwise 0
+ * Returns 1, if both vectors are the same +- tolerance, otherwise 0
  * 
  * @param {vector}	{input1}   float number to compare   
  * @param {vector}	{input2}   float number to compare   
@@ -84,13 +84,14 @@ function int isequal( const float input1, input2, tolerance)
  * vector tester2 = set(1.0, 1.0, 1.0);
  * i@equal1 = isequal(tester1,tester2, 0.0); //not equal
  * i@equal2 = isequal(tester1,tester2, 0.0001); //not equal
- * i@equal3 = isequal(tester1,tester2, 0.0006); //eqal
+ * i@equal3 = isequal(tester1,tester2, 0.0010001); //eqal
  * 
- * Keep in mind we look at total difference, not per vector component difference
+ * Keep in mind that we compare by total length difference, not per vector component difference 
+ * and there might be small floating point errors.
  */
 function int isequal( const vector input1, input2; const float tolerance)
 {
-	return abs(length(input1)-length(input2))<tolerance;
+	return length(input1-input2)<=tolerance;
 }
 
 /**
