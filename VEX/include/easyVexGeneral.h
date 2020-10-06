@@ -5,6 +5,36 @@
  * Functions that simplify general tasks. 
  */
 
+/**
+ * Identify attribute of choice as a UV attribute. 
+ * This is necessary when you create the UV attribute in Vex and not with one of the standard UV sops.
+ * Identifying the attribute like this, will make it show up in the UV view. 
+ * 
+ * @param	{string}	{attribclass}		attribclass "point" or "vertex".
+ * @param	{string}	{uv_attrib_name}		node input to sample from
+ */
+function void set_attribtype_uv( const string attribclass; const string uv_attrib_name)
+{
+	setattribtypeinfo(0, attribclass, uv_attrib_name, "texturecoord");
+}
+
+/**
+ * Returns array of linear vertex numbers for all vertices on the input geo. 
+ * 
+ * @param	{int}	{input}		node input to sample from
+ */
+function int[] vertices( const int input)
+{
+	return expandvertexgroup(input, "*");
+}
+
+/**
+ * Returns array of linear vertex numbers for all vertices on first input geo.
+ */
+function int[] vertices()
+{
+	return expandvertexgroup(0, "*");
+}
 
 /**
  * Returns float rounded to X decimals after the comma
